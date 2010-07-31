@@ -2,6 +2,7 @@
 
 #include "NaubScene.h"
 #include "NaubView.h"
+#include "NaubSim.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +11,8 @@ int main(int argc, char *argv[])
   NaubScene scene;
 	NaubView view(&scene);
 	view.show();
+	NaubSim sim(&scene);
+	sim.start();
 
 	return app.exec();
 }

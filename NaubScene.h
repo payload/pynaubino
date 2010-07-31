@@ -4,16 +4,13 @@
 #include "Naub.h"
 
 #include <QGraphicsScene>
-#include <QTimerEvent>
-#include <QList>
 
 class NaubScene : public QGraphicsScene {
  public:
 	NaubScene();
- protected:
-	void timerEvent(QTimerEvent *event);
- private:
 	QList<Naub *> naubs();
+ protected:
+ private:
 };
 
 #endif
