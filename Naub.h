@@ -7,11 +7,18 @@
 class Naub : public QGraphicsEllipseItem {
  public:
 	Naub();
-	void setup();
+	void setup(b2World *world);
 	void adjust();
+
+	bool isSetup;
 
 	enum { Type = UserType + 1 };
 	int type() const { return Type; }
+ protected:
+	void setupGraphics();
+	void setupPhysics();
+ private:
+	b2World *world;
 };
 
 #endif

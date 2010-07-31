@@ -1,5 +1,10 @@
 #include "NaubSim.h"
 
+static const float32 FRAMERATE = 1 / 30.0f;
+static const float32 B2_TIMESTEP = FRAMERATE;
+static const int32 B2_VELITERATIONS = 10;
+static const int32 B2_POSITERATIONS = 10;
+
 NaubSim::NaubSim(NaubScene *scene) : scene(scene) {
 	setup();
 }
@@ -20,11 +25,13 @@ void NaubSim::setupCalcTimer() {
 }
 
 void NaubSim::calc() {
-	
-	foreach (Naub *naub, scene->naubs())
+	world->Step(B2_TIMESTEP, B2_VELITERATIONS, B2_POSITERATIONS);
+	foreach (Naub *naub, scene->naubs()) {
+		if (!naub->isSetup) naub->setup(world);
 		naub->adjust();
+	}
 }
 
 void NaubSim::start() {
-	calcTimer->start( 1000 / 30 );
+	calcTimer->start( FRAMERATE * 1000 );
 }
