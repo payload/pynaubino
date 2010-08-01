@@ -16,9 +16,10 @@ class Naub : public QGraphicsEllipseItem {
 	int type() const { return Type; }
  protected:
 	void setupGraphics();
-	void setupPhysics();
+	void setupPhysics(b2World *world);
  private:
 	b2World *world;
+	b2Body *body;
 };
 
 #endif

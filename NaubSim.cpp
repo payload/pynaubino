@@ -1,6 +1,6 @@
 #include "NaubSim.h"
 
-static const float32 FRAMERATE = 1 / 30.0f;
+static const float32 FRAMERATE = 1.0f / 30.0f;
 static const float32 B2_TIMESTEP = FRAMERATE;
 static const int32 B2_VELITERATIONS = 10;
 static const int32 B2_POSITERATIONS = 10;
@@ -15,8 +15,9 @@ void NaubSim::setup() {
 }
 
 void NaubSim::setupWorld() {
-	world = new b2World(/* gravity = */ b2Vec2(0, 0),
-											/* doSleep = */ true);
+	b2Vec2 gravity(0.0f, 0.0f);
+	bool doSleep = true;
+	world = new b2World(gravity, doSleep);
 }
 
 void NaubSim::setupCalcTimer() {
@@ -26,6 +27,7 @@ void NaubSim::setupCalcTimer() {
 
 void NaubSim::calc() {
 	world->Step(B2_TIMESTEP, B2_VELITERATIONS, B2_POSITERATIONS);
+	world->ClearForces();
 	foreach (Naub *naub, scene->naubs()) {
 		if (!naub->isSetup) naub->setup(world);
 		naub->adjust();

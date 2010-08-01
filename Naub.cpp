@@ -2,14 +2,15 @@
 
 #include <QPen>
 
+static const float PI = 3.14159;
+
 Naub::Naub() {
 	isSetup = false;
 }
 
 void Naub::setup(b2World *world) {
-	this->world = world;
 	setupGraphics();
-	setupPhysics();
+	setupPhysics(world);
 	isSetup = true;
 }
 
@@ -19,9 +20,27 @@ void Naub::setupGraphics() {
 	setBrush( Qt::cyan );
 }
 
-void Naub::setupPhysics() {
+void Naub::setupPhysics(b2World *world) {
+	setPos(10.0f, 10.0f);
+	this->world = world;
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x(), y());
+	bodyDef.angle = -(rotation()) * (2 * PI) / 360.0;
+	body = world->CreateBody(&bodyDef);
+	b2CircleShape shape;
+	shape.m_radius = 15.0f;
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &shape;
+	fixtureDef.friction = 0.5f;
+	fixtureDef.restitution = 0.5f;
+	fixtureDef.density = 1.0f;
+	body->CreateFixture(&fixtureDef);
 }
 
 void Naub::adjust() {
-	moveBy( 1, 1 );
+	b2Vec2 position = body->GetPosition();
+	float32 angle = body->GetAngle();
+	setPos(position.x, position.y);
+	setRotation(-(angle * 360.0) / (2 * PI));
 }

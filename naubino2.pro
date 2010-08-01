@@ -6,6 +6,7 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
+LIBS += -lBox2D
 
 # Input
 HEADERS += Naub.h NaubScene.h NaubSim.h NaubView.h
