@@ -7,6 +7,7 @@ static const int32 B2_POSITERATIONS = 10;
 
 NaubSim::NaubSim(NaubScene *scene) : scene(scene) {
 	setup();
+	scene->addNaubPair(world);
 }
 
 void NaubSim::setup() {
@@ -28,10 +29,8 @@ void NaubSim::setupCalcTimer() {
 void NaubSim::calc() {
 	world->Step(B2_TIMESTEP, B2_VELITERATIONS, B2_POSITERATIONS);
 	world->ClearForces();
-	foreach (Naub *naub, scene->naubs()) {
-		if (!naub->isSetup) naub->setup(world);
+	foreach (Naub *naub, scene->naubs())
 		naub->adjust();
-	}
 }
 
 void NaubSim::start() {

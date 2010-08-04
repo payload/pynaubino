@@ -4,18 +4,18 @@
 
 static const float PI = 3.14159;
 
-Naub::Naub() {
-	isSetup = false;
+Naub::Naub(b2World *world, qreal x, qreal y, QGraphicsItem *parent) : QGraphicsEllipseItem( 0, 0, 30, 30, parent) {
+	setup(world);
+	body->SetTransform(b2Vec2(x, y), body->GetAngle());
+	adjust();
 }
 
 void Naub::setup(b2World *world) {
 	setupGraphics();
 	setupPhysics(world);
-	isSetup = true;
 }
 
 void Naub::setupGraphics() {
-	setRect( qreal(0), qreal(0), qreal(30), qreal(30) );
 	setPen( QPen( Qt::black, qreal(2) ) );
 	setBrush( Qt::cyan );
 }

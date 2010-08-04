@@ -6,10 +6,11 @@
 #include <QGraphicsItem>
 #include <QList>
 #include <QTimer>
+#include <QVector2D>
+#include <Box2D/Box2D.h>
 
 NaubScene::NaubScene() {
 	addText("NaubScene");
-	addItem(new Naub());
 }
 
 QList<Naub *> NaubScene::naubs() {
@@ -20,3 +21,9 @@ QList<Naub *> NaubScene::naubs() {
 	return naubs;
 }
 
+void NaubScene::addNaubPair(b2World *world) {
+	Naub *naub0 = new Naub(world,  100);
+	Naub *naub1 = new Naub(world, -100);
+	addItem(naub0);
+	addItem(naub1);
+}
