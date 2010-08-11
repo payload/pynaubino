@@ -1,11 +1,15 @@
 #ifndef NAUB_H
 #define NAUB_H
 
+#include "Joint.h"
 #include "Vec.h"
 #include "NaubContext.h"
 
 #include <Box2D/Box2D.h>
 #include <QGraphicsEllipseItem>
+#include <QList>
+
+class Joint;
 
 class Naub {
  public:
@@ -22,6 +26,7 @@ class Naub {
 	void joinWithCenter();	
 	void setupFixture();
 	void setupBody();
+	QList<Joint *> *joints;
 };
 
 #endif

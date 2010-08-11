@@ -26,7 +26,8 @@ qreal Naub::y() {
 }
 
 void Naub::setup() {
-	graphics = new NaubGraphics();
+	joints = new QList<Joint *>();
+	graphics = new NaubGraphics(this);
 	context->naubs->addToGroup(graphics);
 	setupBody();
 	setupFixture();
@@ -76,6 +77,10 @@ void Naub::join(Naub *other) {
 	jointDef.dampingRatio = 0.1f;
 	jointDef.length = 40.0f;
 	context->world->CreateJoint(&jointDef);
+
+	Joint *joint = new Joint(this, other);
+	*joints << joint;
+	*other->joints << joint;
 }
 
 void Naub::adjust() {

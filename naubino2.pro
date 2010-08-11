@@ -10,6 +10,6 @@ LIBS += -lBox2D
 
 # Input
 HEADERS += Naub.h NaubScene.h NaubView.h NaubContext.h \
-NaubGraphics.h Vec.h
+NaubGraphics.h Vec.h Joint.h
 SOURCES += main.cpp Naub.cpp NaubScene.cpp NaubView.cpp \
-NaubContext.cpp NaubGraphics.cpp Vec.cpp
+NaubContext.cpp NaubGraphics.cpp Vec.cpp Joint.cpp
