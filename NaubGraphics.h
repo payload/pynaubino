@@ -1,12 +1,16 @@
 #ifndef NAUBGRAPHICS_H
 #define NAUBGRAPHICS_H
 
-#include <QGraphicsEllipseItem>
+#include "Naub.h"
+
+#include <QGraphicsRectItem>
 #include <QGraphicsItem>
 
-class NaubGraphics : public QGraphicsEllipseItem {
+class NaubGraphics : public QGraphicsRectItem {
  public:
-	NaubGraphics(qreal x = 0, qreal y = 0, qreal w = 20, qreal h = 20);
+	NaubGraphics(Naub *naub, qreal w = 20, qreal h = 20);
+
+	Naub *naub;
 
 	enum { Type = UserType + 1 };
 	int type() const { return Type; }

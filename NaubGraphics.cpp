@@ -3,7 +3,8 @@
 #include <QBrush>
 
 NaubGraphics::NaubGraphics
-(qreal x, qreal y, qreal w, qreal h)
-	: QGraphicsEllipseItem(x, y, w, h) {
+(Naub *naub, qreal w, qreal h) 
+	: QGraphicsRectItem(0, 0, w, h), naub(naub) {
 	setBrush(QBrush(Qt::red));
+	setTransformOriginPoint( w*0.5f, h*0.5f );
 }

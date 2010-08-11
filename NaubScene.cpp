@@ -6,15 +6,14 @@ static const float32 B2_TIMESTEP = FRAMERATE;
 static const int32 B2_VELITERATIONS = 10;
 static const int32 B2_POSITERATIONS = 10;
 
-#include <stdio.h>
-
-
 #include "NaubGraphics.h"
 
 NaubScene::NaubScene() {
 	setup();
 	addEllipse(0, 0, 4, 4);
-	addNaubPair(-200, -100);
+	for (qreal x = 0; x < 3.14159*2; x += 3.14159*2/3) {
+		addNaubPair(cos(x) * 150, sin(x) * 150);
+	}
 }
 
 Naub *NaubScene::addNaub(qreal x, qreal y) {

@@ -1,4 +1,3 @@
-#include <QtDebug>
 #include "Naub.h"
 
 #include "NaubGraphics.h"
@@ -18,11 +17,11 @@ void Naub::setPos(Vec pos) {
 }
 
 qreal Naub::x() {
-	return body->GetPosition().x;
+	return body->GetWorldCenter().x;
 }
 
 qreal Naub::y() {
-	return body->GetPosition().y;
+	return body->GetWorldCenter().y;
 }
 
 void Naub::setup() {
@@ -84,8 +83,13 @@ void Naub::join(Naub *other) {
 }
 
 void Naub::adjust() {
-	b2Vec2 position = body->GetPosition();
-	float32 angle = body->GetAngle();
-	graphics->setPos(position.x, position.y);
+	qreal w = graphics->boundingRect().width();
+	qreal h = graphics->boundingRect().height();
+	qreal angle = body->GetAngle();
+	graphics->setPos(x() - w*0.5f, y() - h*0.5f);
 	graphics->setRotation(-(angle * 360.0) / (2 * PI));
+
+	foreach (Joint *joint, *joints) {
+		joint->adjust();
+	}
 }
