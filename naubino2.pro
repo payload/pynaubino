@@ -9,5 +9,7 @@ INCLUDEPATH += .
 LIBS += -lBox2D
 
 # Input
-HEADERS += Naub.h NaubScene.h NaubSim.h NaubView.h
-SOURCES += main.cpp Naub.cpp NaubScene.cpp NaubSim.cpp NaubView.cpp
+HEADERS += Naub.h NaubScene.h NaubView.h NaubContext.h \
+NaubGraphics.h Vec.h
+SOURCES += main.cpp Naub.cpp NaubScene.cpp NaubView.cpp \
+NaubContext.cpp NaubGraphics.cpp Vec.cpp

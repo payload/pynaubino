@@ -1,35 +1,49 @@
+#include <QtDebug>
 #include "Naub.h"
+
+#include "NaubGraphics.h"
 
 #include <QPen>
 
 static const float PI = 3.14159;
 
-Naub::Naub(b2World *world, qreal x, qreal y, QGraphicsItem *parent) : QGraphicsEllipseItem( 0, 0, 30, 30, parent) {
-	setup(world);
-	body->SetTransform(b2Vec2(x, y), body->GetAngle());
-	adjust();
+Naub::Naub(NaubContext *context, Vec pos) : context(context) {
+	setup();
+	setPos(pos);
 }
 
-void Naub::setup(b2World *world) {
-	setupGraphics();
-	setupPhysics(world);
+void Naub::setPos(Vec pos) {
+	body->SetTransform(pos.toB2Vec2(), body->GetAngle());
+	graphics->setPos(pos.toPointF());
 }
 
-void Naub::setupGraphics() {
-	setPen( QPen( Qt::black, qreal(2) ) );
-	setBrush( Qt::cyan );
+qreal Naub::x() {
+	return body->GetPosition().x;
 }
 
-void Naub::setupPhysics(b2World *world) {
-	setPos(10.0f, 10.0f);
-	this->world = world;
+qreal Naub::y() {
+	return body->GetPosition().y;
+}
+
+void Naub::setup() {
+	graphics = new NaubGraphics();
+	context->naubs->addToGroup(graphics);
+	setupBody();
+	setupFixture();
+	joinWithCenter();
+}
+
+void Naub::setupBody() {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(x(), y());
-	bodyDef.angle = -(rotation()) * (2 * PI) / 360.0;
-	body = world->CreateBody(&bodyDef);
+	b2Body *body = context->world->CreateBody(&bodyDef);
+	body->SetUserData(this);
+	this->body = body;
+}
+
+void Naub::setupFixture() {
 	b2CircleShape shape;
-	shape.m_radius = 15.0f;
+	shape.m_radius = 10.0f;
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.friction = 0.5f;
@@ -38,9 +52,35 @@ void Naub::setupPhysics(b2World *world) {
 	body->CreateFixture(&fixtureDef);
 }
 
+void Naub::joinWithCenter() {
+  b2DistanceJointDef jointDef;
+	jointDef.bodyA = body;
+	jointDef.bodyB = context->center;
+	jointDef.localAnchorA = body->GetLocalCenter();
+	jointDef.localAnchorB = context->center->GetLocalCenter();
+	jointDef.collideConnected = false;
+	jointDef.frequencyHz = 0.1f;
+	jointDef.dampingRatio = 0.6f;
+	jointDef.length = 0.0f;
+	context->world->CreateJoint(&jointDef);
+}
+
+void Naub::join(Naub *other) {
+  b2DistanceJointDef jointDef;
+	jointDef.bodyA = body;
+	jointDef.bodyB = other->body;
+	jointDef.localAnchorA = body->GetLocalCenter();
+	jointDef.localAnchorB = other->body->GetLocalCenter();
+	jointDef.collideConnected = true;
+	jointDef.frequencyHz = 0.5f;
+	jointDef.dampingRatio = 0.1f;
+	jointDef.length = 40.0f;
+	context->world->CreateJoint(&jointDef);
+}
+
 void Naub::adjust() {
 	b2Vec2 position = body->GetPosition();
 	float32 angle = body->GetAngle();
-	setPos(position.x, position.y);
-	setRotation(-(angle * 360.0) / (2 * PI));
+	graphics->setPos(position.x, position.y);
+	graphics->setRotation(-(angle * 360.0) / (2 * PI));
 }

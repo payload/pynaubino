@@ -1,25 +1,27 @@
 #ifndef NAUB_H
 #define NAUB_H
 
+#include "Vec.h"
+#include "NaubContext.h"
+
 #include <Box2D/Box2D.h>
 #include <QGraphicsEllipseItem>
 
-class Naub : public QGraphicsEllipseItem {
+class Naub {
  public:
-	Naub(b2World *world, qreal x = 0, qreal y = 0, QGraphicsItem *parent = 0);
-	void setup(b2World *world);
+	Naub(NaubContext *context, Vec pos);
+	void setPos(Vec pos);
+	qreal x();
+	qreal y();
 	void adjust();
-
-	bool isSetup;
+	void setup();
+	void join(Naub *other);
+	NaubContext *context;
+	QGraphicsItem *graphics;
 	b2Body *body;
-
-	enum { Type = UserType + 1 };
-	int type() const { return Type; }
- protected:
-	void setupGraphics();
-	void setupPhysics(b2World *world);
- private:
-	b2World *world;
+	void joinWithCenter();	
+	void setupFixture();
+	void setupBody();
 };
 
 #endif
