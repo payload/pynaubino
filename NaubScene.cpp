@@ -31,11 +31,13 @@ void NaubScene::addNaubPair(qreal x, qreal y) {
 }
 
 void NaubScene::setup() {
+	//	setMouseTracking(true);
 	naubs = new QList<Naub *>();
 	setupWorld();
 	context = new NaubContext(world);
 	addItem(context->root);
 	setupCalcTimer();
+	
 }
 
 void NaubScene::setupWorld() {
@@ -59,4 +61,16 @@ void NaubScene::calc() {
 
 void NaubScene::start() {
 	calcTimer->start( FRAMERATE * 1000 );
+}
+
+void NaubScene::mouseMoveEvent( QEvent * event ) {
+	qDebug() << "scene mouse move";
+}
+
+void NaubScene::mousePressEvent( QEvent *event ) {
+	qDebug() << "scene mouse press";
+}
+
+void NaubScene::keyPressEvent( QKeyEvent *event ) {
+	qDebug() << "scene key press -" << event->text() << event->key() << event->modifiers();
 }

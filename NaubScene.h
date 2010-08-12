@@ -9,6 +9,8 @@
 #include <QTimer>
 #include <QList>
 #include <Box2D/Box2D.h>
+#include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 
 class NaubScene : public QGraphicsScene {
 	Q_OBJECT
@@ -27,6 +29,10 @@ class NaubScene : public QGraphicsScene {
 	b2World *world;
 	NaubContext *context;
 	QList<Naub *> *naubs;
+ protected:
+	virtual void mouseMoveEvent( QEvent * event );
+	virtual void mousePressEvent( QEvent *event );
+	virtual void keyPressEvent( QKeyEvent *event );
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 #include <QGraphicsRectItem>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 class NaubGraphics : public QGraphicsRectItem {
  public:
@@ -14,6 +15,10 @@ class NaubGraphics : public QGraphicsRectItem {
 
 	enum { Type = UserType + 1 };
 	int type() const { return Type; }
+ protected:
+	void mouseMoveEvent    (QGraphicsSceneMouseEvent *event);
+	void mousePressEvent   (QGraphicsSceneMouseEvent *event);
+	void mouseReleaseEvent (QGraphicsSceneMouseEvent *event);
 };
 
 #endif

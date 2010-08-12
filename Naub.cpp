@@ -1,5 +1,6 @@
-#include "Naub.h"
+#include <QDebug>
 
+#include "Naub.h"
 #include "NaubGraphics.h"
 
 #include <QPen>
@@ -92,4 +93,20 @@ void Naub::adjust() {
 	foreach (Joint *joint, *joints) {
 		joint->adjust();
 	}
+}
+
+void Naub::selected() {
+	qDebug() << "selected";
+}
+
+void Naub::deselected() {
+	qDebug() << "deselected";
+}
+
+void Naub::joined(Naub *other) {
+	qDebug() << "joined";
+}
+
+void Naub::merged(Naub *other) {
+	qDebug() << "merged";
 }

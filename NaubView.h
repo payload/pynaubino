@@ -8,6 +8,7 @@
 class NaubView : public QGraphicsView {
  public:
 	NaubView(NaubScene *scene);
+	virtual void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif

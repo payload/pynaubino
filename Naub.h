@@ -29,6 +29,12 @@ class Naub : public QObject {
 	void setupFixture();
 	void setupBody();
 	QList<Joint *> *joints;
+ public slots:
+	void joined(Naub *other);
+	void merged(Naub *other);
+	void collided(Naub *other);
+	void selected();
+	void deselected();
 };
 
 #endif
