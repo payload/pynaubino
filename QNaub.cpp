@@ -1,12 +1,6 @@
-#include "naub.h"
-#include <QDebug>
-#include <QBrush>
-#include <QEvent>
-#include <QGraphicsSceneEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneMoveEvent>
+#include "QNaub.h"
 
-Naub::Naub(qreal x, qreal y, QGraphicsItem *parent) :
+QNaub::QNaub(qreal x, qreal y, QGraphicsItem *parent) :
     QGraphicsRectItem(x, y, 20, 20, parent)
 {
     setBrush(QBrush(Qt::black));
@@ -15,32 +9,32 @@ Naub::Naub(qreal x, qreal y, QGraphicsItem *parent) :
     setFlag(QGraphicsItem::ItemIsMovable);
 }
 
-void Naub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "press" << this->pos();
     QGraphicsItem::mousePressEvent(event);
 }
 
-void Naub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "move" << this->pos();
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void Naub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "release" << this->pos();
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void Naub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
+void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
     qDebug() << "hover" << this->pos();
     QGraphicsItem::hoverMoveEvent(event);
 }
 
-void Naub::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+void QNaub::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
     qDebug() << "enter" << this->pos();
     QGraphicsItem::hoverEnterEvent(event);
 }
 
-void Naub::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+void QNaub::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
     qDebug() << "leave" << this->pos();
     QGraphicsItem::hoverLeaveEvent(event);
 }

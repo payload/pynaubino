@@ -11,13 +11,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    scene.cpp \
-    view.cpp \
-    naub.cpp
+    Scene.cpp \
+    View.cpp \
+    QNaub.cpp \
+    Naubino.cpp
 
 HEADERS  += \
-    scene.h \
-    view.h \
-    naub.h
+    Scene.h \
+    View.h \
+    QNaub.h \
+    Naubino.h
 
 FORMS    +=
