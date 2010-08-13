@@ -3,10 +3,16 @@
 
 #include <QtGui>
 
+class Naub;
+
 class QNaub : public QGraphicsRectItem
 {
 public:
-    explicit QNaub(qreal x = 0, qreal y = 0, QGraphicsItem *parent = 0);
+    explicit QNaub(Naub *naub, QGraphicsItem *parent = 0);
+    Naub *naub;
+
+    void notifyUpdate();
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

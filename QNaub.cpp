@@ -1,12 +1,24 @@
 #include "QNaub.h"
+#include "Naub.h"
+#include "Vec.h"
 
-QNaub::QNaub(qreal x, qreal y, QGraphicsItem *parent) :
-    QGraphicsRectItem(x, y, 20, 20, parent)
+QNaub::QNaub(Naub *naub, QGraphicsItem *parent) :
+    QGraphicsRectItem(0, 0, 10, 10, parent)
 {
     setBrush(QBrush(Qt::black));
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
+
+    this->naub = naub;
+    notifyUpdate();
+}
+
+void QNaub::notifyUpdate() {
+    setX(naub->pos().x);
+    setY(naub->pos().y);
+    qreal r = naub->radius;
+    setRect(x()-r, y()-r, r*2, r*2);
 }
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {

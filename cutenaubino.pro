@@ -8,18 +8,23 @@ QT       += core gui
 
 TARGET = cutenaubino
 TEMPLATE = app
+LIBS += -lBox2D
 
 
 SOURCES += main.cpp \
     Scene.cpp \
     View.cpp \
     QNaub.cpp \
-    Naubino.cpp
+    Naubino.cpp \
+    Naub.cpp \
+    Vec.cpp
 
 HEADERS  += \
     Scene.h \
     View.h \
     QNaub.h \
-    Naubino.h
+    Naubino.h \
+    Naub.h \
+    Vec.h
 
 FORMS    +=
