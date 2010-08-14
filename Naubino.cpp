@@ -10,7 +10,7 @@ Naubino::Naubino(QObject *parent) :
 
 void Naubino::testSetting() {
     qreal r = 150;
-    for (float32 x = 0; x < M_PI*2; x += M_PI * 0.1)
+    for (float32 x = 0; x < M_PI*2; x += M_PI * 1)
         randomPair( Vec(qCos(x)*r, qSin(x)*r) );
 }
 

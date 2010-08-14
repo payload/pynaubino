@@ -33,6 +33,9 @@ public:
     float32 density;
     float32 friction;
     float32 restitution;
+
+    void selected();
+    void deselected();
 };
 
 #endif // NAUB_H

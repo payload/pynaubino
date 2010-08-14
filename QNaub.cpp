@@ -34,42 +34,48 @@ void QNaub::notifyUpdate() {
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "press" << this->pos();
+    qDebug() << "press" << this;
 #endif
-    QGraphicsItem::mousePressEvent(event);
+    Q_UNUSED(event);
+    naub->selected();
 }
 
 void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "move" << this->pos();
+    static int spam = 0;
+    if (spam % 100 == 0) qDebug() << "move" << this;
+    spam++;
 #endif
-    QGraphicsItem::mouseMoveEvent(event);
+    Q_UNUSED(event);
 }
 
 void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "release" << this->pos();
+    qDebug() << "release" << this;
 #endif
-    QGraphicsItem::mouseReleaseEvent(event);
+    Q_UNUSED(event);
+    naub->deselected();
 }
 
 void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "hover" << this->pos();
+    static int spam = 0;
+    if (spam % 100 == 0) qDebug() << "hover" << this;
+    spam++;
 #endif
-    QGraphicsItem::hoverMoveEvent(event);
+    Q_UNUSED(event);
 }
 
 void QNaub::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "enter" << this->pos();
+    qDebug() << "enter" << this;
 #endif
-    QGraphicsItem::hoverEnterEvent(event);
+    Q_UNUSED(event);
 }
 
 void QNaub::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 #ifdef DEBUG_EVENTS
-    qDebug() << "leave" << this->pos();
+    qDebug() << "leave" << this;
 #endif
-    QGraphicsItem::hoverLeaveEvent(event);
+    Q_UNUSED(event);
 }

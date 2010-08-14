@@ -19,6 +19,14 @@ Naub::Naub(Naubino *naubino, Vec pos)
     body->SetTransform(pos, rot());
 }
 
+void Naub::selected() {
+    qDebug("selected");
+}
+
+void Naub::deselected() {
+    qDebug("deselected");
+}
+
 Vec Naub::pos() {
     return Vec(body->GetPosition());
 }
