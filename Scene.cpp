@@ -4,8 +4,6 @@
 #include "Naubino.h"
 #include "Pointer.h"
 
-#include <QDebug>
-
 Scene::Scene(Naubino *naubino, QObject *parent) :
     QGraphicsScene(parent)
 {

@@ -5,8 +5,6 @@
 #include "Joint.h"
 #include "Pointer.h"
 
-#include <QDebug>
-
 Naub::Naub(Naubino *naubino, Vec pos)
 {
     this->naubino = naubino;
@@ -22,8 +20,6 @@ Naub::Naub(Naubino *naubino, Vec pos)
 }
 
 void Naub::selected(Pointer *pointer) {
-    qDebug("selected");
-
     b2DistanceJointDef def;
     def.frequencyHz = 0.5f;
     def.dampingRatio = 0.1f;
@@ -39,7 +35,6 @@ void Naub::selected(Pointer *pointer) {
 }
 
 void Naub::deselected(Pointer *pointer) {
-    qDebug("deselected");
     QList<b2Joint *> list = mouseJoints->values(pointer);
     for (int i = 0; i < list.count(); i++) {
         b2Joint *joint = list[i];
