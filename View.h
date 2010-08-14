@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 
 class Scene;
+class Qb2DebugDrawItem;
 
 class View : public QGraphicsView
 {
@@ -14,6 +15,8 @@ signals:
 
 public slots:
 
+protected:
+    Qb2DebugDrawItem *debugDraw;
 };
 
 #endif // VIEW_H
