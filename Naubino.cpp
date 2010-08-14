@@ -1,6 +1,7 @@
 #include "Naubino.h"
 #include "Naub.h"
 #include "Joint.h"
+#include "Pointer.h"
 
 Naubino::Naubino(QObject *parent) :
     QObject(parent)
@@ -78,6 +79,14 @@ void Naubino::setup() {
     joints = new QList<Joint *>();
     setupWorld();
     setupCalcTimer();
+
+    // setupPointers
+    pointers = new QList<Pointer *>();
+    Pointer *pointer = new Pointer(this);
+    b2BodyDef def;
+    def.type = b2_kinematicBody;
+    pointer->body = world->CreateBody(&def);
+    *pointers << pointer;
 }
 
 void Naubino::setupCalcTimer() {

@@ -4,12 +4,16 @@
 #include <QtGui>
 
 class Naub;
+class Pointer;
+class Scene;
 
 class QNaub : public QGraphicsEllipseItem
 {
 public:
-    explicit QNaub(Naub *naub, QGraphicsItem *parent = 0);
+    explicit QNaub(Scene *scene, Naub *naub, QGraphicsItem *parent = 0);
+    Scene *scene;
     Naub *naub;
+    Pointer *pointer;
 
     void notifyUpdate();
 

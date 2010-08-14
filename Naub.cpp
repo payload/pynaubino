@@ -3,6 +3,7 @@
 #include "Vec.h"
 #include "Naubino.h"
 #include "Joint.h"
+#include "Pointer.h"
 
 #include <QDebug>
 
@@ -11,6 +12,7 @@ Naub::Naub(Naubino *naubino, Vec pos)
     this->naubino = naubino;
     jointNaubs = new QList<Naub *>();
     joints = new QList<Joint *>();
+    mouseJoints = new QMap<Pointer *, b2Joint *>();
     radius = 15.0f;
     friction = 0.5f;
     density = 1.0f;
@@ -19,12 +21,32 @@ Naub::Naub(Naubino *naubino, Vec pos)
     body->SetTransform(pos, rot());
 }
 
-void Naub::selected() {
+void Naub::selected(Pointer *pointer) {
     qDebug("selected");
+
+    b2DistanceJointDef def;
+    def.frequencyHz = 0.5f;
+    def.dampingRatio = 0.1f;
+    def.length = 0.0f;
+    def.bodyA = body;
+    def.bodyB = pointer->body;
+    def.localAnchorA = body->GetLocalCenter();
+    def.localAnchorB = pointer->body->GetLocalCenter();
+    def.collideConnected = false;
+    mouseJoints->insert(
+            pointer,
+            naubino->world->CreateJoint(&def));
 }
 
-void Naub::deselected() {
+void Naub::deselected(Pointer *pointer) {
     qDebug("deselected");
+    QList<b2Joint *> list = mouseJoints->values(pointer);
+    for (int i = 0; i < list.count(); i++) {
+        b2Joint *joint = list[i];
+        naubino->world->DestroyJoint(joint);
+        list.removeAt(i);
+    }
+    mouseJoints->remove(pointer);
 }
 
 Vec Naub::pos() {

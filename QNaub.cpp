@@ -1,13 +1,15 @@
 #include "QNaub.h"
 #include "Naub.h"
 #include "Vec.h"
+#include "Pointer.h"
+#include "Scene.h"
 
 //#define DEBUG_EVENTS
 #ifdef DEBUG_EVENTS
 #include <QDebug>
 #endif
 
-QNaub::QNaub(Naub *naub, QGraphicsItem *parent) :
+QNaub::QNaub(Scene *scene, Naub *naub, QGraphicsItem *parent) :
     QGraphicsEllipseItem(0, 0, 10, 10, parent)
 {
     setZValue(100);
@@ -16,6 +18,8 @@ QNaub::QNaub(Naub *naub, QGraphicsItem *parent) :
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
+
+    this->scene = scene;
 
     this->naub = naub;
     naub->qnaub = this;
@@ -37,7 +41,7 @@ void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "press" << this;
 #endif
     Q_UNUSED(event);
-    naub->selected();
+    naub->selected(scene->getMainPointer());
 }
 
 void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -54,7 +58,7 @@ void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "release" << this;
 #endif
     Q_UNUSED(event);
-    naub->deselected();
+    naub->deselected(scene->getMainPointer());
 }
 
 void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {

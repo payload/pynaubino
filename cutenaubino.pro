@@ -19,7 +19,9 @@ SOURCES += main.cpp \
     Naub.cpp \
     Vec.cpp \
     Joint.cpp \
-    QJoint.cpp
+    QJoint.cpp \
+    Pointer.cpp \
+    Qb2DebugDraw.cpp
 
 HEADERS  += \
     Scene.h \
@@ -29,6 +31,8 @@ HEADERS  += \
     Naub.h \
     Vec.h \
     Joint.h \
-    QJoint.h
+    QJoint.h \
+    Pointer.h \
+    Qb2DebugDraw.h
 
 FORMS    +=

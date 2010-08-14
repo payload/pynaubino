@@ -9,6 +9,7 @@
 class QNaub;
 class Naubino;
 class Joint;
+class Pointer;
 
 class Naub
 {
@@ -34,8 +35,9 @@ public:
     float32 friction;
     float32 restitution;
 
-    void selected();
-    void deselected();
+    void selected(Pointer *pointer);
+    QMap<Pointer *, b2Joint *> *mouseJoints;
+    void deselected(Pointer *pointer);
 };
 
 #endif // NAUB_H

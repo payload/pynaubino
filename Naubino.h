@@ -7,6 +7,7 @@
 class Naub;
 class Joint;
 class Vec;
+class Pointer;
 
 static const float32 FRAMERATE = 1.0f / 30.0f;
 static const float32 B2_TIMESTEP = FRAMERATE;
@@ -22,19 +23,11 @@ public:
     QList<Joint *> *joints;
     void start();
 
-protected:
     Naub* addNaub(Vec pos);
     Joint* joinNaubs(Naub *a, Naub *b);
     void joinWithCenter(Naub *naub);
     void randomPair(Vec pos);
-signals:
-    void newNaub(Naub *naub);
-    void newJoint(Joint *joint);
 
-public slots:
-    void calc();
-
-private:
     void setup();
 
     void setupWorld();
@@ -48,10 +41,15 @@ private:
     void setupCalcTimer();
     QTimer *calcTimer;
 
-    void testSetting();
+    QList<Pointer *> *pointers;
 
-    friend class Naub;
-    friend class Joint;
+    void testSetting();
+signals:
+    void newNaub(Naub *naub);
+    void newJoint(Joint *joint);
+
+public slots:
+    void calc();
 };
 
 #endif // NAUBINO_H

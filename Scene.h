@@ -6,6 +6,7 @@
 class Naubino;
 class Naub;
 class Joint;
+class Pointer;
 
 class Scene : public QGraphicsScene
 {
@@ -15,6 +16,10 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    Naubino *naubino;
+    Pointer* getMainPointer();
+    QGraphicsItem *pointer;
 signals:
 
 public slots:
