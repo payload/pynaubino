@@ -1,24 +1,25 @@
 #include "Scene.h"
 #include "QNaub.h"
+#include "QJoint.h"
 #include "Naubino.h"
-
-#include <QDebug>
 
 Scene::Scene(Naubino *naubino, QObject *parent) :
     QGraphicsScene(parent)
 {
-    connect(naubino, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub *)));
+    connect(naubino, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub*)));
+    connect(naubino, SIGNAL(newJoint(Joint *)), this, SLOT(newJoint(Joint*)));
 
-    foreach (Naub *naub, *naubino->naubs) {
-        newNaub(naub);
-    }
+    addRect(-300, -200, 600, 400);
 }
 
 void Scene::newNaub(Naub *naub) {
-    qDebug("new naub <-");
     QNaub *qnaub = new QNaub(naub);
-    qDebug() << qnaub->boundingRect().width();
     addItem(qnaub);
+}
+
+void Scene::newJoint(Joint *joint) {
+    QJoint *qjoint = new QJoint(joint);
+    addItem(qjoint);
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

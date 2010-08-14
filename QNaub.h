@@ -5,7 +5,7 @@
 
 class Naub;
 
-class QNaub : public QGraphicsRectItem
+class QNaub : public QGraphicsEllipseItem
 {
 public:
     explicit QNaub(Naub *naub, QGraphicsItem *parent = 0);

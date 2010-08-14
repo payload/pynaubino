@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     Scene scene(&naubino);
     View view(&scene);
     view.show();
+    naubino.start();
 
     return a.exec();
 }

@@ -17,7 +17,9 @@ SOURCES += main.cpp \
     QNaub.cpp \
     Naubino.cpp \
     Naub.cpp \
-    Vec.cpp
+    Vec.cpp \
+    Joint.cpp \
+    QJoint.cpp
 
 HEADERS  += \
     Scene.h \
@@ -25,6 +27,8 @@ HEADERS  += \
     QNaub.h \
     Naubino.h \
     Naub.h \
-    Vec.h
+    Vec.h \
+    Joint.h \
+    QJoint.h
 
 FORMS    +=
