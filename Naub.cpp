@@ -63,7 +63,6 @@ Joint* Naub::join(Naub *other) {
 void Naub::setup() {
     setupBody();
     setupFixture();
-    body->ApplyLinearImpulse(1000*Vec(5, 10), Vec(10, 0));
 }
 
 void Naub::setupBody() {
