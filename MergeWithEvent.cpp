@@ -2,8 +2,6 @@
 #include "Naub.h"
 #include "Naubino.h"
 
-#include <QDebug>
-
 MergeWithEvent::MergeWithEvent(Naubino *naubino) : Event(naubino) {}
 
 bool MergeWithEvent::filter(b2Contact *contact, const b2ContactImpulse *impulse) {

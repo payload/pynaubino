@@ -5,8 +5,6 @@
 #include "Joint.h"
 #include "Pointer.h"
 
-#include <QDebug>
-
 Naub::Naub(Naubino *naubino, Vec pos, QColor color)
     : naubino(naubino), color(color)
 {

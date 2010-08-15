@@ -60,8 +60,6 @@ void Naubino::unjoinFromCenter(Naub *naub) {
 }
 //
 
-#include <QDebug>
-
 //
 void Naubino::mergeNaubs(Naub *a, Naub *b) {
     QMapIterator<Naub *, Joint *> i(*b->jointNaubs);

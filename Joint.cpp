@@ -3,8 +3,6 @@
 #include "QJoint.h"
 #include "Naubino.h"
 
-#include <QDebug>
-
 Joint::Joint(Naubino *naubino, Naub *a, Naub *b)
     : naubino(naubino), a(a), b(b) {
 
