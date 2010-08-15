@@ -10,23 +10,21 @@
 #endif
 
 QNaub::QNaub(Scene *scene, Naub *naub, QGraphicsItem *parent) :
-    QGraphicsEllipseItem(0, 0, 10, 10, parent)
+    QGraphicsEllipseItem(0, 0, 10, 10, parent),
+    scene(scene), naub(naub)
 {
     setZValue(100);
     setPen( QPen( QBrush(Qt::black), 2.0f ) );
-    setBrush( QBrush(Qt::darkGray) );
+    setBrush( QBrush(naub->color) );
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 
-    this->scene = scene;
-
-    this->naub = naub;
     naub->qnaub = this;
-    notifyUpdate();
+    changed();
 }
 
-void QNaub::notifyUpdate() {
+void QNaub::changed() {
     qreal x = naub->pos().x;
     qreal y = naub->pos().y;
     qreal r = naub->radius;
@@ -34,6 +32,12 @@ void QNaub::notifyUpdate() {
     setX(x);
     setY(y);
     setRotation(naub->rot());
+    if (naub->color != brush().color())
+        setBrush( QBrush( naub->color) );
+}
+
+void QNaub::deleted() {
+    scene->removeItem(this);
 }
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -41,7 +45,7 @@ void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "press" << this;
 #endif
     Q_UNUSED(event);
-    naub->selected(scene->getMainPointer());
+    naub->select(scene->getMainPointer());
 }
 
 void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -58,7 +62,7 @@ void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     qDebug() << "release" << this;
 #endif
     Q_UNUSED(event);
-    naub->deselected(scene->getMainPointer());
+    naub->deselect(scene->getMainPointer());
 }
 
 void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {

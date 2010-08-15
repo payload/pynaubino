@@ -12,8 +12,10 @@ Scene::Scene(Naubino *naubino, QObject *parent) :
     connect(naubino, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub*)));
     connect(naubino, SIGNAL(newJoint(Joint *)), this, SLOT(newJoint(Joint*)));
 
-    addRect(-300, -200, 600, 400);
+    QGraphicsItem *border = addRect(-300, -200, 600, 400);
+    border->setZValue(-90);
     pointer = addRect(0, 0, 2, 2);
+    pointer->setZValue(110);
 }
 
 void Scene::newNaub(Naub *naub) {
@@ -22,7 +24,7 @@ void Scene::newNaub(Naub *naub) {
 }
 
 void Scene::newJoint(Joint *joint) {
-    QJoint *qjoint = new QJoint(joint);
+    QJoint *qjoint = new QJoint(this, joint);
     addItem(qjoint);
 }
 

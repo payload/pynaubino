@@ -5,18 +5,27 @@
 
 class Naub;
 class QJoint;
+class Naubino;
 
 class Joint
 {
 public:
-    Joint(Naub *a, Naub *b);
+    Joint(Naubino *naubino, Naub *a, Naub *b);
+    ~Joint();
+
+    Naubino *naubino;
     Naub *a;
     Naub *b;
+    QJoint *qjoint;
     float32 frequencyHz;
     float32 dampingRatio;
     float32 length;
-    QJoint *qjoint;
-    void update();
+    b2Joint *joint;
+
+    void changed();
+    void setup();
+
+    Naub* other(Naub *x) { return a == x ? b : a; }
 };
 
 #endif // JOINT_H

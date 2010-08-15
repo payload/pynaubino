@@ -2,12 +2,14 @@
 #define NAUBINO_H
 
 #include <QtCore>
+#include <QColor>
 #include <Box2D.h>
 
 class Naub;
 class Joint;
 class Vec;
 class Pointer;
+class Event;
 
 static const float32 FRAMERATE = 1.0f / 30.0f;
 static const float32 B2_TIMESTEP = FRAMERATE;
@@ -19,31 +21,41 @@ class Naubino : public QObject
     Q_OBJECT
 public:
     explicit Naubino(QObject *parent = 0);
-    QList<Naub *> *naubs;
-    QList<Joint *> *joints;
-    void start();
 
-    Naub* addNaub(Vec pos);
+    QList<Naub *> *naubs;
+    b2World *world;
+    b2Body *center;
+    b2DistanceJointDef *centerJointDef;
+    QTimer *calcTimer;
+    QList<Pointer *> *pointers;
+    QList<Event *> *events;
+
+    Naub* addNaub(Vec pos, QColor color);
+    void deleteNaub(Naub *naub);
+
     Joint* joinNaubs(Naub *a, Naub *b);
+    void unjoinNaubs(Naub *a, Naub *b);
+    void unjoinNaubs(Joint *j);
+
     void joinWithCenter(Naub *naub);
-    void randomPair(Vec pos);
+    void unjoinFromCenter(Naub *naub);
+
+    void mergeNaubs(Naub *a, Naub *b);
+
+    void select(Naub *naub, Pointer *pointer);
+    void deselect(Naub *naub, Pointer *pointer);
 
     void setup();
-
     void setupWorld();
-    b2World *world;
-
     void setupCenter();
-    b2Body *center;
     void setupCenterJointDef();
-    b2DistanceJointDef *centerJointDef;
-
     void setupCalcTimer();
-    QTimer *calcTimer;
-
-    QList<Pointer *> *pointers;
+    void setupPointers();
 
     void testSetting();
+    void randomPair(Vec pos);
+    void start();
+    void setColor( QColor color );
 signals:
     void newNaub(Naub *naub);
     void newJoint(Joint *joint);

@@ -21,7 +21,10 @@ SOURCES += main.cpp \
     Joint.cpp \
     QJoint.cpp \
     Pointer.cpp \
-    Qb2DebugDraw.cpp
+    Qb2DebugDraw.cpp \
+    NaubinoContactListener.cpp \
+    Event.cpp \
+    MergeWithEvent.cpp
 
 HEADERS  += \
     Scene.h \
@@ -33,6 +36,9 @@ HEADERS  += \
     Joint.h \
     QJoint.h \
     Pointer.h \
-    Qb2DebugDraw.h
+    Qb2DebugDraw.h \
+    NaubinoContactListener.h \
+    Event.h \
+    MergeWithEvent.h
 
 FORMS    +=

@@ -5,43 +5,18 @@
 #include "Joint.h"
 #include "Pointer.h"
 
-Naub::Naub(Naubino *naubino, Vec pos)
+#include <QDebug>
+
+Naub::Naub(Naubino *naubino, Vec pos, QColor color)
+    : naubino(naubino), color(color)
 {
-    this->naubino = naubino;
-    jointNaubs = new QList<Naub *>();
-    joints = new QList<Joint *>();
-    mouseJoints = new QMap<Pointer *, b2Joint *>();
-    radius = 15.0f;
-    friction = 0.5f;
-    density = 1.0f;
-    restitution = 0.1f;
     setup();
     body->SetTransform(pos, rot());
 }
 
-void Naub::selected(Pointer *pointer) {
-    b2DistanceJointDef def;
-    def.frequencyHz = 0.5f;
-    def.dampingRatio = 0.1f;
-    def.length = 0.0f;
-    def.bodyA = body;
-    def.bodyB = pointer->body;
-    def.localAnchorA = body->GetLocalCenter();
-    def.localAnchorB = pointer->body->GetLocalCenter();
-    def.collideConnected = false;
-    mouseJoints->insert(
-            pointer,
-            naubino->world->CreateJoint(&def));
-}
-
-void Naub::deselected(Pointer *pointer) {
-    QList<b2Joint *> list = mouseJoints->values(pointer);
-    for (int i = 0; i < list.count(); i++) {
-        b2Joint *joint = list[i];
-        naubino->world->DestroyJoint(joint);
-        list.removeAt(i);
-    }
-    mouseJoints->remove(pointer);
+Naub::~Naub() {
+    if (qnaub != NULL) qnaub->deleted();
+    naubino->world->DestroyBody(body);
 }
 
 Vec Naub::pos() {
@@ -52,15 +27,26 @@ float32 Naub::rot() {
     return body->GetAngle();
 }
 
-void Naub::update() {
-    if(qnaub) qnaub->notifyUpdate();
+void Naub::changed() {
+    if (qnaub != NULL) qnaub->changed();
+    foreach (Joint *j, jointNaubs->values())
+        j->changed();
 }
 
-Joint* Naub::join(Naub *other) {
-    return new Joint(this, other);
+void Naub::select(Pointer *pointer) {
+    naubino->select(this, pointer);
+}
+
+void Naub::deselect(Pointer *pointer) {
+    naubino->deselect(this, pointer);
 }
 
 void Naub::setup() {
+    selected = 0;
+    qnaub = NULL;
+    centerJoint = NULL;
+    jointNaubs = new QMap<Naub *, Joint *>();
+    pointerJoints = new QMap<Pointer *, b2Joint *>();
     setupBody();
     setupFixture();
 }
@@ -74,6 +60,11 @@ void Naub::setupBody() {
 }
 
 void Naub::setupFixture() {
+    radius = 15.0f;
+    friction = 0.5f;
+    density = 1.0f;
+    restitution = 0.1f;
+
     b2CircleShape shape;
     shape.m_radius = radius;
     b2FixtureDef fixtureDef;
@@ -81,5 +72,6 @@ void Naub::setupFixture() {
     fixtureDef.friction = friction;
     fixtureDef.restitution = restitution;
     fixtureDef.density = density;
-    body->CreateFixture(&fixtureDef);
+    b2Fixture *fix = body->CreateFixture(&fixtureDef);
+    fix->SetUserData(this);
 }

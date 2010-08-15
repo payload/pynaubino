@@ -15,7 +15,8 @@ public:
     Naub *naub;
     Pointer *pointer;
 
-    void notifyUpdate();
+    void changed();
+    void deleted();
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

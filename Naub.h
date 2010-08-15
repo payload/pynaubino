@@ -2,6 +2,7 @@
 #define NAUB_H
 
 #include <QtCore>
+#include <QColor>
 #include <Box2D.h>
 
 #include "Vec.h"
@@ -14,30 +15,33 @@ class Pointer;
 class Naub
 {
 public:
-    Naub(Naubino *naubino, Vec pos);
-    void update();
-    QNaub *qnaub;
+    Naub(Naubino *naubino, Vec pos, QColor color);
+    ~Naub();
+
     Naubino *naubino;
-
-    void setup();
-    void setupBody();
-    void setupFixture();
-    Vec pos();
-    float32 rot();
+    QNaub *qnaub;
     b2Body *body;
-
-    Joint* join(Naub *other);
-    QList<Joint *> *joints;
-    QList<Naub *> *jointNaubs;
-
+    QMap<Naub *, Joint *> *jointNaubs;
+    QMap<Pointer *, b2Joint *> *pointerJoints;
+    QColor color;
+    int selected;
     float32 radius;
     float32 density;
     float32 friction;
     float32 restitution;
+    b2Joint *centerJoint;
 
-    void selected(Pointer *pointer);
-    QMap<Pointer *, b2Joint *> *mouseJoints;
-    void deselected(Pointer *pointer);
+    Vec pos();
+    float32 rot();
+
+    void changed();
+
+    void select(Pointer *pointer);
+    void deselect(Pointer *pointer);
+
+    void setup();
+    void setupBody();
+    void setupFixture();
 };
 
 #endif // NAUB_H

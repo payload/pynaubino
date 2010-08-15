@@ -3,15 +3,29 @@
 #include "QJoint.h"
 #include "Naubino.h"
 
-Joint::Joint(Naub *a, Naub *b) : a(a), b(b) {
+#include <QDebug>
+
+Joint::Joint(Naubino *naubino, Naub *a, Naub *b)
+    : naubino(naubino), a(a), b(b) {
+
+    setup();
+}
+
+Joint::~Joint() {
+    if (qjoint != NULL) qjoint->deleted();
+    naubino->world->DestroyJoint(joint);
+}
+
+void Joint::changed() {
+    if (qjoint != NULL) qjoint->changed();
+}
+
+void Joint::setup() {
+    qjoint = NULL;
+
     frequencyHz = 0.5f;
     dampingRatio = 0.1f;
     length = 40.0f;
-
-    *a->joints << this;
-    *a->jointNaubs << b;
-    *b->joints << this;
-    *b->jointNaubs << a;
 
     b2DistanceJointDef jointDef;
     jointDef.bodyA = a->body;
@@ -22,9 +36,5 @@ Joint::Joint(Naub *a, Naub *b) : a(a), b(b) {
     jointDef.frequencyHz = frequencyHz;
     jointDef.dampingRatio = dampingRatio;
     jointDef.length = length;
-    a->naubino->world->CreateJoint(&jointDef);
-}
-
-void Joint::update() {
-    if (qjoint) qjoint->notifyUpdate();
+    joint = naubino->world->CreateJoint(&jointDef);
 }

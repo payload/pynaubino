@@ -64,13 +64,15 @@ protected:
     }
 };
 
-class Qb2DebugDrawItem : public QGraphicsItem
+class Qb2DebugDrawItem : public QGraphicsObject
 {
 public:
     Qb2DebugDrawItem(b2World *world);
 
     b2World *world;
     Qb2DebugDraw *drawer;
+
+    void timerEvent(QTimerEvent *);
 
     QRectF boundingRect() const {
         return QRectF(-300, -200, 600, 400);
