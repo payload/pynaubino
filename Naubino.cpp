@@ -6,6 +6,7 @@
 #include "NaubinoContactListener.h"
 #include "Cycler.h"
 #include "Scorer.h"
+#include "Color.h"
 
 Naubino::Naubino(QObject *parent) :
     QObject(parent)
@@ -170,8 +171,8 @@ void Naubino::randomPair(Vec pos) {
     qreal x = qrand();
     Vec add(qCos(x), qSin(x));
     add *= 50;
-    Naub *n0 = addNaub(pos - add, Qt::red);
-    Naub *n1 = addNaub(pos + add, Qt::yellow);
+    Naub *n0 = addNaub(pos - add, Color::randomNaub().qcolor());
+    Naub *n1 = addNaub(pos + add, Color::randomNaub().qcolor());
     joinNaubs(n0, n1);
     joinWithCenter(n0);
     joinWithCenter(n1);
