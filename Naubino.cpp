@@ -4,6 +4,8 @@
 #include "Pointer.h"
 #include "Event.h"
 #include "NaubinoContactListener.h"
+#include "Cycler.h"
+#include "Scorer.h"
 
 Naubino::Naubino(QObject *parent) :
     QObject(parent)
@@ -15,10 +17,13 @@ Naubino::Naubino(QObject *parent) :
 Naub* Naubino::addNaub(Vec pos, QColor color) {
     Naub *naub = new Naub(this, pos, color);
     naubs->append(naub);
+    newNaub(naub);
     return naub;
 }
 
 void Naubino::deleteNaub(Naub *naub) {
+    foreach (Joint *j, naub->jointNaubs->values())
+        unjoinNaubs(j);
     naubs->removeOne(naub);
     delete naub;
 }
@@ -29,6 +34,7 @@ Joint* Naubino::joinNaubs(Naub *a, Naub *b) {
     Joint *joint = new Joint(this, a, b);
     a->jointNaubs->insertMulti(b, joint);
     b->jointNaubs->insertMulti(a, joint);
+    newJoint(joint);
     return joint;
 }
 
@@ -67,10 +73,11 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
         i.next();
         unjoinNaubs(i.value());
         if (a != i.key()) {
-            newJoint(joinNaubs(a, i.key()));
+            joinNaubs(a, i.key());
         }
     }
     deleteNaub(b);
+    mergedNaub(a);
 }
 //
 
@@ -111,13 +118,18 @@ void Naubino::setup() {
     setupCenter();
     setupCalcTimer();
     setupPointers();
+
+    world->SetContactListener(new NaubinoContactListener(this));
+    cycler = new Cycler(this);
+    scorer = new Scorer(this);
+    connect(cycler, SIGNAL(sccFound(QList<Naub*>*)),
+            scorer, SLOT(  sccFound(QList<Naub*>*)));
 }
 
 void Naubino::setupWorld() {
     b2Vec2 gravity(0.0f, 0.0f);
     bool doSleep = true;
     world = new b2World(gravity, doSleep);
-    world->SetContactListener(new NaubinoContactListener(this));
 }
 
 void Naubino::setupCenter() {
@@ -149,47 +161,20 @@ void Naubino::setupPointers() {
 // setups ^^
 
 void Naubino::testSetting() {
-    /*
     qreal r = 150;
-    for (float32 x = 0; x < M_PI*2; x += M_PI * 1)
+    for (float32 x = 0; x < M_PI*2; x += M_PI * 0.3)
         randomPair( Vec(qCos(x)*r, qSin(x)*r) );
-    */
-    Vec pos(-100, -100);
-    Naub *n0 = addNaub(pos + Vec( 0,  0), Qt::red);
-    Naub *n1 = addNaub(pos + Vec(40,  0), Qt::cyan);
-    Naub *n2 = addNaub(pos + Vec(40, 80), Qt::red);
-    Naub *n3 = addNaub(pos + Vec(40, 40), Qt::cyan);
-    Joint *j0 = joinNaubs(n0, n1);
-    Joint *j1 = joinNaubs(n2, n3);
-
-    joinWithCenter(n0);
-    joinWithCenter(n1);
-    joinWithCenter(n2);
-    joinWithCenter(n3);
-
-    qreal imp = 1000.0f;
-    n0->body->ApplyLinearImpulse(imp * Vec::rand(), Vec());
-    n0->body->ApplyLinearImpulse(imp * Vec::rand(), Vec());
-    n0->body->ApplyLinearImpulse(imp * Vec::rand(), Vec());
-    n0->body->ApplyLinearImpulse(imp * Vec::rand(), Vec());
-
-    newNaub(n0);
-    newNaub(n1);
-    newNaub(n2);
-    newNaub(n3);
-    newJoint(j0);
-    newJoint(j1);
 }
 
 void Naubino::randomPair(Vec pos) {
-    Q_UNUSED(pos);
-    /*
     qreal x = qrand();
     Vec add(qCos(x), qSin(x));
     add *= 50;
-    Naub *n0 = addNaub(pos - add);
-    Naub *n1 = addNaub(pos + add);
-    joinNaubs(n0, n1);*/
+    Naub *n0 = addNaub(pos - add, Qt::red);
+    Naub *n1 = addNaub(pos + add, Qt::yellow);
+    joinNaubs(n0, n1);
+    joinWithCenter(n0);
+    joinWithCenter(n1);
 }
 
 void Naubino::start() {

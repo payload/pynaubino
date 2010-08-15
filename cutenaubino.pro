@@ -24,7 +24,9 @@ SOURCES += main.cpp \
     Qb2DebugDraw.cpp \
     NaubinoContactListener.cpp \
     Event.cpp \
-    MergeWithEvent.cpp
+    MergeWithEvent.cpp \
+    Cycler.cpp \
+    Scorer.cpp
 
 HEADERS  += \
     Scene.h \
@@ -39,6 +41,8 @@ HEADERS  += \
     Qb2DebugDraw.h \
     NaubinoContactListener.h \
     Event.h \
-    MergeWithEvent.h
+    MergeWithEvent.h \
+    Cycler.h \
+    Scorer.h
 
 FORMS    +=

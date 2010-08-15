@@ -31,6 +31,10 @@ public:
     float32 restitution;
     b2Joint *centerJoint;
 
+    int temp; // use it as a convinience
+    // but dont trust on it to live
+    // longer than your function scope
+
     Vec pos();
     float32 rot();
 

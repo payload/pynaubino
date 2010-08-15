@@ -10,6 +10,8 @@ class Joint;
 class Vec;
 class Pointer;
 class Event;
+class Cycler;
+class Scorer;
 
 static const float32 FRAMERATE = 1.0f / 30.0f;
 static const float32 B2_TIMESTEP = FRAMERATE;
@@ -29,6 +31,9 @@ public:
     QTimer *calcTimer;
     QList<Pointer *> *pointers;
     QList<Event *> *events;
+
+    Cycler *cycler;
+    Scorer *scorer;
 
     Naub* addNaub(Vec pos, QColor color);
     void deleteNaub(Naub *naub);
@@ -59,6 +64,7 @@ public:
 signals:
     void newNaub(Naub *naub);
     void newJoint(Joint *joint);
+    void mergedNaub(Naub *naub);
 
 public slots:
     void calc();
