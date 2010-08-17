@@ -2,21 +2,23 @@
 #include "Naubino.h"
 #include "Naub.h"
 
-Cycler::Cycler(Naubino *naubino, QObject *parent) :
-    QObject(parent), naubino(naubino)
+Cycler::Cycler(Naubino *naubino) :
+    QObject(), naubino(naubino)
 {
     connect(naubino, SIGNAL(mergedNaub(Naub*)), SLOT(mergedNaub(Naub*)));
 }
 
 void Cycler::mergedNaub(Naub *naub) {
-    Gabow *g = new Gabow();
-    g->c = 1;
+    Gabow g;
+    g.c = 1;
     foreach (Naub *n, *naubino->naubs) {
         n->temp = 0;
     }
-    gabow(naub, NULL, g);
-    foreach(QList<Naub *> *scc, g->sccs)
-        sccFound(scc);
+    gabow(naub, NULL, &g);
+    foreach(QList<Naub *> *scc, g.sccs) {
+        sccFound(*scc);
+        delete scc;
+    }
 }
 
 /*
@@ -37,11 +39,11 @@ void Cycler::gabow(Naub *v, Naub *u, Gabow *g) {
                 g->p.pop();
     }
     if (!g->p.isEmpty() && g->p.top() == v) {
-        QList<Naub *> *scc = new QList<Naub *>();
-        do scc->append(x = g->s.pop()); while (x != v);
+        QList<Naub *> scc;
+        do scc.append(x = g->s.pop()); while (x != v);
         // save only non trivial sccs
-        if (scc->count() > 1) g->sccs.append(scc);
-        foreach (Naub *n, *scc) g->in_sccs.insert(n);
+        if (scc.count() > 1) g->sccs.append(new QList<Naub *>(scc));
+        foreach (Naub *n, scc) g->in_sccs.insert(n);
         g->p.pop();
     }
 }

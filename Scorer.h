@@ -10,12 +10,12 @@ class Scorer : public QObject
 {
     Q_OBJECT
 public:
-    explicit Scorer(Naubino *naubino, QObject *parent = 0);
+    explicit Scorer(Naubino *naubino);
     Naubino *naubino;
 signals:
 
 public slots:
-    void sccFound(QList<Naub *> *scc);
+    void sccFound(QList<Naub *> &scc);
 };
 
 #endif // SCORER_H

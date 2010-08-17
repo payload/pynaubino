@@ -20,10 +20,10 @@ class Cycler : public QObject
 {
     Q_OBJECT
 public:
-    explicit Cycler(Naubino *naubino, QObject *parent = 0);
+    explicit Cycler(Naubino *naubino);
     Naubino *naubino;
 signals:
-    void sccFound(QList<Naub *> *scc);
+    void sccFound(QList<Naub *> &scc);
 public slots:
     void mergedNaub(Naub *naub);
 protected:

@@ -126,8 +126,8 @@ void Naubino::setup() {
     world->SetContactListener(new NaubinoContactListener(this));
     cycler = new Cycler(this);
     scorer = new Scorer(this);
-    connect(cycler, SIGNAL(sccFound(QList<Naub*>*)),
-            scorer, SLOT(  sccFound(QList<Naub*>*)));
+    connect(cycler, SIGNAL(sccFound(QList<Naub*>&)),
+            scorer, SLOT(  sccFound(QList<Naub*>&)));
     spammer = new Spammer(this);
     spammer->start();
 }
