@@ -1,5 +1,17 @@
 #include "Color.h"
 
+Color::Color() : _name("unnamed") {
+    _qcolor = QColor();
+}
+
+Color::Color(int r, int g, int b, QString name)
+    : _name(name) {
+    _qcolor = QColor(r, g, b);
+}
+
+QString Color::readableName() { return _name; }
+QColor Color::qcolor() { return _qcolor; }
+
 #define M0(r, g, b, n) colors->insert(n, Color(r, g, b, n));
 QMap<QString, Color>* Color::naubino() {
     static QMap<QString, Color> *colors = new QMap<QString, Color>();
