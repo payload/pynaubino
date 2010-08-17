@@ -10,12 +10,17 @@ Joint::Joint(Naubino *naubino, Naub *a, Naub *b)
 }
 
 Joint::~Joint() {
-    if (qjoint != NULL) qjoint->deleted();
+    if (qjoint != NULL) qjoint->jointDeleted();
     naubino->world->DestroyJoint(joint);
 }
 
 void Joint::changed() {
-    if (qjoint != NULL) qjoint->changed();
+    if (qjoint != NULL) qjoint->jointChanged();
+}
+
+void Joint::deleted() {
+    naubino->world->DestroyJoint(joint);
+    if (qjoint != NULL) qjoint->jointDeleted();
 }
 
 void Joint::setup() {

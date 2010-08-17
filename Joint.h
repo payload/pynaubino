@@ -23,6 +23,8 @@ public:
     b2Joint *joint;
 
     void changed();
+    void deleted();
+
     void setup();
 
     Naub* other(Naub *x) { return a == x ? b : a; }

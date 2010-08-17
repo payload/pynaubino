@@ -42,7 +42,7 @@ Joint* Naubino::joinNaubs(Naub *a, Naub *b) {
 void Naubino::unjoinNaubs(Naub *a, Naub *b) {
     a->jointNaubs->remove(b);
     Joint *joint = b->jointNaubs->take(a);
-    delete joint;
+    joint->deleted();
 }
 
 void Naubino::unjoinNaubs(Joint *j) {

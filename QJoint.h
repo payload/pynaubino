@@ -9,14 +9,19 @@ class Scene;
 class QJoint : public QObject, public QGraphicsLineItem
 {
     Q_OBJECT
+    Q_PROPERTY(qreal penWidth READ penWidth WRITE setPenWidth)
 public:
     explicit QJoint(Scene *scene, Joint *joint);
     Scene *scene;
     Joint *joint;
 
-    void changed();
-    void deleted();
+    void jointChanged();
+    void jointDeleted();
+
+    qreal penWidth();
+    void setPenWidth(qreal width);
 public slots:
+    void deleted();
 signals:
 };
 
