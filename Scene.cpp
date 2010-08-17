@@ -19,8 +19,10 @@ Scene::Scene(Naubino *naubino, QObject *parent) :
 }
 
 void Scene::newNaub(Naub *naub) {
+    //QNaub *qnaub = new QNaub(this, naub);
     QNaub *qnaub = new QNaub(this, naub);
     addItem(qnaub);
+    //addItem(qnaub);
 }
 
 void Scene::newJoint(Joint *joint) {

@@ -5,7 +5,7 @@
 
 #include <QtGui>
 
-#define DEBUG_PHYSICS
+//#define DEBUG_PHYSICS
 
 View::View(Scene *scene, QWidget *parent) :
     QGraphicsView(scene, parent)
@@ -16,4 +16,5 @@ View::View(Scene *scene, QWidget *parent) :
     debugDraw->setZValue(-100);
     scene->addItem(debugDraw);
 #endif
+    setRenderHint(QPainter::Antialiasing);
 }

@@ -1,30 +1,26 @@
 #include "QNaub.h"
-#include "Naub.h"
-#include "Vec.h"
-#include "Pointer.h"
 #include "Scene.h"
+#include "Naub.h"
 
-//#define DEBUG_EVENTS
-#ifdef DEBUG_EVENTS
-#include <QDebug>
-#endif
-
-QNaub::QNaub(Scene *scene, Naub *naub, QGraphicsItem *parent) :
-    QGraphicsEllipseItem(0, 0, 10, 10, parent),
-    scene(scene), naub(naub)
+QNaub::QNaub(Scene *scene, Naub *naub) :
+    QObject(), QGraphicsEllipseItem(0, 0, 10, 10), scene(scene), naub(naub)
 {
-    setZValue(100);
-    setPen( QPen( QBrush(Qt::black), 2.0f ) );
-    setBrush( QBrush(naub->color) );
+    setZValue(101);
+    setPen( Qt::NoPen );
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 
     naub->qnaub = this;
-    changed();
+    naubChanged();
 }
 
-void QNaub::changed() {
+QNaub::~QNaub() {
+    scene = 0;
+    naub = 0;
+}
+
+void QNaub::naubChanged() {
     qreal x = naub->pos().x;
     qreal y = naub->pos().y;
     qreal r = naub->radius;
@@ -36,54 +32,36 @@ void QNaub::changed() {
         setBrush( QBrush( naub->color) );
 }
 
+void QNaub::naubDeleted() {
+    deleted();
+}
+
 void QNaub::deleted() {
-    scene->removeItem(this);
+    setVisible(false);
 }
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-#ifdef DEBUG_EVENTS
-    qDebug() << "press" << this;
-#endif
-    Q_UNUSED(event);
     naub->select(scene->getMainPointer());
+    Q_UNUSED(event);
 }
 
 void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-#ifdef DEBUG_EVENTS
-    static int spam = 0;
-    if (spam % 100 == 0) qDebug() << "move" << this;
-    spam++;
-#endif
     Q_UNUSED(event);
 }
 
 void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-#ifdef DEBUG_EVENTS
-    qDebug() << "release" << this;
-#endif
-    Q_UNUSED(event);
     naub->deselect(scene->getMainPointer());
+    Q_UNUSED(event);
 }
 
 void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
-#ifdef DEBUG_EVENTS
-    static int spam = 0;
-    if (spam % 100 == 0) qDebug() << "hover" << this;
-    spam++;
-#endif
     Q_UNUSED(event);
 }
 
 void QNaub::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-#ifdef DEBUG_EVENTS
-    qDebug() << "enter" << this;
-#endif
     Q_UNUSED(event);
 }
 
 void QNaub::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-#ifdef DEBUG_EVENTS
-    qDebug() << "leave" << this;
-#endif
     Q_UNUSED(event);
 }

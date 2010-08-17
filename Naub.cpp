@@ -13,7 +13,7 @@ Naub::Naub(Naubino *naubino, Vec pos, QColor color)
 }
 
 Naub::~Naub() {
-    if (qnaub != NULL) qnaub->deleted();
+    if (qnaub != NULL) qnaub->naubDeleted();
     naubino->world->DestroyBody(body);
 }
 
@@ -26,7 +26,7 @@ float32 Naub::rot() {
 }
 
 void Naub::changed() {
-    if (qnaub != NULL) qnaub->changed();
+    if (qnaub != NULL) qnaub->naubChanged();
     foreach (Joint *j, jointNaubs->values())
         j->changed();
 }

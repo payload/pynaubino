@@ -3,8 +3,8 @@
 #include "Naub.h"
 #include "Scene.h"
 
-QJoint::QJoint(Scene *scene, Joint *joint, QGraphicsItem *parent) :
-    QGraphicsLineItem(parent), scene(scene), joint(joint)
+QJoint::QJoint(Scene *scene, Joint *joint) :
+        QObject(), QGraphicsLineItem(), scene(scene), joint(joint)
 {
     setZValue(99);
     setPen( QPen( QBrush(Qt::black), 4.0f ) );
