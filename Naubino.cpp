@@ -26,7 +26,7 @@ void Naubino::deleteNaub(Naub *naub) {
     foreach (Joint *j, naub->jointNaubs->values())
         unjoinNaubs(j);
     naubs->removeOne(naub);
-    delete naub;
+    naub->deleted();
 }
 //
 
@@ -100,14 +100,16 @@ void Naubino::select(Naub *naub, Pointer *pointer) {
 }
 
 void Naubino::deselect(Naub *naub, Pointer *pointer) {
-    QList<b2Joint *> list = naub->pointerJoints->values(pointer);
-    for (int i = 0; i < list.count(); i++) {
-        b2Joint *joint = list[i];
-        world->DestroyJoint(joint);
-        list.removeAt(i);
+    if (naub->pointerJoints->count() > 0) {
+        QList<b2Joint *> list = naub->pointerJoints->values(pointer);
+        for (int i = 0; i < list.count(); i++) {
+            b2Joint *joint = list[i];
+            world->DestroyJoint(joint);
+            list.removeAt(i);
+        }
+        naub->pointerJoints->remove(pointer);
+        naub->selected--;
     }
-    naub->pointerJoints->remove(pointer);
-    naub->selected--;
 }
 //
 

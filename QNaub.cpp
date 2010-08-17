@@ -33,7 +33,11 @@ void QNaub::naubChanged() {
 }
 
 void QNaub::naubDeleted() {
-    deleted();
+    QPropertyAnimation *ani = new QPropertyAnimation(this, "scale");
+    ani->setEndValue(0);
+    ani->setDuration(500);
+    connect(ani, SIGNAL(finished()), SLOT(deleted()));
+    ani->start();
 }
 
 void QNaub::deleted() {

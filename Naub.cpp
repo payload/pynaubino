@@ -13,8 +13,12 @@ Naub::Naub(Naubino *naubino, Vec pos, QColor color)
 }
 
 Naub::~Naub() {
-    if (qnaub != NULL) qnaub->naubDeleted();
     naubino->world->DestroyBody(body);
+}
+
+void Naub::deleted() {
+    if (qnaub != NULL) qnaub->naubDeleted();
+    body->SetActive(false);
 }
 
 Vec Naub::pos() {

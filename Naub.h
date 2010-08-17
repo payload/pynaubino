@@ -39,6 +39,7 @@ public:
     float32 rot();
 
     void changed();
+    void deleted();
 
     void select(Pointer *pointer);
     void deselect(Pointer *pointer);
