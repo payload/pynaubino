@@ -7,6 +7,7 @@
 #include "Cycler.h"
 #include "Scorer.h"
 #include "Color.h"
+#include "Spammer.h"
 
 Naubino::Naubino(QObject *parent) :
     QObject(parent)
@@ -127,6 +128,8 @@ void Naubino::setup() {
     scorer = new Scorer(this);
     connect(cycler, SIGNAL(sccFound(QList<Naub*>*)),
             scorer, SLOT(  sccFound(QList<Naub*>*)));
+    spammer = new Spammer(this);
+    spammer->start();
 }
 
 void Naubino::setupWorld() {

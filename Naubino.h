@@ -12,6 +12,7 @@ class Pointer;
 class Event;
 class Cycler;
 class Scorer;
+class Spammer;
 
 static const float32 FRAMERATE = 1.0f / 30.0f;
 static const float32 B2_TIMESTEP = FRAMERATE;
@@ -34,6 +35,7 @@ public:
 
     Cycler *cycler;
     Scorer *scorer;
+    Spammer *spammer;
 
     Naub* addNaub(Vec pos, QColor color);
     void deleteNaub(Naub *naub);

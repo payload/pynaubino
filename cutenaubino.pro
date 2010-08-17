@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     MergeWithEvent.cpp \
     Cycler.cpp \
     Scorer.cpp \
-    Color.cpp
+    Color.cpp \
+    Spammer.cpp
 
 HEADERS  += \
     Scene.h \
@@ -45,6 +46,7 @@ HEADERS  += \
     MergeWithEvent.h \
     Cycler.h \
     Scorer.h \
-    Color.h
+    Color.h \
+    Spammer.h
 
 FORMS    +=

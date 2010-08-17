@@ -11,18 +11,11 @@ Scene::Scene(Naubino *naubino, QObject *parent) :
 
     connect(naubino, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub*)));
     connect(naubino, SIGNAL(newJoint(Joint *)), this, SLOT(newJoint(Joint*)));
-
-    QGraphicsItem *border = addRect(-300, -200, 600, 400);
-    border->setZValue(-90);
-    pointer = addRect(0, 0, 2, 2);
-    pointer->setZValue(110);
 }
 
 void Scene::newNaub(Naub *naub) {
-    //QNaub *qnaub = new QNaub(this, naub);
     QNaub *qnaub = new QNaub(this, naub);
     addItem(qnaub);
-    //addItem(qnaub);
 }
 
 void Scene::newJoint(Joint *joint) {
@@ -33,7 +26,6 @@ void Scene::newJoint(Joint *joint) {
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF pos = event->scenePos();
     getMainPointer()->setPos( Vec(pos) );
-    pointer->setPos( pos );
     QGraphicsScene::mouseMoveEvent(event);
 }
 

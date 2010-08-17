@@ -19,7 +19,6 @@ public:
 
     Naubino *naubino;
     Pointer* getMainPointer();
-    QGraphicsItem *pointer;
 signals:
 
 public slots:
