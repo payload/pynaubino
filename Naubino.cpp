@@ -187,9 +187,14 @@ void Naubino::start() {
 
 // public slots
 void Naubino::calc() {
-    events->clear();
     world->Step(B2_TIMESTEP, B2_VELITERATIONS, B2_POSITERATIONS);
-    foreach (Event *event, *events) event->handle();
+
+    foreach (Event *event, *events) {
+        event->handle();
+        delete event;
+    }
+    events->clear();
+
     foreach (Naub *naub, *naubs) naub->changed();
     world->ClearForces();
 }
