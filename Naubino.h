@@ -23,7 +23,7 @@ class Naubino : public QObject
 {
     Q_OBJECT
 public:
-    explicit Naubino(QObject *parent = 0);
+    explicit Naubino();
 
     QList<Naub *> *naubs;
     b2World *world;
@@ -66,7 +66,7 @@ public:
 signals:
     void newNaub(Naub *naub);
     void newJoint(Joint *joint);
-    void mergedNaub(Naub *naub);
+    void mergedNaub(Naub &naub);
 
 public slots:
     void calc();

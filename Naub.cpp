@@ -4,6 +4,7 @@
 #include "Naubino.h"
 #include "Joint.h"
 #include "Pointer.h"
+#include "Cycler.h"
 
 Naub::Naub(Naubino *naubino, Vec pos, QColor color)
     : naubino(naubino), color(color)
@@ -49,6 +50,7 @@ void Naub::setup() {
     centerJoint = NULL;
     jointNaubs = new QMap<Naub *, Joint *>();
     pointerJoints = new QMap<Pointer *, b2Joint *>();
+    tarjan = new NaubTarjan();
     setupBody();
     setupFixture();
 }
@@ -63,9 +65,9 @@ void Naub::setupBody() {
 
 void Naub::setupFixture() {
     radius = 15.0f;
-    friction = 0.5f;
+    friction = .001f;
     density = 1.0f;
-    restitution = 0.1f;
+    restitution = 0.99f;
 
     b2CircleShape shape;
     shape.m_radius = radius;

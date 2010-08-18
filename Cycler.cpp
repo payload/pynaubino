@@ -1,49 +1,75 @@
 #include "Cycler.h"
 #include "Naubino.h"
 #include "Naub.h"
+#include "Color.h"
 
-Cycler::Cycler(Naubino *naubino) :
-    QObject(), naubino(naubino)
-{
-    connect(naubino, SIGNAL(mergedNaub(Naub*)), SLOT(mergedNaub(Naub*)));
+Tarjan::Tarjan() {
+    s = new QStack<Naub *>();
+    sccs = new QList< QList<Naub *> *>();
+    index = 1;
 }
 
-void Cycler::mergedNaub(Naub *naub) {
-    Gabow g;
-    g.c = 1;
+NaubTarjan::NaubTarjan() {
+    index = 0;
+    lowlink = 0;
+    in_s = false;
+}
+
+Cycler::Cycler(Naubino *naubino) :
+    QObject(), naubino(naubino) {
+    connect(naubino, SIGNAL(mergedNaub(Naub&)), SLOT(mergedNaub(Naub&)));
+}
+
+#include <QDebug>
+
+void Cycler::mergedNaub(Naub &naub) {
+    Tarjan t;
     foreach (Naub *n, *naubino->naubs) {
-        n->temp = 0;
+        n->tarjan->index   = 0;
+        n->tarjan->lowlink = 0;
+        n->tarjan->in_s    = false;
+        n->tarjan->visited = false;
     }
-    gabow(naub, NULL, &g);
-    foreach(QList<Naub *> *scc, g.sccs) {
+    tarjan(naub, 0, t);
+    qDebug();
+    foreach(QList<Naub *> *scc, *t.sccs) {
         sccFound(*scc);
         delete scc;
     }
 }
 
 /*
-http://en.wikipedia.org/wiki/Gabow's_algorithm
+http://en.wikipedia.org/wiki/Tarjan's_strongly_connected_components_algorithm
 
-u is the vertex i am coming from and is used to
-apply Gabow on undirected graphs.
+"u" to prevent moving back in our undirected graph
 */
-void Cycler::gabow(Naub *v, Naub *u, Gabow *g) {
-    Naub *x;
-    v->temp = g->c++;
-    g->s.push(v);
-    g->p.push(v);
-    foreach (Naub *w, v->jointNaubs->keys()) {
-        if (w->temp == 0) gabow(w, v, g);
-        if (w != u && !g->in_sccs.contains(w))
-            while (!g->p.isEmpty() && g->p.top()->temp > w->temp)
-                g->p.pop();
+void Cycler::tarjan(Naub &v, Naub *u, Tarjan &t) {
+    v.tarjan->index = t.index;
+    v.tarjan->lowlink = t.index;
+    t.index++;
+    t.s->push(&v);
+    v.tarjan->in_s = true;
+    v.tarjan->visited = true;
+    foreach (Naub *w, v.jointNaubs->keys()) {
+        if (w != u) {
+            if (w->tarjan->index == 0) {
+                tarjan(*w, &v, t);
+                v.tarjan->lowlink = qMin(v.tarjan->lowlink, w->tarjan->lowlink);
+            } else {
+                if (w->tarjan->in_s)
+                    v.tarjan->lowlink = qMin(v.tarjan->lowlink, w->tarjan->index);
+            }
+        }
     }
-    if (!g->p.isEmpty() && g->p.top() == v) {
-        QList<Naub *> scc;
-        do scc.append(x = g->s.pop()); while (x != v);
-        // save only non trivial sccs
-        if (scc.count() > 1) g->sccs.append(new QList<Naub *>(scc));
-        foreach (Naub *n, scc) g->in_sccs.insert(n);
-        g->p.pop();
+    if (v.tarjan->lowlink == v.tarjan->index && t.s->count() > 1) {
+        QList<Naub *> *scc = new QList<Naub *>();
+        Naub *w;
+        int c = 0;
+        do {
+            w = t.s->pop();
+            scc->append(w);
+            c++;
+        } while(w != &v);
+        if (c > 1) t.sccs->append(scc);
     }
 }

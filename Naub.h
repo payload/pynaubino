@@ -11,6 +11,7 @@ class QNaub;
 class Naubino;
 class Joint;
 class Pointer;
+class NaubTarjan;
 
 class Naub
 {
@@ -31,9 +32,7 @@ public:
     float32 restitution;
     b2Joint *centerJoint;
 
-    int temp; // use it as a convinience
-    // but dont trust on it to live
-    // longer than your function scope
+    NaubTarjan *tarjan;
 
     Vec pos();
     float32 rot();

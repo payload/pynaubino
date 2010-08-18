@@ -9,8 +9,8 @@
 #include "Color.h"
 #include "Spammer.h"
 
-Naubino::Naubino(QObject *parent) :
-    QObject(parent)
+Naubino::Naubino() :
+    QObject()
 {
     setup();
 }
@@ -79,7 +79,7 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
         }
     }
     deleteNaub(b);
-    mergedNaub(a);
+    mergedNaub(*a);
 }
 //
 
@@ -87,9 +87,9 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
 void Naubino::select(Naub *naub, Pointer *pointer) {
     naub->selected++;
     b2DistanceJointDef def;
-    def.frequencyHz = 0.5f;
-    def.dampingRatio = 0.1f;
-    def.length = 0.0f;
+    def.frequencyHz  = 1;
+    def.dampingRatio = 0.001;
+    def.length       = 0.001;
     def.bodyA = naub->body;
     def.bodyB = pointer->body;
     def.localAnchorA = naub->body->GetLocalCenter();
@@ -146,9 +146,9 @@ void Naubino::setupCenter() {
     centerJointDef->bodyB = center;
     centerJointDef->localAnchorB = center->GetLocalCenter();
     centerJointDef->collideConnected = false;
-    centerJointDef->frequencyHz = 0.1f;
-    centerJointDef->dampingRatio = 0.6f;
-    centerJointDef->length = 0.0f;
+    centerJointDef->frequencyHz  = 0.1f;
+    centerJointDef->dampingRatio = 0.0f;
+    centerJointDef->length       = 0.0f;
 }
 
 void Naubino::setupCalcTimer() {

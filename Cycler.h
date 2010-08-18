@@ -5,16 +5,7 @@
 
 class Naubino;
 class Naub;
-
-class Cycle : public QList<Naub *> {};
-
-struct Gabow {
-    QStack<Naub *> s;
-    QStack<Naub *> p;
-    QList< QList<Naub *>* > sccs;
-    QSet<Naub *> in_sccs;
-    int c;
-};
+class Tarjan;
 
 class Cycler : public QObject
 {
@@ -25,9 +16,30 @@ public:
 signals:
     void sccFound(QList<Naub *> &scc);
 public slots:
-    void mergedNaub(Naub *naub);
+    void mergedNaub(Naub &naub);
 protected:
-    void gabow(Naub *v, Naub *u, Gabow *g);
+    void tarjan(Naub &v, Naub *u, Tarjan &t);
+};
+
+
+class Tarjan {
+private:
+    Tarjan();
+    QStack<Naub *> *s;
+    QList<QList<Naub *> *> *sccs;
+    int index;
+    friend class Cycler;
+};
+
+class NaubTarjan {
+private:
+    NaubTarjan();
+    int index;
+    int lowlink;
+    bool in_s;
+    bool visited;
+    friend class Cycler;
+    friend class Naub;
 };
 
 #endif // CYCLER_H
