@@ -5,8 +5,7 @@ NaubinoContactListener::NaubinoContactListener(Naubino *naubino)
 
 void NaubinoContactListener::PostSolve(
         b2Contact* contact, const b2ContactImpulse* impulse) {
-    Event *event = new Event(naubino);
-    if (event->filter(contact, impulse)) naubino->events->append(event);
+    Event *event;
     event = new MergeWithEvent(naubino);
     if (event->filter(contact, impulse)) naubino->events->append(event);
 }

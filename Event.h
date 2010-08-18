@@ -11,12 +11,8 @@ class Event
 public:
     Event(Naubino *naubino);
     Naubino *naubino;
-    virtual bool filter(b2Contact *contact, const b2ContactImpulse *impulse) {
-        Q_UNUSED(contact);
-        Q_UNUSED(impulse);
-        return false;
-    }
-    virtual void handle(){}
+    virtual bool filter(b2Contact *contact, const b2ContactImpulse *impulse);
+    virtual void handle();
 };
 
 #endif // EVENT_H
