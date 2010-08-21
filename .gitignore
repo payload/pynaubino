@@ -1,1 +1,7 @@
 *.pro.user
+moc_*
+*.moc
+*.o
+*/bin*
+tests/*/bin*
+Makefile
