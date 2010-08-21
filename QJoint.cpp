@@ -14,9 +14,9 @@ QJoint::QJoint(Scene *scene, Joint *joint) :
 }
 
 void QJoint::jointChanged() {
-    Vec a = joint->a->pos();
-    Vec b = joint->b->pos();
-    setLine(a.x, a.y, b.x, b.y);
+    QPointF a = joint->a->pos().q();
+    QPointF b = joint->b->pos().q();
+    setLine(a.x(), a.y(), b.x(), b.y());
 }
 
 void QJoint::jointDeleted() {

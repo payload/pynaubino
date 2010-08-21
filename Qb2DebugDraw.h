@@ -56,7 +56,7 @@ public:
 
 protected:
     QPointF toQPointF(b2Vec2 vec) {
-        return QPointF(vec.x, vec.y);
+        return QPointF(vec.x * 100, vec.y * 100);
     }
 
     QColor toQColor(b2Color color) {

@@ -17,6 +17,7 @@ View::View(Scene *scene, QWidget *parent) :
     border->setZValue(-90);
 
 #ifdef DEBUG_PHYSICS
+    setRenderHint(QPainter::Antialiasing, false);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     debugDraw = new Qb2DebugDrawItem(scene->naubino->world);
     debugDraw->setZValue(-100);

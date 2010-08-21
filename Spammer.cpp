@@ -5,7 +5,7 @@
 Spammer::Spammer(Naubino *naubino) :
     QTimer(), naubino(naubino)
 {
-    setInterval(3000);
+    setInterval(1000);
 }
 
 Spammer::~Spammer() {
@@ -13,7 +13,8 @@ Spammer::~Spammer() {
 }
 
 void Spammer::timerEvent(QTimerEvent *e) {
-    qreal rx = 300*1.8, ry = 200*1.8, x = qrand() * 2.0f / RAND_MAX * M_PI;
+    qreal w = 5, h = 2.5;
+    qreal rx = w, ry = h, x = qrand() * 2.0f / RAND_MAX * M_PI;
     naubino->randomPair(Vec( rx*qCos(x), ry*qSin(x) ));
     QTimer::timerEvent(e);
 }

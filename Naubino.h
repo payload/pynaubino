@@ -13,11 +13,7 @@ class Event;
 class Cycler;
 class Scorer;
 class Spammer;
-
-static const float32 FRAMERATE = 1.0f / 30.0f;
-static const float32 B2_TIMESTEP = FRAMERATE;
-static const int32 B2_VELITERATIONS = 10;
-static const int32 B2_POSITERATIONS = 10;
+class CenterJoint;
 
 class Naubino : public QObject
 {
@@ -26,12 +22,17 @@ public:
     explicit Naubino();
 
     QList<Naub *> *naubs;
+    QList<CenterJoint *> *joints;
     b2World *world;
     b2Body *center;
     b2DistanceJointDef *centerJointDef;
     QTimer *calcTimer;
     QList<Pointer *> *pointers;
     QList<Event *> *events;
+    QList<b2MouseJoint *> *pointerJoints;
+    b2Body *ground_body;
+
+    int timeperframe;
 
     Cycler *cycler;
     Scorer *scorer;

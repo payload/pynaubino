@@ -21,9 +21,10 @@ QNaub::~QNaub() {
 }
 
 void QNaub::naubChanged() {
-    qreal x = naub->pos().x;
-    qreal y = naub->pos().y;
-    qreal r = naub->radius;
+    QPointF pos = naub->pos().q();
+    qreal x = pos.x();
+    qreal y = pos.y();
+    qreal r = naub->radius * 100;
     setRect( QRectF(0-r, 0-r, r*2, r*2).normalized() );
     setX(x);
     setY(y);

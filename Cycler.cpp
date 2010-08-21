@@ -20,8 +20,6 @@ Cycler::Cycler(Naubino *naubino) :
     connect(naubino, SIGNAL(mergedNaub(Naub&)), SLOT(mergedNaub(Naub&)));
 }
 
-#include <QDebug>
-
 void Cycler::mergedNaub(Naub &naub) {
     Tarjan t;
     foreach (Naub *n, *naubino->naubs) {
@@ -31,7 +29,6 @@ void Cycler::mergedNaub(Naub &naub) {
         n->tarjan->visited = false;
     }
     tarjan(naub, 0, t);
-    qDebug();
     foreach(QList<Naub *> *scc, *t.sccs) {
         sccFound(*scc);
         delete scc;

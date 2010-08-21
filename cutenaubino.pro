@@ -28,7 +28,9 @@ SOURCES += main.cpp \
     Cycler.cpp \
     Scorer.cpp \
     Color.cpp \
-    Spammer.cpp
+    Spammer.cpp \
+    CenterJoint.cpp \
+    PointerJoint.cpp
 
 HEADERS  += \
     Scene.h \
@@ -47,6 +49,8 @@ HEADERS  += \
     Cycler.h \
     Scorer.h \
     Color.h \
-    Spammer.h
+    Spammer.h \
+    CenterJoint.h \
+    PointerJoint.h
 
 FORMS    +=

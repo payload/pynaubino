@@ -8,6 +8,9 @@
 #include "Scorer.h"
 #include "Color.h"
 #include "Spammer.h"
+#include "CenterJoint.h"
+
+static const float32 FPS = 20;
 
 Naubino::Naubino() :
     QObject()
@@ -20,6 +23,16 @@ Naub* Naubino::addNaub(Vec pos, QColor color) {
     Naub *naub = new Naub(this, pos, color);
     naubs->append(naub);
     newNaub(naub);
+
+    {
+        b2FrictionJointDef def;
+        def.Initialize(ground_body, naub->body,
+                       ground_body->GetWorldCenter());
+        def.maxForce = 0.01;
+        def.maxTorque = 0.01;
+        world->CreateJoint(&def);
+    }
+
     return naub;
 }
 
@@ -56,15 +69,16 @@ void Naubino::unjoinNaubs(Joint *j) {
 //
 void Naubino::joinWithCenter(Naub *naub) {
     if (naub->centerJoint == NULL) {
-        centerJointDef->bodyA = naub->body;
-        centerJointDef->localAnchorA = naub->body->GetLocalCenter();
-        naub->centerJoint = world->CreateJoint(centerJointDef);
+        naub->centerJoint = new CenterJoint(world, center);
+        naub->centerJoint->join(naub);
+        joints->append(naub->centerJoint);
     }
 }
 
 void Naubino::unjoinFromCenter(Naub *naub) {
-    world->DestroyJoint(naub->centerJoint);
-    naub->centerJoint = NULL;
+    naub->centerJoint->unjoin();
+    delete naub->centerJoint;
+    naub->centerJoint = 0;
 }
 //
 
@@ -86,18 +100,19 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
 //
 void Naubino::select(Naub *naub, Pointer *pointer) {
     naub->selected++;
-    b2DistanceJointDef def;
-    def.frequencyHz  = 1;
-    def.dampingRatio = 0.001;
-    def.length       = 0.001;
-    def.bodyA = naub->body;
-    def.bodyB = pointer->body;
-    def.localAnchorA = naub->body->GetLocalCenter();
-    def.localAnchorB = pointer->body->GetLocalCenter();
-    def.collideConnected = false;
-    naub->pointerJoints->insert(
-            pointer,
-            world->CreateJoint(&def));
+
+    b2MouseJointDef def;
+    def.maxForce = naub->body->GetMass() * 2;
+    def.frequencyHz = 20;
+    def.dampingRatio = 1;
+    def.bodyA = ground_body;
+    def.bodyB = naub->body;
+    def.target = pointer->pos();
+    def.userData = pointer;
+
+    b2MouseJoint *joint = (b2MouseJoint *)world->CreateJoint(&def);
+    naub->pointerJoints->insert(pointer, joint);
+    pointerJoints->append(joint);
 }
 
 void Naubino::deselect(Naub *naub, Pointer *pointer) {
@@ -106,6 +121,7 @@ void Naubino::deselect(Naub *naub, Pointer *pointer) {
         for (int i = 0; i < list.count(); i++) {
             b2Joint *joint = list[i];
             world->DestroyJoint(joint);
+            pointerJoints->removeOne((b2MouseJoint *)joint);
             list.removeAt(i);
         }
         naub->pointerJoints->remove(pointer);
@@ -117,10 +133,17 @@ void Naubino::deselect(Naub *naub, Pointer *pointer) {
 // setups
 void Naubino::setup() {
     naubs = new QList<Naub *>();
+    joints = new QList<CenterJoint *>();
     events = new QList<Event *>();
+    pointerJoints = new QList<b2MouseJoint *>();
     setupWorld();
     setupCenter();
     setupCalcTimer();
+
+    b2BodyDef def;
+    def.type = b2_staticBody;
+    ground_body = world->CreateBody(&def);
+
     setupPointers();
 
     world->SetContactListener(new NaubinoContactListener(this));
@@ -139,16 +162,9 @@ void Naubino::setupWorld() {
 }
 
 void Naubino::setupCenter() {
-    b2BodyDef centerDef;
-    center = world->CreateBody(&centerDef);
-
-    centerJointDef = new b2DistanceJointDef();
-    centerJointDef->bodyB = center;
-    centerJointDef->localAnchorB = center->GetLocalCenter();
-    centerJointDef->collideConnected = false;
-    centerJointDef->frequencyHz  = 0.1f;
-    centerJointDef->dampingRatio = 0.0f;
-    centerJointDef->length       = 0.0f;
+    b2BodyDef def;
+    def.type = b2_kinematicBody;
+    center = world->CreateBody(&def);
 }
 
 void Naubino::setupCalcTimer() {
@@ -167,15 +183,13 @@ void Naubino::setupPointers() {
 // setups ^^
 
 void Naubino::testSetting() {
-    qreal r = 150;
-    for (float32 x = 0; x < M_PI*2; x += M_PI * 0.3)
-        randomPair( Vec(qCos(x)*r, qSin(x)*r) );
+
 }
 
 void Naubino::randomPair(Vec pos) {
     qreal x = qrand();
     Vec add(qCos(x), qSin(x));
-    add *= 50;
+    add *= 0.2;
     Naub *n0 = addNaub(pos - add, Color::randomNaub().qcolor());
     Naub *n1 = addNaub(pos + add, Color::randomNaub().qcolor());
     joinNaubs(n0, n1);
@@ -185,12 +199,22 @@ void Naubino::randomPair(Vec pos) {
 
 void Naubino::start() {
     testSetting();
-    calcTimer->start( FRAMERATE * 1000 );
+    calcTimer->start( 1000/FPS );
 }
 
 // public slots
 void Naubino::calc() {
-    world->Step(B2_TIMESTEP, B2_VELITERATIONS, B2_POSITERATIONS);
+    QTime t;
+    timeperframe = 0;
+    t.start();
+    foreach (CenterJoint *joint, *joints)
+        joint->update();
+
+    foreach (b2MouseJoint *joint, *pointerJoints)
+        joint->SetTarget( ((Pointer*)joint->GetUserData())->pos() );
+
+    world->Step( 1.0f/FPS, 10, 10);
+    world->ClearForces();
 
     foreach (Event *event, *events) {
         event->handle();
@@ -198,7 +222,9 @@ void Naubino::calc() {
     }
     events->clear();
 
-    foreach (Naub *naub, *naubs) naub->changed();
-    world->ClearForces();
+    foreach (Naub *naub, *naubs)
+        naub->changed();
+
+    timeperframe += t.elapsed();
 }
 

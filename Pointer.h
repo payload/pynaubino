@@ -14,6 +14,7 @@ public:
     Naubino *naubino;
     b2Body *body;
     void setPos(Vec pos);
+    Vec pos();
 };
 
 #endif // POINTER_H

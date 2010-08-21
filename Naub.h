@@ -12,6 +12,7 @@ class Naubino;
 class Joint;
 class Pointer;
 class NaubTarjan;
+class CenterJoint;
 
 class Naub
 {
@@ -30,7 +31,7 @@ public:
     float32 density;
     float32 friction;
     float32 restitution;
-    b2Joint *centerJoint;
+    CenterJoint *centerJoint;
 
     NaubTarjan *tarjan;
 

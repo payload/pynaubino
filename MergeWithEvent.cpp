@@ -8,8 +8,9 @@ MergeWithEvent::MergeWithEvent(Naubino *naubino) : Event(naubino) {}
 //  too lazy now :P
 bool MergeWithEvent::filter(b2Contact *contact, const b2ContactImpulse *impulse) {
     Q_UNUSED(impulse);
-    a = (Naub *)contact->GetFixtureA()->GetUserData();
-    b = (Naub *)contact->GetFixtureB()->GetUserData();
+    a = (Naub *)(contact->GetFixtureA()->GetUserData());
+    b = (Naub *)(contact->GetFixtureB()->GetUserData());
+    if (a == 0 || b == 0) return false;
     if (b->selected > 0) {
         Naub *c;
         c = a;

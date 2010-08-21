@@ -23,7 +23,7 @@ void Naub::deleted() {
 }
 
 Vec Naub::pos() {
-    return Vec(body->GetPosition());
+    return Vec(body->GetWorldCenter());
 }
 
 float32 Naub::rot() {
@@ -56,18 +56,19 @@ void Naub::setup() {
 }
 
 void Naub::setupBody() {
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    b2Body *body = naubino->world->CreateBody(&bodyDef);
+    b2BodyDef def;
+    def.type = b2_dynamicBody;
+    def.fixedRotation = 0;
+    b2Body *body = naubino->world->CreateBody(&def);
     body->SetUserData(this);
     this->body = body;
 }
 
 void Naub::setupFixture() {
-    radius = 15.0f;
-    friction = .001f;
-    density = 1.0f;
-    restitution = 0.99f;
+    radius = 0.15f;
+    friction = 0;
+    density = 1;
+    restitution = 0.4f;
 
     b2CircleShape shape;
     shape.m_radius = radius;

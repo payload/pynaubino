@@ -10,8 +10,7 @@ Joint::Joint(Naubino *naubino, Naub *a, Naub *b)
 }
 
 Joint::~Joint() {
-    if (qjoint != NULL) qjoint->jointDeleted();
-    naubino->world->DestroyJoint(joint);
+    deleted();
 }
 
 void Joint::changed() {
@@ -19,25 +18,18 @@ void Joint::changed() {
 }
 
 void Joint::deleted() {
-    naubino->world->DestroyJoint(joint);
     if (qjoint != NULL) qjoint->jointDeleted();
 }
 
 void Joint::setup() {
     qjoint = NULL;
 
-    frequencyHz = 0.5f;
-    dampingRatio = 0.1f;
-    length = 40.0f;
-
-    b2DistanceJointDef jointDef;
-    jointDef.bodyA = a->body;
-    jointDef.bodyB = b->body;
-    jointDef.localAnchorA = a->body->GetLocalCenter();
-    jointDef.localAnchorB = b->body->GetLocalCenter();
-    jointDef.collideConnected = true;
-    jointDef.frequencyHz = frequencyHz;
-    jointDef.dampingRatio = dampingRatio;
-    jointDef.length = length;
-    joint = naubino->world->CreateJoint(&jointDef);
+    {
+        b2DistanceJointDef def;
+        def.Initialize(a->body, b->body, a->pos(), b->pos());
+        def.length = (a->radius + b->radius) * 1.40;
+        def.frequencyHz = 1;
+        def.dampingRatio = 0;
+        naubino->world->CreateJoint(&def);
+    }
 }

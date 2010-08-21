@@ -12,5 +12,9 @@ void Qb2DebugDrawItem::timerEvent(QTimerEvent *event) {
 }
 
 Qb2DebugDraw::Qb2DebugDraw() : b2DebugDraw() {
-    SetFlags(e_shapeBit | e_jointBit | e_aabbBit | e_pairBit | e_centerOfMassBit);
+    SetFlags( e_shapeBit
+            | e_jointBit
+            //| e_aabbBit
+            | e_pairBit
+            | e_centerOfMassBit);
 }
