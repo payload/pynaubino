@@ -5,7 +5,7 @@
 Spammer::Spammer(Naubino *naubino) :
     QTimer(), naubino(naubino)
 {
-    setInterval(1000);
+    setInterval(3000);
 }
 
 Spammer::~Spammer() {

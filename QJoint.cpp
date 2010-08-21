@@ -1,9 +1,9 @@
 #include "QJoint.h"
-#include "Joint.h"
+#include "NaubJoint.h"
 #include "Naub.h"
 #include "Scene.h"
 
-QJoint::QJoint(Scene *scene, Joint *joint) :
+QJoint::QJoint(Scene *scene, NaubJoint *joint) :
         QObject(), QGraphicsLineItem(), scene(scene), joint(joint)
 {
     setZValue(99);

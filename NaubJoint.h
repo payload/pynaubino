@@ -1,5 +1,5 @@
-#ifndef JOINT_H
-#define JOINT_H
+#ifndef NAUBJOINT_H
+#define NAUBJOINT_H
 
 #include <Box2D.h>
 
@@ -7,11 +7,11 @@ class Naub;
 class QJoint;
 class Naubino;
 
-class Joint
+class NaubJoint
 {
 public:
-    Joint(Naubino *naubino, Naub *a, Naub *b);
-    ~Joint();
+    NaubJoint(Naubino *naubino, Naub *a, Naub *b);
+    ~NaubJoint();
 
     Naubino *naubino;
     Naub *a;
@@ -30,4 +30,4 @@ public:
     Naub* other(Naub *x) { return a == x ? b : a; }
 };
 
-#endif // JOINT_H
+#endif // NAUBJOINT_H

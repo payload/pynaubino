@@ -1,6 +1,6 @@
 #include "Naubino.h"
 #include "Naub.h"
-#include "Joint.h"
+#include "NaubJoint.h"
 #include "Pointer.h"
 #include "Event.h"
 #include "NaubinoContactListener.h"
@@ -37,7 +37,7 @@ Naub* Naubino::addNaub(Vec pos, QColor color) {
 }
 
 void Naubino::deleteNaub(Naub *naub) {
-    foreach (Joint *j, naub->jointNaubs->values())
+    foreach (NaubJoint *j, naub->jointNaubs->values())
         unjoinNaubs(j);
     naubs->removeOne(naub);
     naub->deleted();
@@ -45,8 +45,8 @@ void Naubino::deleteNaub(Naub *naub) {
 //
 
 //
-Joint* Naubino::joinNaubs(Naub *a, Naub *b) {
-    Joint *joint = new Joint(this, a, b);
+NaubJoint* Naubino::joinNaubs(Naub *a, Naub *b) {
+    NaubJoint *joint = new NaubJoint(this, a, b);
     a->jointNaubs->insertMulti(b, joint);
     b->jointNaubs->insertMulti(a, joint);
     newJoint(joint);
@@ -55,11 +55,11 @@ Joint* Naubino::joinNaubs(Naub *a, Naub *b) {
 
 void Naubino::unjoinNaubs(Naub *a, Naub *b) {
     a->jointNaubs->remove(b);
-    Joint *joint = b->jointNaubs->take(a);
+    NaubJoint *joint = b->jointNaubs->take(a);
     joint->deleted();
 }
 
-void Naubino::unjoinNaubs(Joint *j) {
+void Naubino::unjoinNaubs(NaubJoint *j) {
     j->a->jointNaubs->remove(j->b);
     j->b->jointNaubs->remove(j->a);
     delete j;
@@ -84,7 +84,7 @@ void Naubino::unjoinFromCenter(Naub *naub) {
 
 //
 void Naubino::mergeNaubs(Naub *a, Naub *b) {
-    QMapIterator<Naub *, Joint *> i(*b->jointNaubs);
+    QMapIterator<Naub *, NaubJoint *> i(*b->jointNaubs);
     while (i.hasNext()) {
         i.next();
         unjoinNaubs(i.value());

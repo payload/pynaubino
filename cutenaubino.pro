@@ -18,7 +18,7 @@ SOURCES += main.cpp \
     Naubino.cpp \
     Naub.cpp \
     Vec.cpp \
-    Joint.cpp \
+    NaubJoint.cpp \
     QJoint.cpp \
     Pointer.cpp \
     Qb2DebugDraw.cpp \
@@ -29,8 +29,7 @@ SOURCES += main.cpp \
     Scorer.cpp \
     Color.cpp \
     Spammer.cpp \
-    CenterJoint.cpp \
-    PointerJoint.cpp
+    CenterJoint.cpp
 
 HEADERS  += \
     Scene.h \
@@ -39,7 +38,7 @@ HEADERS  += \
     Naubino.h \
     Naub.h \
     Vec.h \
-    Joint.h \
+    NaubJoint.h \
     QJoint.h \
     Pointer.h \
     Qb2DebugDraw.h \
@@ -50,7 +49,6 @@ HEADERS  += \
     Scorer.h \
     Color.h \
     Spammer.h \
-    CenterJoint.h \
-    PointerJoint.h
+    CenterJoint.h
 
 FORMS    +=

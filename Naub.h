@@ -9,7 +9,7 @@
 
 class QNaub;
 class Naubino;
-class Joint;
+class NaubJoint;
 class Pointer;
 class NaubTarjan;
 class CenterJoint;
@@ -23,7 +23,7 @@ public:
     Naubino *naubino;
     QNaub *qnaub;
     b2Body *body;
-    QMap<Naub *, Joint *> *jointNaubs;
+    QMap<Naub *, NaubJoint *> *jointNaubs;
     QMap<Pointer *, b2Joint *> *pointerJoints;
     QColor color;
     int selected;

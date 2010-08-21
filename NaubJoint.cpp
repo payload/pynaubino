@@ -1,27 +1,27 @@
-#include "Joint.h"
+#include "NaubJoint.h"
 #include "Naub.h"
 #include "QJoint.h"
 #include "Naubino.h"
 
-Joint::Joint(Naubino *naubino, Naub *a, Naub *b)
+NaubJoint::NaubJoint(Naubino *naubino, Naub *a, Naub *b)
     : naubino(naubino), a(a), b(b) {
 
     setup();
 }
 
-Joint::~Joint() {
+NaubJoint::~NaubJoint() {
     deleted();
 }
 
-void Joint::changed() {
+void NaubJoint::changed() {
     if (qjoint != NULL) qjoint->jointChanged();
 }
 
-void Joint::deleted() {
+void NaubJoint::deleted() {
     if (qjoint != NULL) qjoint->jointDeleted();
 }
 
-void Joint::setup() {
+void NaubJoint::setup() {
     qjoint = NULL;
 
     {

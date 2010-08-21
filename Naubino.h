@@ -6,7 +6,7 @@
 #include <Box2D.h>
 
 class Naub;
-class Joint;
+class NaubJoint;
 class Vec;
 class Pointer;
 class Event;
@@ -41,9 +41,9 @@ public:
     Naub* addNaub(Vec pos, QColor color);
     void deleteNaub(Naub *naub);
 
-    Joint* joinNaubs(Naub *a, Naub *b);
+    NaubJoint* joinNaubs(Naub *a, Naub *b);
     void unjoinNaubs(Naub *a, Naub *b);
-    void unjoinNaubs(Joint *j);
+    void unjoinNaubs(NaubJoint *j);
 
     void joinWithCenter(Naub *naub);
     void unjoinFromCenter(Naub *naub);
@@ -66,7 +66,7 @@ public:
     void setColor( QColor color );
 signals:
     void newNaub(Naub *naub);
-    void newJoint(Joint *joint);
+    void newJoint(NaubJoint *joint);
     void mergedNaub(Naub &naub);
 
 public slots:

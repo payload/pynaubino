@@ -5,7 +5,7 @@
 
 class Naubino;
 class Naub;
-class Joint;
+class NaubJoint;
 class Pointer;
 
 class Scene : public QGraphicsScene
@@ -25,7 +25,7 @@ signals:
 
 public slots:
     void newNaub(Naub *naub);
-    void newJoint(Joint *joint);
+    void newJoint(NaubJoint *joint);
 };
 
 #endif // SCENE_H

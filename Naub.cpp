@@ -2,7 +2,7 @@
 #include "QNaub.h"
 #include "Vec.h"
 #include "Naubino.h"
-#include "Joint.h"
+#include "NaubJoint.h"
 #include "Pointer.h"
 #include "Cycler.h"
 
@@ -32,7 +32,7 @@ float32 Naub::rot() {
 
 void Naub::changed() {
     if (qnaub != NULL) qnaub->naubChanged();
-    foreach (Joint *j, jointNaubs->values())
+    foreach (NaubJoint *j, jointNaubs->values())
         j->changed();
 }
 
@@ -48,7 +48,7 @@ void Naub::setup() {
     selected = 0;
     qnaub = NULL;
     centerJoint = NULL;
-    jointNaubs = new QMap<Naub *, Joint *>();
+    jointNaubs = new QMap<Naub *, NaubJoint *>();
     pointerJoints = new QMap<Pointer *, b2Joint *>();
     tarjan = new NaubTarjan();
     setupBody();

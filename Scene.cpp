@@ -10,7 +10,7 @@ Scene::Scene(Naubino *naubino, QObject *parent) :
     this->naubino = naubino;
 
     connect(naubino, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub*)));
-    connect(naubino, SIGNAL(newJoint(Joint *)), this, SLOT(newJoint(Joint*)));
+    connect(naubino, SIGNAL(newJoint(NaubJoint *)), this, SLOT(newJoint(NaubJoint*)));
 }
 
 void Scene::newNaub(Naub *naub) {
@@ -18,7 +18,7 @@ void Scene::newNaub(Naub *naub) {
     addItem(qnaub);
 }
 
-void Scene::newJoint(Joint *joint) {
+void Scene::newJoint(NaubJoint *joint) {
     QJoint *qjoint = new QJoint(this, joint);
     addItem(qjoint);
 }

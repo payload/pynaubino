@@ -3,7 +3,7 @@
 
 #include <QtGui>
 
-class Joint;
+class NaubJoint;
 class Scene;
 
 class QJoint : public QObject, public QGraphicsLineItem
@@ -11,9 +11,9 @@ class QJoint : public QObject, public QGraphicsLineItem
     Q_OBJECT
     Q_PROPERTY(qreal penWidth READ penWidth WRITE setPenWidth)
 public:
-    explicit QJoint(Scene *scene, Joint *joint);
+    explicit QJoint(Scene *scene, NaubJoint *joint);
     Scene *scene;
-    Joint *joint;
+    NaubJoint *joint;
 
     void jointChanged();
     void jointDeleted();
