@@ -1,9 +1,5 @@
 include(../tests.pri)
 
-message()
-message($$OBJECT_DIR)
-message()
-
 QT       += testlib
 TARGET = tst_Naubino
 CONFIG   += qtestlib console thread

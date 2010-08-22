@@ -24,7 +24,7 @@ public:
     float32 length;
     b2Joint *joint;
 
-    void changed();
+    void update();
     void deleted();
 
     void setup();

@@ -15,6 +15,7 @@ public:
 
     NaubJoint* joinNaubs(Naub *a, Naub *b);
     void remove(Naub *a, Naub *b);
+    void remove(NaubJoint *joint);
     void remove(Joint *joint);
     int count();
     const QList<Joint *>& joints();

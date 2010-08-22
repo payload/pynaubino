@@ -5,3 +5,4 @@ moc_*
 */bin*
 tests/*/bin*
 Makefile
+lib/lib*

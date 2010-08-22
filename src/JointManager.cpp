@@ -19,6 +19,8 @@ const QList<Joint *>& JointManager::joints() {
 
 NaubJoint* JointManager::joinNaubs(Naub *a, Naub *b) {
     NaubJoint *joint = new NaubJoint(naubino, a, b);
+    a->jointNaubs->insert(b, joint);
+    b->jointNaubs->insert(a, joint);
     joints_->append(joint);
     newJoint(joint);
     return joint;
@@ -29,8 +31,13 @@ void JointManager::remove(Joint *joint) {
     delete joint;
 }
 
+void JointManager::remove(NaubJoint *joint) {
+    remove(joint->a, joint->b);
+}
+
 void JointManager::remove(Naub *a, Naub *b) {
     Joint *j = a->jointNaubs->take(b);
+    b->jointNaubs->remove(a);
     remove(j);
 }
 

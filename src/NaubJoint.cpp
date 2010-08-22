@@ -13,7 +13,7 @@ NaubJoint::~NaubJoint() {
     deleted();
 }
 
-void NaubJoint::changed() {
+void NaubJoint::update() {
     if (qjoint != NULL) qjoint->jointChanged();
 }
 

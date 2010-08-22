@@ -33,7 +33,7 @@ float32 Naub::rot() {
 void Naub::changed() {
     if (qnaub != NULL) qnaub->naubChanged();
     foreach (NaubJoint *j, jointNaubs->values())
-        j->changed();
+        j->update();
 }
 
 void Naub::select(Pointer *pointer) {
