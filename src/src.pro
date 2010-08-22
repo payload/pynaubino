@@ -7,7 +7,7 @@
 QT       += core gui
 
 TARGET = cutenaubino
-TEMPLATE = lib
+TEMPLATE = lib app
 LIBS += -lBox2D
 
 SOURCES += *.cpp

@@ -41,6 +41,7 @@ void Naubino::deleteNaub(Naub *naub) {
         unjoinNaubs(j);
     naubs->removeOne(naub);
     naub->deleted();
+    delete naub;
 }
 //
 
