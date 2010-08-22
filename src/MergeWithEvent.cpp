@@ -1,6 +1,7 @@
 #include "MergeWithEvent.h"
 #include "Naub.h"
 #include "Naubino.h"
+#include "JointManager.h"
 
 MergeWithEvent::MergeWithEvent(Naubino *naubino) : Event(naubino) {}
 
@@ -28,7 +29,7 @@ bool MergeWithEvent::filter(b2Contact *contact, const b2ContactImpulse *impulse)
 
 void MergeWithEvent::handle() {
     if (a->jointNaubs->count() == 0)
-        naubino->joinNaubs(a, b);
+        naubino->joints->joinNaubs(a, b);
     else
         naubino->mergeNaubs(a, b);
 }

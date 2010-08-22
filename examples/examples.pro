@@ -1,7 +1,6 @@
 include(../cutenaubino.pri)
 
-TEMPLATE = lib
 TARGET = cutenaubino
-DESTDIR = $$LIBRARYPATH
+TEMPLATE = app
+LIBS += -lcutenaubino
 SOURCES += *.cpp
-HEADERS += ../include/*.h

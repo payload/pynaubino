@@ -5,6 +5,9 @@
 #include <Color.h>
 #include <Vec.h>
 
+#include "NaubManager.h"
+#include "JointManager.h"
+
 class tst_Naubino : public QObject
 {
     Q_OBJECT

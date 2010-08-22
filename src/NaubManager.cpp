@@ -1,6 +1,7 @@
 #include "NaubManager.h"
 #include "Naub.h"
 #include "Color.h"
+#include "Vec.h"
 
 NaubManager::NaubManager(Naubino *naubino) :
         QObject(), naubino(naubino) {

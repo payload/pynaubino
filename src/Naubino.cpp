@@ -1,6 +1,7 @@
 #include "Naubino.h"
 #include "Naub.h"
 #include "NaubManager.h"
+#include "JointManager.h"
 #include "NaubJoint.h"
 #include "Pointer.h"
 #include "Event.h"
@@ -31,33 +32,11 @@ void Naubino::friction(Naub &naub) {
 //
 
 //
-NaubJoint* Naubino::joinNaubs(Naub *a, Naub *b) {
-    NaubJoint *joint = new NaubJoint(this, a, b);
-    a->jointNaubs->insertMulti(b, joint);
-    b->jointNaubs->insertMulti(a, joint);
-    newJoint(joint);
-    return joint;
-}
-
-void Naubino::unjoinNaubs(Naub *a, Naub *b) {
-    a->jointNaubs->remove(b);
-    NaubJoint *joint = b->jointNaubs->take(a);
-    joint->deleted();
-}
-
-void Naubino::unjoinNaubs(NaubJoint *j) {
-    j->a->jointNaubs->remove(j->b);
-    j->b->jointNaubs->remove(j->a);
-    delete j;
-}
-//
-
-//
 void Naubino::joinWithCenter(Naub *naub) {
     if (naub->centerJoint == NULL) {
         naub->centerJoint = new CenterJoint(world, center);
         naub->centerJoint->join(naub);
-        joints->append(naub->centerJoint);
+        // XXX joints->append(naub->centerJoint);
     }
 }
 
@@ -73,9 +52,9 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
     QMapIterator<Naub *, NaubJoint *> i(*b->jointNaubs);
     while (i.hasNext()) {
         i.next();
-        unjoinNaubs(i.value());
+        joints->remove(i.value());
         if (a != i.key()) {
-            joinNaubs(a, i.key());
+            joints->joinNaubs(a, i.key());
         }
     }
     naubs->remove(b);
@@ -119,7 +98,7 @@ void Naubino::deselect(Naub *naub, Pointer *pointer) {
 // setups
 void Naubino::setup() {
     naubs = new NaubManager(this);
-    joints = new QList<CenterJoint *>();
+    joints = new JointManager(this);
     events = new QList<Event *>();
     pointerJoints = new QList<b2MouseJoint *>();
     setupWorld();
@@ -178,7 +157,7 @@ void Naubino::randomPair(Vec pos) {
     add *= 0.2;
     Naub *n0 = naubs->add( Vec(pos - add) );
     Naub *n1 = naubs->add( Vec(pos + add) );
-    joinNaubs(n0, n1);
+    joints->joinNaubs(n0, n1);
     joinWithCenter(n0);
     joinWithCenter(n1);
 }
@@ -193,7 +172,7 @@ void Naubino::calc() {
     QTime t;
     timeperframe = 0;
     t.start();
-    foreach (CenterJoint *joint, *joints)
+    foreach (Joint *joint, joints->joints())
         joint->update();
 
     foreach (b2MouseJoint *joint, *pointerJoints)

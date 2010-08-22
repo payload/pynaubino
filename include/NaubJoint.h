@@ -7,7 +7,9 @@ class Naub;
 class QJoint;
 class Naubino;
 
-class NaubJoint
+#include "Joint.h"
+
+class NaubJoint : public Joint
 {
 public:
     NaubJoint(Naubino *naubino, Naub *a, Naub *b);

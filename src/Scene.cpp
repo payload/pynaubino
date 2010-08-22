@@ -4,6 +4,7 @@
 #include "Naubino.h"
 #include "Pointer.h"
 #include "NaubManager.h"
+#include "JointManager.h"
 
 Scene::Scene(Naubino *naubino, QObject *parent) :
     QGraphicsScene(parent)
@@ -11,7 +12,7 @@ Scene::Scene(Naubino *naubino, QObject *parent) :
     this->naubino = naubino;
 
     connect(naubino->naubs, SIGNAL(newNaub(Naub *)), this, SLOT(newNaub(Naub*)));
-    connect(naubino, SIGNAL(newJoint(NaubJoint *)), this, SLOT(newJoint(NaubJoint*)));
+    connect(naubino->joints, SIGNAL(newJoint(NaubJoint *)), this, SLOT(newJoint(NaubJoint*)));
 }
 
 void Scene::newNaub(Naub *naub) {

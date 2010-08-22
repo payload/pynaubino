@@ -5,7 +5,8 @@
 #include <QColor>
 #include <Box2D.h>
 
-#include "NaubManager.h"
+class NaubManager;
+class JointManager;
 
 class Naub;
 class NaubJoint;
@@ -24,7 +25,7 @@ public:
     explicit Naubino();
 
     NaubManager *naubs;
-    QList<CenterJoint *> *joints;
+    JointManager *joints;
     b2World *world;
     b2Body *center;
     b2DistanceJointDef *centerJointDef;
@@ -41,10 +42,6 @@ public:
     Spammer *spammer;
 
     void friction(Naub &naub);
-
-    NaubJoint* joinNaubs(Naub *a, Naub *b);
-    void unjoinNaubs(Naub *a, Naub *b);
-    void unjoinNaubs(NaubJoint *j);
 
     void joinWithCenter(Naub *naub);
     void unjoinFromCenter(Naub *naub);
@@ -66,7 +63,6 @@ public:
     void start();
     void setColor( QColor color );
 signals:
-    void newJoint(NaubJoint *joint);
     void mergedNaub(Naub &naub);
 
 public slots:

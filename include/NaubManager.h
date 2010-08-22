@@ -2,8 +2,10 @@
 #define NAUBMANAGER_H
 
 #include <QtCore>
-#include "Vec.h"
-#include "Naub.h"
+
+class Vec;
+class Naub;
+class Naubino;
 
 class NaubManager : public QObject
 {
