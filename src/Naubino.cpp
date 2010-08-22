@@ -1,5 +1,6 @@
 #include "Naubino.h"
 #include "Naub.h"
+#include "NaubManager.h"
 #include "NaubJoint.h"
 #include "Pointer.h"
 #include "Event.h"
@@ -19,29 +20,13 @@ Naubino::Naubino() :
 }
 
 //
-Naub* Naubino::addNaub(Vec pos, QColor color) {
-    Naub *naub = new Naub(this, pos, color);
-    naubs->append(naub);
-    newNaub(naub);
-
-    {
-        b2FrictionJointDef def;
-        def.Initialize(ground_body, naub->body,
-                       ground_body->GetWorldCenter());
-        def.maxForce = 0.01;
-        def.maxTorque = 0.01;
-        world->CreateJoint(&def);
-    }
-
-    return naub;
-}
-
-void Naubino::deleteNaub(Naub *naub) {
-    foreach (NaubJoint *j, naub->jointNaubs->values())
-        unjoinNaubs(j);
-    naubs->removeOne(naub);
-    naub->deleted();
-    delete naub;
+void Naubino::friction(Naub &naub) {
+    b2FrictionJointDef def;
+    def.Initialize(ground_body, naub.body,
+                   ground_body->GetWorldCenter());
+    def.maxForce = 0.01;
+    def.maxTorque = 0.01;
+    world->CreateJoint(&def);
 }
 //
 
@@ -93,7 +78,7 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
             joinNaubs(a, i.key());
         }
     }
-    deleteNaub(b);
+    naubs->remove(b);
     mergedNaub(*a);
 }
 //
@@ -133,7 +118,7 @@ void Naubino::deselect(Naub *naub, Pointer *pointer) {
 
 // setups
 void Naubino::setup() {
-    naubs = new QList<Naub *>();
+    naubs = new NaubManager(this);
     joints = new QList<CenterJoint *>();
     events = new QList<Event *>();
     pointerJoints = new QList<b2MouseJoint *>();
@@ -191,8 +176,8 @@ void Naubino::randomPair(Vec pos) {
     qreal x = qrand();
     Vec add(qCos(x), qSin(x));
     add *= 0.2;
-    Naub *n0 = addNaub(pos - add, Color::randomNaub().qcolor());
-    Naub *n1 = addNaub(pos + add, Color::randomNaub().qcolor());
+    Naub *n0 = naubs->add( Vec(pos - add) );
+    Naub *n1 = naubs->add( Vec(pos + add) );
     joinNaubs(n0, n1);
     joinWithCenter(n0);
     joinWithCenter(n1);
@@ -223,7 +208,7 @@ void Naubino::calc() {
     }
     events->clear();
 
-    foreach (Naub *naub, *naubs)
+    foreach (Naub *naub, naubs->naubs())
         naub->changed();
 
     timeperframe += t.elapsed();

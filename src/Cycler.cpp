@@ -2,6 +2,7 @@
 #include "Naubino.h"
 #include "Naub.h"
 #include "Color.h"
+#include "NaubManager.h"
 
 Tarjan::Tarjan() {
     s = new QStack<Naub *>();
@@ -22,7 +23,7 @@ Cycler::Cycler(Naubino *naubino) :
 
 void Cycler::mergedNaub(Naub &naub) {
     Tarjan t;
-    foreach (Naub *n, *naubino->naubs) {
+    foreach (Naub *n, naubino->naubs->naubs()) {
         n->tarjan->index   = 0;
         n->tarjan->lowlink = 0;
         n->tarjan->in_s    = false;

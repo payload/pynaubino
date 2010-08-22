@@ -5,6 +5,8 @@
 #include <QColor>
 #include <Box2D.h>
 
+#include "NaubManager.h"
+
 class Naub;
 class NaubJoint;
 class Vec;
@@ -21,7 +23,7 @@ class Naubino : public QObject
 public:
     explicit Naubino();
 
-    QList<Naub *> *naubs;
+    NaubManager *naubs;
     QList<CenterJoint *> *joints;
     b2World *world;
     b2Body *center;
@@ -38,8 +40,7 @@ public:
     Scorer *scorer;
     Spammer *spammer;
 
-    Naub* addNaub(Vec pos, QColor color);
-    void deleteNaub(Naub *naub);
+    void friction(Naub &naub);
 
     NaubJoint* joinNaubs(Naub *a, Naub *b);
     void unjoinNaubs(Naub *a, Naub *b);
@@ -65,7 +66,6 @@ public:
     void start();
     void setColor( QColor color );
 signals:
-    void newNaub(Naub *naub);
     void newJoint(NaubJoint *joint);
     void mergedNaub(Naub &naub);
 
