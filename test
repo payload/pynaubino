@@ -1,0 +1,4 @@
+#!/bin/sh
+for tst in `find tests -name 'tst_*' -executable`;
+do LD_LIBRARY_PATH=lib $tst;
+done
