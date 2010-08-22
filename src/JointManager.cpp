@@ -44,3 +44,7 @@ void JointManager::remove(Naub *a, Naub *b) {
 int JointManager::count() {
     return joints_->count();
 }
+
+void JointManager::update() {
+    foreach (Joint *joint, *joints_) joint->update();
+}

@@ -172,8 +172,8 @@ void Naubino::calc() {
     QTime t;
     timeperframe = 0;
     t.start();
-    foreach (Joint *joint, joints->joints())
-        joint->update();
+
+    joints->update();
 
     foreach (b2MouseJoint *joint, *pointerJoints)
         joint->SetTarget( ((Pointer*)joint->GetUserData())->pos() );
@@ -187,8 +187,7 @@ void Naubino::calc() {
     }
     events->clear();
 
-    foreach (Naub *naub, naubs->naubs())
-        naub->changed();
+    naubs->update();
 
     timeperframe += t.elapsed();
 }

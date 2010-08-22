@@ -19,6 +19,7 @@ public:
     Naub* add(Vec pos, QColor color);
     void remove(Naub *naub);
     int count();
+    void update();
 signals:
     void newNaub(Naub *naub);
 public slots:

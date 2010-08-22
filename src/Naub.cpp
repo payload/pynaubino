@@ -30,7 +30,7 @@ float32 Naub::rot() {
     return body->GetAngle();
 }
 
-void Naub::changed() {
+void Naub::update() {
     if (qnaub != NULL) qnaub->naubChanged();
     foreach (NaubJoint *j, jointNaubs->values())
         j->update();

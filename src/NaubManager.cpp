@@ -39,3 +39,7 @@ void NaubManager::remove(Naub *naub) {
 int NaubManager::count() {
     return naubs_->count();
 }
+
+void NaubManager::update() {
+    foreach (Naub *naub, *naubs_) naub->update();
+}

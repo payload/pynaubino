@@ -18,6 +18,7 @@ public:
     void remove(NaubJoint *joint);
     void remove(Joint *joint);
     int count();
+    void update();
     const QList<Joint *>& joints();
 signals:
     void newJoint(NaubJoint *joint);

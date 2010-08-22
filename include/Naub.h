@@ -38,7 +38,7 @@ public:
     Vec pos();
     float32 rot();
 
-    void changed();
+    void update();
     void deleted();
 
     void select(Pointer *pointer);
