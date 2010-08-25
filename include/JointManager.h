@@ -3,29 +3,34 @@
 
 #include <QtCore>
 #include "Naub.h"
-#include "Joint.h"
-#include "NaubJoint.h"
+#include "Joints.h"
 
 class JointManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit JointManager(Naubino *naubino);
+    explicit JointManager();
     ~JointManager();
 
-    NaubJoint* joinNaubs(Naub *a, Naub *b);
-    void remove(Naub *a, Naub *b);
-    void remove(NaubJoint *joint);
-    void remove(Joint *joint);
+    NaubJoint& joinNaubs(Naub &a, Naub &b);
+    void unjoinNaubs(NaubJoint &joint);
+    NaubJoint* naubJoint(Naub &a, Naub &b);
+
+    CenterJoint& joinWithCenter(Naub &naub);
+    void unjoinFromCenter(CenterJoint &joint);
+    CenterJoint* centerJoint(Naub &naub);
+
+    PointerJoint& selectNaub(Naub &naub);
+    void deselectNaub(Naub &naub);
+    PointerJoint* pointerJoint(Naub &naub);
+
     int count();
     void update();
-    const QList<Joint *>& joints();
 signals:
     void newJoint(NaubJoint *joint);
 public slots:
 
 private:
-    Naubino *naubino;
     QList<Joint *> *joints_;
 };
 

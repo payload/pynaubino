@@ -41,10 +41,18 @@ public:
     Scorer *scorer;
     Spammer *spammer;
 
+
+    //
+    Naub& addNaub(Vec pos);
+    NaubJoint& joinNaubs(Naub& a, Naub& b);
+    //
+
+
     void friction(Naub &naub);
 
-    void joinWithCenter(Naub *naub);
-    void unjoinFromCenter(Naub *naub);
+
+    void joinWithCenter(Naub &naub);
+    void unjoinFromCenter(Naub &naub);
 
     void mergeNaubs(Naub *a, Naub *b);
 

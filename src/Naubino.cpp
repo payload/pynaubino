@@ -20,6 +20,14 @@ Naubino::Naubino() :
     setup();
 }
 
+Naub& Naubino::addNaub(Vec pos) {
+    return naubs->add(pos);
+}
+
+NaubJoint& Naubino::joinNaubs(Naub &a, Naub &b) {
+    return joints->joinNaubs(a, b);
+}
+
 //
 void Naubino::friction(Naub &naub) {
     b2FrictionJointDef def;
@@ -32,7 +40,7 @@ void Naubino::friction(Naub &naub) {
 //
 
 //
-void Naubino::joinWithCenter(Naub *naub) {
+void Naubino::joinWithCenter(Naub &naub) {
     if (naub->centerJoint == NULL) {
         naub->centerJoint = new CenterJoint(world, center);
         naub->centerJoint->join(naub);
@@ -40,10 +48,10 @@ void Naubino::joinWithCenter(Naub *naub) {
     }
 }
 
-void Naubino::unjoinFromCenter(Naub *naub) {
-    naub->centerJoint->unjoin();
-    delete naub->centerJoint;
-    naub->centerJoint = 0;
+void Naubino::unjoinFromCenter(Naub &naub) {
+    naub.centerJoint->unjoin();
+    delete naub.centerJoint;
+    naub.centerJoint = 0;
 }
 //
 
@@ -54,7 +62,7 @@ void Naubino::mergeNaubs(Naub *a, Naub *b) {
         i.next();
         joints->remove(i.value());
         if (a != i.key()) {
-            joints->joinNaubs(a, i.key());
+            joints->joinNaubs(*a, *(i.key()));
         }
     }
     naubs->remove(b);
@@ -155,8 +163,8 @@ void Naubino::randomPair(Vec pos) {
     qreal x = qrand();
     Vec add(qCos(x), qSin(x));
     add *= 0.2;
-    Naub *n0 = naubs->add( Vec(pos - add) );
-    Naub *n1 = naubs->add( Vec(pos + add) );
+    Naub &n0 = addNaub( Vec(pos - add) );
+    Naub &n1 = addNaub( Vec(pos + add) );
     joints->joinNaubs(n0, n1);
     joinWithCenter(n0);
     joinWithCenter(n1);

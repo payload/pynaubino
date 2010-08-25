@@ -22,6 +22,7 @@ private Q_SLOTS:
     void cleanup();
     void addDeleteNaub();
     void joinUnjoinNaubs();
+    void mergeNaubs();
 };
 
 tst_Naubino::tst_Naubino()
@@ -40,7 +41,7 @@ void tst_Naubino::addDeleteNaub()
 {
     Naub *n0;
     int c = naubino->joints->count();
-    n0 = naubino->naubs->add(Vec(10, 10));
+    n0 = naubino->naubs->add<(Vec(10, 10));
     QVERIFY(naubino->naubs->count() == c+1);
     naubino->naubs->remove(n0);
     QVERIFY(naubino->naubs->count() == c);
@@ -56,6 +57,19 @@ void tst_Naubino::joinUnjoinNaubs()
     QVERIFY(naubino->joints->count() == c+1);
     naubino->joints->remove(j);
     QVERIFY(naubino->joints->count() == c);
+}
+
+void tst_Naubino::mergeNaubs() {
+    Naub *n0, *n1, *n2, *n3, *n4, *n5;
+    n0 = naubino->addNaub(Vec(-10, -10));
+    n1 = naubino->addNaub(Vec( 10, -10));
+    n2 = naubino->addNaub(Vec(-10,  10));
+    n3 = naubino->addNaub(Vec( 10,  10));
+    n4 = naubino->addNaub(Vec(-10,  20));
+    n5 = naubino->addNaub(Vec( 10,  20));
+
+    NaubJoint *j01, *j23, *j45;
+    j01 = naubino->joinNaubs(n0, n1);
 }
 
 QTEST_APPLESS_MAIN(tst_Naubino);

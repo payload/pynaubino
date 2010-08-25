@@ -17,13 +17,13 @@ const QList<Joint *>& JointManager::joints() {
     return *joints_;
 }
 
-NaubJoint* JointManager::joinNaubs(Naub *a, Naub *b) {
-    NaubJoint *joint = new NaubJoint(naubino, a, b);
-    a->jointNaubs->insert(b, joint);
-    b->jointNaubs->insert(a, joint);
+NaubJoint& JointManager::joinNaubs(Naub &a, Naub &b) {
+    NaubJoint *joint = new NaubJoint(*naubino, a, b);
+    a.jointNaubs->insert(&b, joint);
+    b.jointNaubs->insert(&a, joint);
     joints_->append(joint);
     newJoint(joint);
-    return joint;
+    return *joint;
 }
 
 void JointManager::remove(Joint *joint) {

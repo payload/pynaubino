@@ -3,8 +3,8 @@
 #include "QJoint.h"
 #include "Naubino.h"
 
-NaubJoint::NaubJoint(Naubino *naubino, Naub *a, Naub *b)
-    : naubino(naubino), a(a), b(b) {
+NaubJoint::NaubJoint(Naubino &naubino, Naub &a, Naub &b)
+    : naubino(&naubino), a(&a), b(&b) {
 
     setup();
 }

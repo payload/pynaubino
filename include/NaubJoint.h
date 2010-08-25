@@ -12,7 +12,7 @@ class Naubino;
 class NaubJoint : public Joint
 {
 public:
-    NaubJoint(Naubino *naubino, Naub *a, Naub *b);
+    NaubJoint(Naubino &naubino, Naub &a, Naub &b);
     ~NaubJoint();
 
     Naubino *naubino;
