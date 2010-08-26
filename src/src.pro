@@ -4,6 +4,6 @@ TEMPLATE = lib
 TARGET = cutenaubino
 DESTDIR = $$LIBRARYPATH
 SOURCES += *.cpp
-HEADERS += ../include/*.h \
-    Naubino2.h \
-    Joints.h
+HEADERS += ../include/*.h
+CONFIG -= app_bundle
+CONFIG += qt debug

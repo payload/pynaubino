@@ -1,7 +1,7 @@
 #include "NaubManager.h"
 
-NaubManager::NaubManager(Naubino *naubino) :
-        QObject(), naubino(naubino) {
+NaubManager::NaubManager(b2World &world)
+    : world_(&world) {
     naubs_ = new QList<Naub *>();
 }
 
@@ -10,6 +10,7 @@ NaubManager::~NaubManager() {
         delete naub;
     delete naubs_;
     naubs_ = 0;
+    world_ = 0;
 }
 
 Naub& NaubManager::add(Vec pos) {
@@ -17,21 +18,24 @@ Naub& NaubManager::add(Vec pos) {
 }
 
 Naub& NaubManager::add(Vec pos, Color color) {
-    Naub *naub = new Naub(naubino, pos, color);
-    naubs_->append(naub);
-    newNaub(naub);
+    Q_UNUSED(pos); Q_UNUSED(color);
+    Naub *naub = new Naub(world());
+    naubs().append(naub);
     return *naub;
 }
 
 void NaubManager::remove(Naub &naub) {
-    naubs_->removeOne(naub);
-    delete naub;
+    naubs().removeOne(&naub);
+    delete &naub;
 }
 
 int NaubManager::count() {
-    return naubs_->count();
+    return naubs().count();
 }
 
 void NaubManager::update() {
-    foreach (Naub *naub, *naubs_) naub->update();
+    foreach (Naub *naub, naubs()) naub->update();
 }
+
+b2World& NaubManager::world() { return *world_; }
+QList<Naub *>& NaubManager::naubs() { return *naubs_; }

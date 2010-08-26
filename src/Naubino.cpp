@@ -1,202 +1,96 @@
 #include "Naubino.h"
-#include "Naub.h"
-#include "NaubManager.h"
-#include "JointManager.h"
-#include "NaubJoint.h"
-#include "Pointer.h"
-#include "Event.h"
-#include "NaubinoContactListener.h"
-#include "Cycler.h"
-#include "Scorer.h"
-#include "Color.h"
-#include "Spammer.h"
-#include "CenterJoint.h"
 
-static const float32 FPS = 20;
+Naubino::Naubino()
+    : QObject() {
+    world_ = new b2World(Vec(), true);
+    naubs_ = new NaubManager(world());
+    joints_ = new JointManager(world());
+    setupCenter();
+    setupPointer();
+}
 
-Naubino::Naubino() :
-    QObject()
-{
-    setup();
+Naubino::~Naubino() {
+    delete world_; world_ = 0;
+    delete naubs_; naubs_ = 0;
+    delete joints_; joints_ = 0;
+    center_ = 0;
+    pointer_ = 0;
 }
 
 Naub& Naubino::addNaub(Vec pos) {
-    return naubs->add(pos);
+    return naubs().add(pos);
+}
+
+void Naubino::removeNaub(Naub &naub) {
+    naubs().remove(naub);
 }
 
 NaubJoint& Naubino::joinNaubs(Naub &a, Naub &b) {
-    return joints->joinNaubs(a, b);
+    return joints().joinNaubs(a, b);
 }
 
-//
-void Naubino::friction(Naub &naub) {
-    b2FrictionJointDef def;
-    def.Initialize(ground_body, naub.body,
-                   ground_body->GetWorldCenter());
-    def.maxForce = 0.01;
-    def.maxTorque = 0.01;
-    world->CreateJoint(&def);
-}
-//
-
-//
-void Naubino::joinWithCenter(Naub &naub) {
-    if (naub->centerJoint == NULL) {
-        naub->centerJoint = new CenterJoint(world, center);
-        naub->centerJoint->join(naub);
-        // XXX joints->append(naub->centerJoint);
-    }
+void Naubino::unjoinNaubs(NaubJoint &joint) {
+    joints().unjoinNaubs(joint);
 }
 
-void Naubino::unjoinFromCenter(Naub &naub) {
-    naub.centerJoint->unjoin();
-    delete naub.centerJoint;
-    naub.centerJoint = 0;
+void Naubino::rejoinNaubs(NaubJoint &joint, Naub &a, Naub &b) {
+    joints().rejoinNaubs(joint, a, b);
 }
-//
 
-//
-void Naubino::mergeNaubs(Naub *a, Naub *b) {
-    QMapIterator<Naub *, NaubJoint *> i(*b->jointNaubs);
+NaubJoint* Naubino::naubJoint(Naub &a, Naub &b) {
+    return joints().naubJoint(a, b);
+}
+
+CenterJoint& Naubino::joinWithCenter(Naub &naub) {
+    return joints().joinWithCenter(naub, *center_);
+}
+
+void Naubino::unjoinFromCenter(CenterJoint &joint) {
+    unjoinFromCenter(joint);
+}
+
+CenterJoint* Naubino::centerJoint(Naub &naub) {
+    return joints().centerJoint(naub);
+}
+
+PointerJoint& Naubino::selectNaub(Naub &naub) {
+    return joints().selectNaub(naub, pointer());
+}
+
+void Naubino::deselectNaub(Naub &naub) {
+    PointerJoint *joint = pointerJoint(naub);
+    if (joint != 0) joints().deselectNaub(*joint);
+}
+
+PointerJoint* Naubino::pointerJoint(Naub &naub) {
+    return joints().pointerJoint(naub, pointer());
+}
+
+void Naubino::mergeNaubs(Naub &a, Naub &b) {
+    QMapIterator<Naub *, NaubJoint *> i(b.jointNaubs());
     while (i.hasNext()) {
         i.next();
-        joints->remove(i.value());
-        if (a != i.key()) {
-            joints->joinNaubs(*a, *(i.key()));
-        }
+        if (&a == i.key())
+            unjoinNaubs(*i.value());
+        else
+            rejoinNaubs(*i.value(), a, *i.key());
     }
-    naubs->remove(b);
-    mergedNaub(*a);
-}
-//
-
-//
-void Naubino::select(Naub *naub, Pointer *pointer) {
-    naub->selected++;
-
-    b2MouseJointDef def;
-    def.maxForce = naub->body->GetMass() * 2;
-    def.frequencyHz = 20;
-    def.dampingRatio = 1;
-    def.bodyA = ground_body;
-    def.bodyB = naub->body;
-    def.target = pointer->pos();
-    def.userData = pointer;
-
-    b2MouseJoint *joint = (b2MouseJoint *)world->CreateJoint(&def);
-    naub->pointerJoints->insert(pointer, joint);
-    pointerJoints->append(joint);
-}
-
-void Naubino::deselect(Naub *naub, Pointer *pointer) {
-    if (naub->pointerJoints->count() > 0) {
-        QList<b2Joint *> list = naub->pointerJoints->values(pointer);
-        for (int i = 0; i < list.count(); i++) {
-            b2Joint *joint = list[i];
-            world->DestroyJoint(joint);
-            pointerJoints->removeOne((b2MouseJoint *)joint);
-            list.removeAt(i);
-        }
-        naub->pointerJoints->remove(pointer);
-        naub->selected--;
-    }
-}
-//
-
-// setups
-void Naubino::setup() {
-    naubs = new NaubManager(this);
-    joints = new JointManager(this);
-    events = new QList<Event *>();
-    pointerJoints = new QList<b2MouseJoint *>();
-    setupWorld();
-    setupCenter();
-    setupCalcTimer();
-
-    b2BodyDef def;
-    def.type = b2_staticBody;
-    ground_body = world->CreateBody(&def);
-
-    setupPointers();
-
-    world->SetContactListener(new NaubinoContactListener(this));
-    cycler = new Cycler(this);
-    scorer = new Scorer(this);
-    connect(cycler, SIGNAL(sccFound(QList<Naub*>&)),
-            scorer, SLOT(  sccFound(QList<Naub*>&)));
-    spammer = new Spammer(this);
-    spammer->start();
-}
-
-void Naubino::setupWorld() {
-    b2Vec2 gravity(0.0f, 0.0f);
-    bool doSleep = true;
-    world = new b2World(gravity, doSleep);
+    removeNaub(b);
+    mergedNaub(a);
 }
 
 void Naubino::setupCenter() {
     b2BodyDef def;
     def.type = b2_kinematicBody;
-    center = world->CreateBody(&def);
+    center_ = world().CreateBody(&def);
 }
 
-void Naubino::setupCalcTimer() {
-    calcTimer = new QTimer();
-    connect(calcTimer, SIGNAL(timeout()), this, SLOT(calc()));
+void Naubino::setupPointer() {
+    pointer_ = new Pointer(world());
 }
 
-void Naubino::setupPointers() {
-    pointers = new QList<Pointer *>();
-    Pointer *pointer = new Pointer(this);
-    b2BodyDef def;
-    def.type = b2_kinematicBody;
-    pointer->body = world->CreateBody(&def);
-    pointers->append(pointer);
-}
-// setups ^^
-
-void Naubino::testSetting() {
-
-}
-
-void Naubino::randomPair(Vec pos) {
-    qreal x = qrand();
-    Vec add(qCos(x), qSin(x));
-    add *= 0.2;
-    Naub &n0 = addNaub( Vec(pos - add) );
-    Naub &n1 = addNaub( Vec(pos + add) );
-    joints->joinNaubs(n0, n1);
-    joinWithCenter(n0);
-    joinWithCenter(n1);
-}
-
-void Naubino::start() {
-    testSetting();
-    calcTimer->start( 1000/FPS );
-}
-
-// public slots
-void Naubino::calc() {
-    QTime t;
-    timeperframe = 0;
-    t.start();
-
-    joints->update();
-
-    foreach (b2MouseJoint *joint, *pointerJoints)
-        joint->SetTarget( ((Pointer*)joint->GetUserData())->pos() );
-
-    world->Step( 1.0f/FPS, 10, 10);
-    world->ClearForces();
-
-    foreach (Event *event, *events) {
-        event->handle();
-        delete event;
-    }
-    events->clear();
-
-    naubs->update();
-
-    timeperframe += t.elapsed();
-}
-
+NaubManager& Naubino::naubs() { return *naubs_; }
+JointManager& Naubino::joints() { return *joints_; }
+b2World& Naubino::world() { return *world_; }
+b2Body& Naubino::center() { return *center_; }
+Pointer& Naubino::pointer() { return *pointer_; }

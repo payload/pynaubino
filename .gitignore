@@ -6,3 +6,4 @@ moc_*
 tests/*/bin*
 Makefile
 lib/lib*
+*.bak
