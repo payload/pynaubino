@@ -32,6 +32,8 @@ public:
 
     void mergeNaubs(Naub &a, Naub &b);
 
+    void update();
+
     NaubManager& naubs();
     JointManager& joints();
     b2World& world();

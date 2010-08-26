@@ -79,6 +79,13 @@ void Naubino::mergeNaubs(Naub &a, Naub &b) {
     mergedNaub(a);
 }
 
+void Naubino::update() {
+    world().Step(0.04, 10, 10);
+    world().ClearForces();
+    naubs().update();
+    joints().update();
+}
+
 void Naubino::setupCenter() {
     b2BodyDef def;
     def.type = b2_kinematicBody;
