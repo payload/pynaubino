@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "QNaub.h"
-//#include "QJoint.h"
+#include "QNaubJoint.h"
 #include "Naubino.h"
 #include "Pointer.h"
 #include "NaubManager.h"
@@ -23,8 +23,8 @@ void Scene::newNaub(Naub &naub) {
 }
 
 void Scene::newNaubJoint(NaubJoint &joint) {
-    //QJoint *qjoint = new QJoint(this, joint);
-    //addItem(qjoint);
+    QNaubJoint *qjoint = new QNaubJoint(this, &joint);
+    addItem(qjoint);
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
