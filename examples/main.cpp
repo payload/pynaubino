@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     Naubino naubino;
-    Scene scene(&naubino);
+    Scene scene(naubino);
     View view(&scene);
     view.show();
     naubino.update();

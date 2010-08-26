@@ -8,18 +8,20 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit Scene(Naubino *naubino, QObject *parent = 0);
+    explicit Scene(Naubino &naubino);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-    Naubino *naubino;
-    Pointer* getMainPointer();
+    Pointer& mainPointer();
+    Naubino& naubino();
 signals:
 
 public slots:
-    void newNaub(Naub *naub);
-    void newJoint(NaubJoint *joint);
+    void newNaub(Naub &naub);
+    void newJoint(NaubJoint &joint);
+private:
+    Naubino *naubino_;
 };
 
 #endif // SCENE_H
