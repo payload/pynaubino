@@ -1,10 +1,8 @@
 #include "QNaubJoint.h"
-#include "Joints.h"
 #include "Naub.h"
-#include "Scene.h"
 
-QNaubJoint::QNaubJoint(Scene *scene, NaubJoint *joint) :
-        QObject(), QGraphicsLineItem(), scene(scene), joint(joint)
+QNaubJoint::QNaubJoint(NaubJoint &joint) :
+        QObject(), QGraphicsLineItem(), joint_(&joint)
 {
     setZValue(99);
     setPen( QPen( Qt::black ) );
@@ -13,9 +11,15 @@ QNaubJoint::QNaubJoint(Scene *scene, NaubJoint *joint) :
     jointChanged();
 }
 
+QNaubJoint::~QNaubJoint() {
+    joint_ = 0;
+}
+
+NaubJoint& QNaubJoint::joint() { return *joint_; }
+
 void QNaubJoint::jointChanged() {
-    QPointF a = joint->a().pos().q();
-    QPointF b = joint->b().pos().q();
+    QPointF a = joint().a().pos().q();
+    QPointF b = joint().b().pos().q();
     setLine(a.x(), a.y(), b.x(), b.y());
 }
 

@@ -23,7 +23,7 @@ void Scene::newNaub(Naub &naub) {
 }
 
 void Scene::newNaubJoint(NaubJoint &joint) {
-    QNaubJoint *qjoint = new QNaubJoint(this, &joint);
+    QNaubJoint *qjoint = new QNaubJoint(joint);
     addItem(qjoint);
 }
 
