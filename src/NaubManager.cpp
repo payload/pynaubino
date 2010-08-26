@@ -18,9 +18,10 @@ Naub& NaubManager::add(Vec pos) {
 }
 
 Naub& NaubManager::add(Vec pos, Color color) {
-    Q_UNUSED(pos); Q_UNUSED(color);
     Naub *naub = new Naub(world());
     naubs().append(naub);
+    naub->setPos(pos);
+    naub->setColor(color);
     return *naub;
 }
 

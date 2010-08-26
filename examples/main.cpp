@@ -9,8 +9,11 @@ int main(int argc, char *argv[])
 
     Naubino naubino;
     Scene scene(naubino);
-    View view(&scene);
+    View view(scene);
     view.show();
+
+    naubino.joinNaubs(naubino.addNaub(Vec(-0.30, 0)),
+                      naubino.addNaub(Vec( 0.30, 0)));
     naubino.update();
 
     return a.exec();

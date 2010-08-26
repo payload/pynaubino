@@ -8,3 +8,5 @@ Makefile
 lib/lib*
 *.bak
 examples/cutenaubino
+*/bin/*
+\#*

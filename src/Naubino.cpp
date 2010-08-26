@@ -18,7 +18,9 @@ Naubino::~Naubino() {
 }
 
 Naub& Naubino::addNaub(Vec pos) {
-    return naubs().add(pos);
+    Naub &naub = naubs().add(pos);
+    newNaub(naub);
+    return naub;
 }
 
 void Naubino::removeNaub(Naub &naub) {
@@ -26,7 +28,9 @@ void Naubino::removeNaub(Naub &naub) {
 }
 
 NaubJoint& Naubino::joinNaubs(Naub &a, Naub &b) {
-    return joints().joinNaubs(a, b);
+    NaubJoint &joint = joints().joinNaubs(a, b);
+    newNaubJoint(joint);
+    return joint;
 }
 
 void Naubino::unjoinNaubs(NaubJoint &joint) {

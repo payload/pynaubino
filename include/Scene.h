@@ -19,7 +19,7 @@ signals:
 
 public slots:
     void newNaub(Naub &naub);
-    void newJoint(NaubJoint &joint);
+    void newNaubJoint(NaubJoint &joint);
 private:
     Naubino *naubino_;
 };

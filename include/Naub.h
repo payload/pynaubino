@@ -14,7 +14,15 @@ public:
     Naub(b2World &world);
     ~Naub();
     void update();
+
+    void setPos(Vec pos);
+    void setColor(Color color);
+
     b2World& world();
+    Vec pos();
+    float32 rot();
+    float32 radius();
+    Color color();
 
     // JointManager >>
     CenterJoint *centerJoint;
@@ -27,6 +35,7 @@ private:
     b2World *world_;
     b2Body *body_;
     float32 radius_, friction_, density_, restitution_;
+    Color color_;
 
     QMap<Naub *, NaubJoint *> *jointNaubs_;
     QMap<Pointer *, PointerJoint *> *pointerJoints_;
