@@ -2,21 +2,20 @@
 #define VIEW_H
 
 #include <QGraphicsView>
-
-class Scene;
-class Qb2DebugDrawItem;
+#include "Scene.h"
+#include "Qb2DebugDraw.h"
 
 class View : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit View(Scene *scene, QWidget *parent = 0);
+    explicit View(Scene &scene);
 signals:
 
 public slots:
 
-protected:
-    Qb2DebugDrawItem *debugDraw;
+private:
+    Qb2DebugDrawItem *debugDraw_;
 };
 
 #endif // VIEW_H
