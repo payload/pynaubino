@@ -1,9 +1,10 @@
 #include "Naub.h"
 
 Naub::Naub(b2World &world)
-    : world_(&world), centerJoint(0) {
+    : world_(&world) {
     jointNaubs_ = new QMap<Naub *, NaubJoint *>();
     pointerJoints_ = new QMap<Pointer *, PointerJoint *>();
+    centerJoint = 0;
 
     setupPhysics();
 }
