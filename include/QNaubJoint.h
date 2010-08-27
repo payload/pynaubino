@@ -2,7 +2,7 @@
 #define QNAUBJOINT_H
 
 #include <QtGui>
-#include "Joints.h"
+class NaubJoint;
 
 class QNaubJoint : public QObject, public QGraphicsLineItem
 {

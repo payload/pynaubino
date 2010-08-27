@@ -10,24 +10,55 @@ Joint::~Joint() {
 b2World& Joint::world() { return *world_; }
 
 NaubJoint::NaubJoint(b2World &world)
-    : Joint(world), a_(0), b_(0) {}
+    : Joint(world), a_(0), b_(0) {
+    qnaubjoint = 0;
+    help_body_ = 0;
+}
 
 NaubJoint::~NaubJoint() {
     unjoin();
+    qnaubjoint = 0;
 }
 
 void NaubJoint::update() {
-
+    if (qnaubjoint) qnaubjoint->jointChanged();
 }
 
 void NaubJoint::join(Naub &a, Naub &b) {
     a_ = &a;
     b_ = &b;
+
+    {
+        b2BodyDef def;
+        def.type = b2_dynamicBody;
+        def.position = a.pos();
+        help_body_ = world().CreateBody(&def);
+    }
+    {
+        b2WeldJointDef def;
+        def.Initialize(&a.body(), help_body_, a.pos());
+        world().CreateJoint(&def);
+    }
+    {
+        b2DistanceJointDef def;
+        def.bodyA = help_body_;
+        def.bodyB = &b.body();
+        def.localAnchorA = Vec();
+        def.localAnchorB = Vec();
+        def.length = 0.6;
+        def.dampingRatio = 0.5;
+        def.frequencyHz = 3;
+        world().CreateJoint(&def);
+    }
 }
 
 void NaubJoint::unjoin() {
     a_ = 0;
     b_ = 0;
+    if (help_body_) {
+        world().DestroyBody(help_body_);
+        help_body_ = 0;
+    }
 }
 
 Naub& NaubJoint::a() { return *a_; }
@@ -60,7 +91,9 @@ Naub& CenterJoint::naub() { return *naub_; }
 b2Body& CenterJoint::center() { return *center_; }
 
 PointerJoint::PointerJoint(b2World &world)
-    : Joint(world), naub_(0), pointer_(0) {}
+    : Joint(world), naub_(0), pointer_(0) {
+    help_body_ = 0;
+}
 
 PointerJoint::~PointerJoint() {
     unjoin();
@@ -73,13 +106,40 @@ void PointerJoint::update() {
 void PointerJoint::join(Naub &naub, Pointer &pointer) {
     naub_ = &naub;
     pointer_ = &pointer;
+
+    {
+        b2BodyDef def;
+        def.type = b2_dynamicBody;
+        def.position = naub.pos();
+        help_body_ = world().CreateBody(&def);
+    }
+    {
+        b2WeldJointDef def;
+        def.Initialize(&naub.body(), help_body_, naub.pos());
+        world().CreateJoint(&def);
+    }
+    {
+        b2DistanceJointDef def;
+        def.bodyA = help_body_;
+        def.bodyB = &pointer.body();
+        def.localAnchorA = Vec();
+        def.localAnchorB = Vec();
+        def.length = 0.01;
+        def.dampingRatio = 0.8;
+        def.frequencyHz = 1;
+        world().CreateJoint(&def);
+    }
 }
 
 void PointerJoint::unjoin() {
     naub_ = 0;
     pointer_ = 0;
+    if (help_body_) {
+        world().DestroyBody(help_body_);
+        help_body_ = 0;
+    }
 }
 
 Naub& PointerJoint::naub() { return *naub_; }
-
 Pointer& PointerJoint::pointer() { return *pointer_; }
+

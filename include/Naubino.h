@@ -32,8 +32,6 @@ public:
 
     void mergeNaubs(Naub &a, Naub &b);
 
-    void update();
-
     NaubManager& naubs();
     JointManager& joints();
     b2World& world();
@@ -47,7 +45,7 @@ signals:
     void mergedJoint(NaubJoint &joint);
     void mergedNaub(Naub &naub);
 public slots:
-
+    void update();
 private:
     void setupCenter();
     void setupPointer();

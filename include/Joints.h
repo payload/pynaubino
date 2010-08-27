@@ -3,6 +3,7 @@
 
 #include <Box2D.h>
 #include "Pointer.h"
+#include "QNaubJoint.h"
 
 class Naub;
 
@@ -26,8 +27,13 @@ public:
     void unjoin();
     Naub &a();
     Naub &b();
+
+    // QNaubJoint >>
+    QNaubJoint *qnaubjoint;
+    // << QNaubJoint
 private:
     Naub *a_, *b_;
+    b2Body *help_body_;
 };
 
 class CenterJoint : public Joint {
@@ -51,11 +57,12 @@ public:
     void update();
     void join(Naub &naub, Pointer &pointer);
     void unjoin();
-    Naub &naub();
-    Pointer &pointer();
+    Naub& naub();
+    Pointer& pointer();
 private:
     Naub *naub_;
     Pointer *pointer_;
+    b2Body *help_body_;
 };
 
 #endif // JOINTS_H

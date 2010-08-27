@@ -13,6 +13,7 @@ public:
     void setPos(Vec pos);
     Vec pos();
     b2World& world();
+    b2Body& body();
     QList<PointerJoint *>& joints();
 private:
     b2World *world_;

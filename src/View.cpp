@@ -5,7 +5,7 @@
 
 #include <QtGui>
 
-//#define DEBUG_PHYSICS
+#define DEBUG_PHYSICS
 
 View::View(Scene &scene) : QGraphicsView(&scene)
 {
@@ -20,6 +20,6 @@ View::View(Scene &scene) : QGraphicsView(&scene)
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     debugDraw_ = new Qb2DebugDrawItem(&scene.naubino().world());
     debugDraw_->setZValue(-100);
-    scene->addItem(debugDraw_);
+    scene.addItem(debugDraw_);
 #endif
 }

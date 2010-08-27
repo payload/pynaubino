@@ -5,6 +5,7 @@ Naub::Naub(b2World &world)
     jointNaubs_ = new QMap<Naub *, NaubJoint *>();
     pointerJoints_ = new QMap<Pointer *, PointerJoint *>();
     centerJoint = 0;
+    qnaub = 0;
 
     color_ = Color::randomNaub();
 
@@ -16,10 +17,11 @@ Naub::~Naub() {
     delete pointerJoints_; pointerJoints_ = 0;
     centerJoint = 0;
     world_ = 0;
+    qnaub = 0;
 }
 
 void Naub::update() {
-
+    if (qnaub) qnaub->naubChanged();
 }
 
 void Naub::setupPhysics() {
@@ -53,5 +55,6 @@ Vec Naub::pos() { return Vec(body_->GetWorldCenter()); }
 float32 Naub::rot() { return body_->GetAngle(); }
 float32 Naub::radius() { return radius_; }
 Color Naub::color() { return color_; }
+b2Body& Naub::body() { return *body_; }
 QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return *jointNaubs_; }
 QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return *pointerJoints_; }

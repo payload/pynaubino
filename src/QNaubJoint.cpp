@@ -1,5 +1,6 @@
 #include "QNaubJoint.h"
 #include "Naub.h"
+#include "Joints.h"
 
 QNaubJoint::QNaubJoint(NaubJoint &joint) :
         QObject(), QGraphicsLineItem(), joint_(&joint)
@@ -8,10 +9,12 @@ QNaubJoint::QNaubJoint(NaubJoint &joint) :
     setPen( QPen( Qt::black ) );
     setPenWidth( 4.0f );
 
+    joint.qnaubjoint = this;
     jointChanged();
 }
 
 QNaubJoint::~QNaubJoint() {
+    joint().qnaubjoint = 0;
     joint_ = 0;
 }
 

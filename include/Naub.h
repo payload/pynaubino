@@ -8,6 +8,7 @@
 #include "Pointer.h"
 #include "Color.h"
 #include "Joints.h"
+#include "QNaub.h"
 
 class Naub {
 public:
@@ -23,6 +24,11 @@ public:
     float32 rot();
     float32 radius();
     Color color();
+    b2Body& body();
+
+    // QNaub >>
+    QNaub *qnaub;
+    // << QNaub
 
     // JointManager >>
     CenterJoint *centerJoint;

@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
 
     naubino.joinNaubs(naubino.addNaub(Vec(-0.30, 0)),
                       naubino.addNaub(Vec( 0.30, 0)));
-    naubino.update();
+    QTimer *timer = new QTimer();
+    timer->connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
+    timer->start(50);
 
     return a.exec();
 }

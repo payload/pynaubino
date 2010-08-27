@@ -24,4 +24,5 @@ Vec Pointer::pos() {
 }
 
 b2World& Pointer::world() { return *world_; }
+b2Body& Pointer::body() { return *body_; }
 QList<PointerJoint*>& Pointer::joints() { return *joints_; }

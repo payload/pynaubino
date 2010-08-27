@@ -12,10 +12,12 @@ QNaub::QNaub(Scene &scene, Naub &naub) :
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 
+    naub.qnaub = this;
     naubChanged();
 }
 
 QNaub::~QNaub() {
+    naub().qnaub = 0;
     naub_ = 0;
     scene_ = 0;
 }
