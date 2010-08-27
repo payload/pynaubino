@@ -4,16 +4,18 @@
 #include <QtGui>
 #include "Vec.h"
 class Naub;
+class Scene;
 
 class QNaub : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 public:
-    explicit QNaub(Naub &naub);
+    explicit QNaub(Scene &scene, Naub &naub);
     ~QNaub();
 
     Naub& naub();
+    Scene& scene();
 
     void naubChanged();
     void naubDeleted();
@@ -30,6 +32,7 @@ public slots:
     void deleted();
 private:
     Naub *naub_;
+    Scene *scene_;
 };
 
 #endif // QNaub_H

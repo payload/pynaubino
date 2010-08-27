@@ -75,9 +75,9 @@ PointerJoint& JointManager::selectNaub(Naub &naub,
 }
 
 void JointManager::deselectNaub(PointerJoint &joint) {
-    joint.unjoin();
     joint.naub().pointerJoints().remove(&joint.pointer());
     joint.pointer().joints().removeOne(&joint);
+    joint.unjoin();
     joints().removeOne(&joint);
     delete &joint;
 }

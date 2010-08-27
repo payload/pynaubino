@@ -3,6 +3,8 @@
 
 #include <QtGui>
 #include "Naubino.h"
+#include "QNaub.h"
+#include "QNaubJoint.h"
 
 class Scene : public QGraphicsScene
 {
@@ -12,6 +14,9 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    void selectNaub(QNaub &qnaub);
+    void deselectNaub(QNaub &qnaub);
 
     Pointer& mainPointer();
     Naubino& naubino();

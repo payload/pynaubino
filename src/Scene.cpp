@@ -1,10 +1,4 @@
 #include "Scene.h"
-#include "QNaub.h"
-#include "QNaubJoint.h"
-#include "Naubino.h"
-#include "Pointer.h"
-#include "NaubManager.h"
-#include "JointManager.h"
 
 Scene::Scene(Naubino &naubino)
     : QGraphicsScene(), naubino_(&naubino) {
@@ -18,7 +12,7 @@ Scene::Scene(Naubino &naubino)
 }
 
 void Scene::newNaub(Naub &naub) {
-    QNaub *qnaub = new QNaub(naub);
+    QNaub *qnaub = new QNaub(*this, naub);
     addItem(qnaub);
 }
 
@@ -39,6 +33,14 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void Scene::selectNaub(QNaub &qnaub) {
+    naubino().selectNaub(qnaub.naub());
+}
+
+void Scene::deselectNaub(QNaub &qnaub) {
+    naubino().deselectNaub(qnaub.naub());
 }
 
 Pointer& Scene::mainPointer() { return naubino().pointer(); }
