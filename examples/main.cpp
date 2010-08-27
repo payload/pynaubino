@@ -5,18 +5,29 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
     Naubino naubino;
     Scene scene(naubino);
     View view(scene);
     view.show();
 
-    naubino.joinNaubs(naubino.addNaub(Vec(-0.30, 0)),
-                      naubino.addNaub(Vec( 0.30, 0)));
+    Naub &a = naubino.addNaub(Vec(-0.30, 0));
+    Naub &b = naubino.addNaub(Vec( 0.30, 0));
+    naubino.joinNaubs(a, b);
+    naubino.joinWithCenter(a);
+    naubino.joinWithCenter(b);
+
     QTimer *timer = new QTimer();
     timer->connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
     timer->start(50);
 
-    return a.exec();
+    int ret = app.exec();
+
+    timer->stop();
+    timer->disconnect();
+    delete timer;
+    timer = 0;
+
+    return ret;
 }

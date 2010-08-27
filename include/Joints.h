@@ -48,6 +48,7 @@ public:
 private:
     Naub *naub_;
     b2Body *center_;
+    b2Body *help_body_;
 };
 
 class PointerJoint : public Joint {

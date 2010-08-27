@@ -65,8 +65,9 @@ Naub& NaubJoint::a() { return *a_; }
 Naub& NaubJoint::b() { return *b_; }
 
 CenterJoint::CenterJoint(b2World &world)
-    : Joint(world), naub_(0), center_(0) {}
-
+    : Joint(world), naub_(0), center_(0) {
+    help_body_ = 0;
+}
 
 CenterJoint::~CenterJoint() {
     unjoin();
@@ -79,11 +80,52 @@ void CenterJoint::update() {
 void CenterJoint::join(Naub &naub, b2Body &center) {
     naub_ = &naub;
     center_ = &center;
+
+    {
+        b2BodyDef def;
+        def.type = b2_dynamicBody;
+        def.position = center.GetPosition();
+        help_body_ = world().CreateBody(&def);
+    }
+    {
+        b2RevoluteJointDef def;
+        def.bodyA = &center;
+        def.bodyB = help_body_;
+        def.localAnchorA = Vec();
+        def.localAnchorB = Vec();
+        def.enableLimit = false;
+        //world().CreateJoint(&def);
+    }
+    {
+        b2DistanceJointDef def;
+        def.bodyA = &naub.body();
+        def.bodyB = help_body_;
+        def.localAnchorA = Vec();
+        def.localAnchorB = Vec();
+        def.length = 0.01;
+        def.dampingRatio = 0.8;
+        def.frequencyHz = 0.3;
+        //world().CreateJoint(&def);
+    }
+    {
+        b2FrictionJointDef def;
+        def.bodyA = &center;
+        def.bodyB = &naub.body();
+        def.localAnchorA = Vec();
+        def.localAnchorB = Vec();
+        def.maxForce = 2;
+        def.maxTorque = 2;
+        world().CreateJoint(&def);
+    }
 }
 
 void CenterJoint::unjoin() {
     naub_ = 0;
     center_ = 0;
+    if (help_body_ != 0) {
+        world().DestroyBody(help_body_);
+        help_body_ = 0;
+    }
 }
 
 Naub& CenterJoint::naub() { return *naub_; }
