@@ -3,11 +3,9 @@
 #include "QNaub.h"
 
 
-Naub::Naub(b2World &world) : world_(&world) {
-    jointNaubs_ = new QMap<Naub *, NaubJoint *>();
-    pointerJoints_ = new QMap<Pointer *, PointerJoint *>();
-    centerJoint = 0;
-    qnaub = 0;
+Naub::Naub(b2World *world) : world_(world) {
+    centerJoint_ = 0;
+    qnaub_ = 0;
 
     color_ = Color::randomNaub();
 
@@ -16,17 +14,15 @@ Naub::Naub(b2World &world) : world_(&world) {
 
 
 Naub::~Naub() {
-    delete jointNaubs_; jointNaubs_ = 0;
-    delete pointerJoints_; pointerJoints_ = 0;
-    centerJoint = 0;
+    centerJoint_ = 0;
     world_ = 0;
-    qnaub = 0;
+    qnaub_ = 0;
 }
 
 
 void Naub::update() {
-    if (qnaub) {
-        qnaub->naubChanged();
+    if (qnaub_ != 0) {
+        qnaub_->naubChanged();
     }
 }
 
@@ -55,16 +51,21 @@ void Naub::setupPhysics() {
 }
 
 
-void Naub::setPos(Vec pos) { body_->SetTransform(pos, rot()); }
-void Naub::setColor(Color color) { color_ = color; }
+void Naub::setPos(const Vec& pos) { body_->SetTransform(pos, rot()); }
+void Naub::setColor(const Color& color) { color_ = color; }
 
 
 b2World& Naub::world() { return *world_; }
-Vec Naub::pos() { return Vec(body_->GetWorldCenter()); }
-float32 Naub::rot() { return body_->GetAngle(); }
-float32 Naub::radius() { return radius_; }
-Color Naub::color() { return color_; }
+const b2World& Naub::world() const { return *world_; }
+Vec Naub::pos() const { return Vec(body_->GetWorldCenter()); }
+float Naub::rot() const { return body_->GetAngle(); }
+float Naub::radius() const { return radius_; }
+const Color& Naub::color() const { return color_; }
 b2Body& Naub::body() { return *body_; }
-QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return *jointNaubs_; }
-QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return *pointerJoints_; }
+const b2Body& Naub::body() const { return *body_; }
+void Naub::setQNaub(QNaub *n) { qnaub_ = n; }
+CenterJoint *Naub::centerJoint() { return centerJoint_; }
+void Naub::setCenterJoint(CenterJoint *j) { centerJoint_ = j; }
+QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return jointNaubs_; }
+QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return pointerJoints_; }
 

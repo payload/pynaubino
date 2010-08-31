@@ -4,10 +4,12 @@
 
 #include "Prereqs.h"
 
+#include <QMap>
+
 #include <Box2D/Box2D.h>
 
-#include "Vec.h"
 #include "Color.h"
+#include "Vec.h"
 
 class CenterJoint;
 class NaubJoint;
@@ -19,39 +21,47 @@ class Pointer;
 
 class Naub {
 public:
-    Naub(b2World &world);
+    Naub(b2World *world);
     ~Naub();
+
     void update();
 
-    void setPos(Vec pos);
-    void setColor(Color color);
+    void setPos(const Vec& pos);
+    void setColor(const Color& color);
 
     b2World& world();
-    Vec pos();
-    float32 rot();
-    float32 radius();
-    Color color();
+    const b2World& world() const;
+
+    Vec pos() const;
+    float rot() const;
+    float radius() const;
+    const Color& color() const;
     b2Body& body();
+    const b2Body& body() const;
 
-    // QNaub >>
-    QNaub *qnaub;
-    // << QNaub
+    void setQNaub(QNaub*);
 
-    // JointManager >>
-    CenterJoint *centerJoint;
+    CenterJoint *centerJoint();
+    void setCenterJoint(CenterJoint *);
+
+
     QMap<Naub *, NaubJoint *>& jointNaubs();
     QMap<Pointer *, PointerJoint *>& pointerJoints();
-    // << JointManager
+
 private:
     void setupPhysics();
 
     b2World *world_;
     b2Body *body_;
-    float32 radius_, friction_, density_, restitution_;
+    float radius_, friction_, density_, restitution_;
     Color color_;
 
-    QMap<Naub *, NaubJoint *> *jointNaubs_;
-    QMap<Pointer *, PointerJoint *> *pointerJoints_;
+    QNaub *qnaub_;
+
+    CenterJoint *centerJoint_;
+
+    QMap<Naub *, NaubJoint *> jointNaubs_;
+    QMap<Pointer *, PointerJoint *> pointerJoints_;
 };
 
 

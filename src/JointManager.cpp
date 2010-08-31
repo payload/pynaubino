@@ -59,7 +59,7 @@ NaubJoint* JointManager::naubJoint(Naub &a, Naub &b) {
 CenterJoint& JointManager::joinWithCenter(Naub &naub, b2Body &center) {
     CenterJoint *joint = new CenterJoint(&world());
     joints().append(joint);
-    naub.centerJoint = joint;
+    naub.setCenterJoint(joint);
     joint->join(&naub, &center);
     return *joint;
 }
@@ -67,14 +67,14 @@ CenterJoint& JointManager::joinWithCenter(Naub &naub, b2Body &center) {
 
 void JointManager::unjoinFromCenter(CenterJoint &joint) {
     joint.unjoin();
-    joint.naub().centerJoint = 0;
+    joint.naub().setCenterJoint(0);
     joints().removeOne(&joint);
     delete &joint;
 }
 
 
 CenterJoint* JointManager::centerJoint(Naub &naub) {
-    return naub.centerJoint;
+    return naub.centerJoint();
 }
 
 

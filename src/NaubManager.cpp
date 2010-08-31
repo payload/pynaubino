@@ -16,7 +16,7 @@ Naub* NaubManager::add(const Vec& pos) {
 
 
 Naub* NaubManager::add(const Vec& pos, const Color& color) {
-    Naub *naub = new Naub(*world_);
+    Naub *naub = new Naub(world_);
     Q_ASSERT(naubs_.contains(naub) == false);
 
     naub->setPos(pos);
