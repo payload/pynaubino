@@ -4,6 +4,7 @@
 #include <View.h>
 
 #include <NaubPairSpammer.h>
+#include <ContactListener.h>
 
 int main(int argc, char *argv[])
 {
@@ -15,11 +16,14 @@ int main(int argc, char *argv[])
     view.show();
 
     QTimer timer;
-    timer.connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
+    timer.connect(&timer, SIGNAL(timeout()), &naubino, SLOT(update()));
     timer.start(50);
 
     NaubPairSpammer spam(&naubino);
     spam.start(2000);
+
+    ContactListener conlistener;
+    naubino.world().SetContactListener(&conlistener);
 
     return app.exec();
 }
