@@ -14,9 +14,6 @@
 class PointerJoint;
 
 
-class PointerJoint;
-
-
 class Pointer {
 public:
     Pointer(b2World &world);
@@ -26,10 +23,13 @@ public:
     b2World& world();
     b2Body& body();
     QList<PointerJoint *>& joints();
+
 private:
     b2World *world_;
     b2Body *body_;
     QList<PointerJoint *> *joints_;
 };
 
+
 #endif // POINTER_H
+

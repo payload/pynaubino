@@ -27,3 +27,4 @@ protected:
 
 
 #endif // COLOR_H
+

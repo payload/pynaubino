@@ -9,8 +9,7 @@
 #include <Box2D/Box2D.h>
 
 
-class Vec : public b2Vec2
-{
+class Vec : public b2Vec2 {
 public:
     Vec(float32 x, float32 y);
     Vec(b2Vec2 vec);
@@ -20,4 +19,6 @@ public:
     static Vec rand();
 };
 
+
 #endif // VEC_H
+

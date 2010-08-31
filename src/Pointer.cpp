@@ -10,6 +10,7 @@ Pointer::Pointer(b2World &world) : world_(&world) {
     joints_ = new QList<PointerJoint *>();
 }
 
+
 Pointer::~Pointer() {
     world().DestroyBody(body_);
     body_ = 0;
@@ -17,14 +18,18 @@ Pointer::~Pointer() {
     delete joints_; joints_ = 0;
 }
 
+
 void Pointer::setPos(Vec pos) {
     body_->SetTransform(pos, 0);
 }
+
 
 Vec Pointer::pos() {
     return Vec(body_->GetWorldCenter());
 }
 
+
 b2World& Pointer::world() { return *world_; }
 b2Body& Pointer::body() { return *body_; }
 QList<PointerJoint*>& Pointer::joints() { return *joints_; }
+

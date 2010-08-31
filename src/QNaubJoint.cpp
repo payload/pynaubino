@@ -18,18 +18,22 @@ QNaubJoint::QNaubJoint(NaubJoint &joint) :
     jointChanged();
 }
 
+
 QNaubJoint::~QNaubJoint() {
     joint().qnaubjoint = 0;
     joint_ = 0;
 }
 
+
 NaubJoint& QNaubJoint::joint() { return *joint_; }
+
 
 void QNaubJoint::jointChanged() {
     QPointF a = joint().a().pos().q();
     QPointF b = joint().b().pos().q();
     setLine(a.x(), a.y(), b.x(), b.y());
 }
+
 
 void QNaubJoint::jointDeleted() {
     QPropertyAnimation *ani = new QPropertyAnimation(this, "penWidth");
@@ -39,16 +43,20 @@ void QNaubJoint::jointDeleted() {
     ani->start();
 }
 
+
 void QNaubJoint::deleted() {
     setVisible(false);
 }
 
+
 qreal QNaubJoint::penWidth() {
     return pen().widthF();
 }
+
 
 void QNaubJoint::setPenWidth(qreal width) {
     QPen p = pen();
     p.setWidthF(width);
     setPen( p );
 }
+

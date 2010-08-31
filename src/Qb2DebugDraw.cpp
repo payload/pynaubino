@@ -7,10 +7,12 @@ Qb2DebugDrawItem::Qb2DebugDrawItem(b2World *world) : world(world) {
     startTimer(50);
 }
 
+
 void Qb2DebugDrawItem::timerEvent(QTimerEvent *event) {
     Q_UNUSED(event);
     update();
 }
+
 
 Qb2DebugDraw::Qb2DebugDraw() : b2DebugDraw() {
     SetFlags( e_shapeBit
@@ -19,3 +21,4 @@ Qb2DebugDraw::Qb2DebugDraw() : b2DebugDraw() {
             | e_pairBit
             | e_centerOfMassBit);
 }
+

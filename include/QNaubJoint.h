@@ -10,8 +10,7 @@
 class NaubJoint;
 
 
-class QNaubJoint : public QObject, public QGraphicsLineItem
-{
+class QNaubJoint : public QObject, public QGraphicsLineItem {
     Q_OBJECT
     Q_PROPERTY(qreal penWidth READ penWidth WRITE setPenWidth)
 public:
@@ -25,11 +24,14 @@ public:
 
     qreal penWidth();
     void setPenWidth(qreal width);
+
 public slots:
     void deleted();
-signals:
+
 private:
     NaubJoint *joint_;
 };
 
+
 #endif // QNAUBJOINT_H
+

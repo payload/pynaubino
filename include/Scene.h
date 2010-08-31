@@ -9,8 +9,7 @@
 #include "QNaubJoint.h"
 
 
-class Scene : public QGraphicsScene
-{
+class Scene : public QGraphicsScene {
     Q_OBJECT
 public:
     Scene(Naubino &naubino);
@@ -23,13 +22,15 @@ public:
 
     Pointer& mainPointer();
     Naubino& naubino();
-signals:
 
 public slots:
     void newNaub(Naub &naub);
     void newNaubJoint(NaubJoint &joint);
+
 private:
     Naubino *naubino_;
 };
 
+
 #endif // SCENE_H
+

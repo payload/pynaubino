@@ -17,7 +17,6 @@ class PointerJoint;
 class Pointer;
 
 
-
 class Naub {
 public:
     Naub(b2World &world);
@@ -55,4 +54,6 @@ private:
     QMap<Pointer *, PointerJoint *> *pointerJoints_;
 };
 
+
 #endif // NAUB_H
+

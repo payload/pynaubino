@@ -11,7 +11,6 @@
 class Joint;
 
 
-
 class JointManager {
 public:
     JointManager(b2World &world);
@@ -35,9 +34,12 @@ public:
 
     b2World& world();
     QList<Joint *>& joints();
+
 private:
     QList<Joint *> *joints_;
     b2World *world_;
 };
 
+
 #endif // JOINTMANAGER_H
+

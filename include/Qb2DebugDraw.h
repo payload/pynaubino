@@ -10,8 +10,7 @@
 
 
 
-class Qb2DebugDraw : public b2DebugDraw
-{
+class Qb2DebugDraw : public b2DebugDraw {
 public:
     Qb2DebugDraw();
 
@@ -70,8 +69,8 @@ protected:
     }
 };
 
-class Qb2DebugDrawItem : public QGraphicsObject
-{
+
+class Qb2DebugDrawItem : public QGraphicsObject {
 public:
     Qb2DebugDrawItem(b2World *world);
 
@@ -92,4 +91,6 @@ public:
     }
 };
 
+
 #endif // QB2DEBUGDRAW_H
+

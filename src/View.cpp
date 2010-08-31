@@ -8,8 +8,7 @@
 #define DEBUG_PHYSICS
 
 
-View::View(Scene &scene) : QGraphicsView(&scene)
-{
+View::View(Scene &scene) : QGraphicsView(&scene) {
     setRenderHint(QPainter::Antialiasing);
     setSceneRect(-300, -200, 600, 400);
 
@@ -24,3 +23,4 @@ View::View(Scene &scene) : QGraphicsView(&scene)
     scene.addItem(debugDraw_);
 #endif
 }
+

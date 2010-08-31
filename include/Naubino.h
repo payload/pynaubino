@@ -13,9 +13,7 @@
 #include "Joints.h"
 
 
-
-class Naubino : public QObject
-{
+class Naubino : public QObject {
     Q_OBJECT
 public:
     Naubino();
@@ -64,4 +62,6 @@ private:
     Pointer *pointer_;
 };
 
+
 #endif // NAUBINO_H
+

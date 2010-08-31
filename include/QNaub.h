@@ -12,8 +12,7 @@ class Naub;
 class Scene;
 
 
-class QNaub : public QObject, public QGraphicsEllipseItem
-{
+class QNaub : public QObject, public QGraphicsEllipseItem {
     Q_OBJECT
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 public:
@@ -32,13 +31,15 @@ public:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-signals:
 
 public slots:
     void deleted();
+
 private:
     Naub *naub_;
     Scene *scene_;
 };
 
+
 #endif // QNaub_H
+

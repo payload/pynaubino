@@ -5,8 +5,8 @@
 
 
 QNaub::QNaub(Scene &scene, Naub &naub) :
-    QObject(), QGraphicsEllipseItem(0, 0, 10, 10),
-    scene_(&scene), naub_(&naub)
+        QObject(), QGraphicsEllipseItem(0, 0, 10, 10),
+        scene_(&scene), naub_(&naub)
 {
     setZValue(101);
     setPen(QPen( Qt::NoPen ));
@@ -18,14 +18,17 @@ QNaub::QNaub(Scene &scene, Naub &naub) :
     naubChanged();
 }
 
+
 QNaub::~QNaub() {
     naub().qnaub = 0;
     naub_ = 0;
     scene_ = 0;
 }
 
+
 Naub& QNaub::naub() { return *naub_; }
 Scene& QNaub::scene() { return *scene_; }
+
 
 void QNaub::naubChanged() {
     QPointF pos = naub().pos().q();
@@ -41,6 +44,7 @@ void QNaub::naubChanged() {
         setBrush(QBrush( qcolor ));
 }
 
+
 void QNaub::naubDeleted() {
     QPropertyAnimation *ani = new QPropertyAnimation(this, "scale");
     ani->setEndValue(0);
@@ -49,32 +53,40 @@ void QNaub::naubDeleted() {
     ani->start();
 }
 
+
 void QNaub::deleted() {
     setVisible(false);
 }
+
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event);
     scene().selectNaub(*this);
 }
 
+
 void QNaub::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event);
 }
+
 
 void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event);
     scene().deselectNaub(*this);
 }
 
+
 void QNaub::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
     Q_UNUSED(event);
 }
+
 
 void QNaub::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
     Q_UNUSED(event);
 }
 
+
 void QNaub::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
     Q_UNUSED(event);
 }
+

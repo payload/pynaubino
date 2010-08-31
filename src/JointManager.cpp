@@ -6,18 +6,20 @@
 #include "Joints.h"
 
 
-JointManager::JointManager(b2World &world)
-    : world_(&world) {
+JointManager::JointManager(b2World &world) : world_(&world) {
     joints_ = new QList<Joint *>();
 }
 
+
 JointManager::~JointManager() {
-    foreach (Joint *joint, *joints_)
+    foreach (Joint *joint, *joints_) {
         delete joint;
+    }
     delete joints_;
     joints_ = 0;
     world_ = 0;
 }
+
 
 NaubJoint& JointManager::joinNaubs(Naub &a, Naub &b) {
     NaubJoint *joint = new NaubJoint(world());
@@ -28,6 +30,7 @@ NaubJoint& JointManager::joinNaubs(Naub &a, Naub &b) {
     return *joint;
 }
 
+
 void JointManager::unjoinNaubs(NaubJoint &joint) {
     joint.a().jointNaubs().remove(&joint.b());
     joint.b().jointNaubs().remove(&joint.a());
@@ -35,6 +38,7 @@ void JointManager::unjoinNaubs(NaubJoint &joint) {
     joints().removeOne(&joint);
     delete &joint;
 }
+
 
 void JointManager::rejoinNaubs(NaubJoint &joint,
                                Naub &a, Naub &b) {
@@ -46,18 +50,20 @@ void JointManager::rejoinNaubs(NaubJoint &joint,
     joint.join(a, b);
 }
 
+
 NaubJoint* JointManager::naubJoint(Naub &a, Naub &b) {
     return a.jointNaubs().value(&b, 0);
 }
 
-CenterJoint& JointManager::joinWithCenter(Naub &naub,
-                                          b2Body &center) {
+
+CenterJoint& JointManager::joinWithCenter(Naub &naub, b2Body &center) {
     CenterJoint *joint = new CenterJoint(world());
     joints().append(joint);
     naub.centerJoint = joint;
     joint->join(naub, center);
     return *joint;
 }
+
 
 void JointManager::unjoinFromCenter(CenterJoint &joint) {
     joint.unjoin();
@@ -66,9 +72,11 @@ void JointManager::unjoinFromCenter(CenterJoint &joint) {
     delete &joint;
 }
 
+
 CenterJoint* JointManager::centerJoint(Naub &naub) {
     return naub.centerJoint;
 }
+
 
 PointerJoint& JointManager::selectNaub(Naub &naub,
                                        Pointer &pointer) {
@@ -80,6 +88,7 @@ PointerJoint& JointManager::selectNaub(Naub &naub,
     return *joint;
 }
 
+
 void JointManager::deselectNaub(PointerJoint &joint) {
     joint.naub().pointerJoints().remove(&joint.pointer());
     joint.pointer().joints().removeOne(&joint);
@@ -89,19 +98,25 @@ void JointManager::deselectNaub(PointerJoint &joint) {
 }
 
 
-PointerJoint* JointManager::pointerJoint(Naub &naub,
-                                         Pointer &pointer) {
+PointerJoint* JointManager::pointerJoint(Naub &naub, Pointer &pointer) {
     return naub.pointerJoints().value(&pointer, 0);
 }
+
 
 int JointManager::count() {
     return joints().count();
 }
 
+
 void JointManager::update() {
-    foreach (Joint *joint, joints()) joint->update();
+    foreach (Joint *joint, joints()) {
+        joint->update();
+    }
 }
+
 
 b2World& JointManager::world() { return *world_; }
 
+
 QList<Joint *>& JointManager::joints() { return *joints_; }
+

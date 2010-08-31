@@ -11,17 +11,15 @@
 class Qb2DebugDrawItem;
 
 
-class View : public QGraphicsView
-{
+class View : public QGraphicsView {
     Q_OBJECT
 public:
     View(Scene &scene);
-signals:
-
-public slots:
 
 private:
     Qb2DebugDrawItem *debugDraw_;
 };
 
+
 #endif // VIEW_H
+

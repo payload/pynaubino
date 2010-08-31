@@ -9,7 +9,6 @@
 #include "Naub.h"
 
 
-
 class NaubManager {
 public:
     NaubManager(b2World &world);
@@ -21,6 +20,7 @@ public:
 
     int count();
     void update();
+
 private:
     b2World& world();
     QList<Naub *>& naubs();
@@ -29,4 +29,6 @@ private:
     b2World *world_;
 };
 
+
 #endif // NAUBMANAGER_H
+
