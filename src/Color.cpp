@@ -16,8 +16,8 @@ Color::Color(int r, int g, int b, QString name) : name_(name) {
 }
 
 
-QString Color::readableName() { return name_; }
-QColor Color::qcolor() { return qcolor_; }
+const QString& Color::readableName() const { return name_; }
+const QColor& Color::qcolor() const { return qcolor_; }
 
 
 #define INSERT_IN_MAP(r, g, b, n) colors.insert(n, Color(r, g, b, n));

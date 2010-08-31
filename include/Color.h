@@ -12,8 +12,8 @@ public:
     Color();
     Color(int r, int g, int b, QString name);
 
-    QString readableName();
-    QColor qcolor();
+    const QString& readableName() const;
+    const QColor& qcolor() const;
 
     static const QMap<QString, Color>& naubinoColors();
     static const QList<Color>& possibleNaubColors();
