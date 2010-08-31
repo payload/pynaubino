@@ -6,7 +6,7 @@
 
 QNaub::QNaub(Scene &scene, Naub &naub) :
         QObject(), QGraphicsEllipseItem(0, 0, 10, 10),
-        scene_(&scene), naub_(&naub)
+        naub_(&naub), scene_(&scene)
 {
     setZValue(101);
     setPen(QPen( Qt::NoPen ));
