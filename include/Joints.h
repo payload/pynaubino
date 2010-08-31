@@ -43,7 +43,7 @@ public:
 
 private:
     Naub *a_, *b_;
-    b2Body *help_body_;
+    b2Body *helpBody_;
     QNaubJoint *qnaubjoint_;
 };
 
@@ -66,7 +66,7 @@ public:
 private:
     Naub *naub_;
     b2Body *center_;
-    b2Body *help_body_;
+    b2Body *helpBody_;
 };
 
 
@@ -88,7 +88,7 @@ public:
 private:
     Naub *naub_;
     Pointer *pointer_;
-    b2Body *help_body_;
+    b2Body *helpBody_;
 };
 
 

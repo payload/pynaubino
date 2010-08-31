@@ -20,7 +20,7 @@ Joint::~Joint() {
 /* *** NaubJoint ********************************************************** */
 
 NaubJoint::NaubJoint(b2World *world) : Joint(world), a_(0),
-        b_(0), help_body_(0), qnaubjoint_(0) { }
+        b_(0), helpBody_(0), qnaubjoint_(0) { }
 
 
 NaubJoint::~NaubJoint() {
@@ -44,16 +44,16 @@ void NaubJoint::join(Naub *a, Naub *b) {
         b2BodyDef def;
         def.type = b2_dynamicBody;
         def.position = a_->pos();
-        help_body_ = world_->CreateBody(&def);
+        helpBody_ = world_->CreateBody(&def);
     }
     {
         b2WeldJointDef def;
-        def.Initialize(&a_->body(), help_body_, a_->pos());
+        def.Initialize(&a_->body(), helpBody_, a_->pos());
         world_->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
-        def.bodyA = help_body_;
+        def.bodyA = helpBody_;
         def.bodyB = &b->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
@@ -68,9 +68,9 @@ void NaubJoint::join(Naub *a, Naub *b) {
 void NaubJoint::unjoin() {
     a_ = 0;
     b_ = 0;
-    if (help_body_ != 0) {
-        world_->DestroyBody(help_body_);
-        help_body_ = 0;
+    if (helpBody_ != 0) {
+        world_->DestroyBody(helpBody_);
+        helpBody_ = 0;
     }
 }
 
@@ -84,7 +84,7 @@ void NaubJoint::setQNaubJoint(QNaubJoint *n) { qnaubjoint_ = n; }
 /* *** CenterJoint ********************************************************* */
 
 CenterJoint::CenterJoint(b2World *world) : Joint(world), naub_(0),
-        center_(0), help_body_(0) {}
+        center_(0), helpBody_(0) {}
 
 
 CenterJoint::~CenterJoint() {
@@ -104,12 +104,12 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
         b2BodyDef def;
         def.type = b2_dynamicBody;
         def.position = center_->GetPosition();
-        help_body_ = world_->CreateBody(&def);
+        helpBody_ = world_->CreateBody(&def);
     }
     {
         b2RevoluteJointDef def;
         def.bodyA = center_;
-        def.bodyB = help_body_;
+        def.bodyB = helpBody_;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.enableLimit = false;
@@ -118,7 +118,7 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
     {
         b2DistanceJointDef def;
         def.bodyA = &naub_->body();
-        def.bodyB = help_body_;
+        def.bodyB = helpBody_;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.001;
@@ -142,9 +142,9 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
 void CenterJoint::unjoin() {
     naub_ = 0;
     center_ = 0;
-    if (help_body_ != 0) {
-        world_->DestroyBody(help_body_);
-        help_body_ = 0;
+    if (helpBody_ != 0) {
+        world_->DestroyBody(helpBody_);
+        helpBody_ = 0;
     }
 }
 
@@ -158,7 +158,7 @@ const b2Body& CenterJoint::center() const { return *center_; }
 /* *** PointerJoint ******************************************************** */
 
 PointerJoint::PointerJoint(b2World *world) : Joint(world), naub_(0),
-        pointer_(0), help_body_(0) {
+        pointer_(0), helpBody_(0) {
 }
 
 
@@ -179,16 +179,16 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
         b2BodyDef def;
         def.type = b2_dynamicBody;
         def.position = naub_->pos();
-        help_body_ = world_->CreateBody(&def);
+        helpBody_ = world_->CreateBody(&def);
     }
     {
         b2WeldJointDef def;
-        def.Initialize(&naub_->body(), help_body_, naub_->pos());
+        def.Initialize(&naub_->body(), helpBody_, naub_->pos());
         world_->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
-        def.bodyA = help_body_;
+        def.bodyA = helpBody_;
         def.bodyB = &pointer_->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
@@ -203,9 +203,9 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
 void PointerJoint::unjoin() {
     naub_ = 0;
     pointer_ = 0;
-    if (help_body_) {
-        world_->DestroyBody(help_body_);
-        help_body_ = 0;
+    if (helpBody_ != 0) {
+        world_->DestroyBody(helpBody_);
+        helpBody_ = 0;
     }
 }
 
