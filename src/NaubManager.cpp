@@ -1,53 +1,44 @@
 #include "NaubManager.h"
 
 
-NaubManager::NaubManager(b2World &world) : world_(&world) {
-    naubs_ = new QList<Naub *>();
+NaubManager::NaubManager(b2World *world) : world_(world) {
 }
 
 
 NaubManager::~NaubManager() {
-    foreach (Naub *naub, *naubs_) {
-        delete naub;
-    }
-    delete naubs_;
-    naubs_ = 0;
     world_ = 0;
 }
 
 
-Naub& NaubManager::add(Vec pos) {
+Naub* NaubManager::add(const Vec& pos) {
     return add(pos, Color::randomNaub());
 }
 
 
-Naub& NaubManager::add(Vec pos, Color color) {
-    Naub *naub = new Naub(world());
-    naubs().append(naub);
+Naub* NaubManager::add(const Vec& pos, const Color& color) {
+    Naub *naub = new Naub(*world_);
+    Q_ASSERT(naubs_.contains(naub) == false);
+
     naub->setPos(pos);
     naub->setColor(color);
-    return *naub;
+    naubs_.insert(naub);
+
+    return naub;
 }
 
 
-void NaubManager::remove(Naub &naub) {
-    naubs().removeOne(&naub);
-    delete &naub;
+void NaubManager::remove(Naub *naub) {
+    naubs_.remove(naub);
+    delete naub;
 }
 
 
-int NaubManager::count() {
-    return naubs().count();
-}
+int NaubManager::count() const { return naubs_.count(); }
 
 
 void NaubManager::update() {
-    foreach (Naub *naub, naubs()) {
+    foreach (Naub *naub, naubs_) {
         naub->update();
     }
 }
-
-
-b2World& NaubManager::world() { return *world_; }
-QList<Naub *>& NaubManager::naubs() { return *naubs_; }
 

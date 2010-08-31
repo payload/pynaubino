@@ -5,7 +5,7 @@
 
 Naubino::Naubino() : QObject(), center_(0) {
     world_ = new b2World(Vec(), true);
-    naubs_ = new NaubManager(world());
+    naubs_ = new NaubManager(&world());
     joints_ = new JointManager(world());
     pointer_ = new Pointer(world());
 
@@ -23,14 +23,14 @@ Naubino::~Naubino() {
 
 
 Naub& Naubino::addNaub(Vec pos) {
-    Naub &naub = naubs().add(pos);
-    emit newNaub(naub);
-    return naub;
+    Naub *naub = naubs().add(pos);
+    emit newNaub(*naub);
+    return *naub;
 }
 
 
 void Naubino::removeNaub(Naub &naub) {
-    naubs().remove(naub);
+    naubs().remove(&naub);
 }
 
 
