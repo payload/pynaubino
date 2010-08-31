@@ -7,18 +7,17 @@
 #include <QtGlobal>
 
 
-Color::Color() : _name("unnamed") {
-    _qcolor = QColor();
+Color::Color() : name_("unnamed") {
 }
 
 
-Color::Color(int r, int g, int b, QString name) : _name(name) {
-    _qcolor = QColor(r, g, b);
+Color::Color(int r, int g, int b, QString name) : name_(name) {
+    qcolor_ = QColor(r, g, b);
 }
 
 
-QString Color::readableName() { return _name; }
-QColor Color::qcolor() { return _qcolor; }
+QString Color::readableName() { return name_; }
+QColor Color::qcolor() { return qcolor_; }
 
 
 #define INSERT_IN_MAP(r, g, b, n) colors->insert(n, Color(r, g, b, n));
