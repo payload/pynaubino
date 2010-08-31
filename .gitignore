@@ -10,3 +10,6 @@ lib/lib*
 examples/cutenaubino
 */bin/*
 \#*
+*.swp
+Makefile*
+
