@@ -7,4 +7,3 @@ SOURCES += *.cpp
 HEADERS += ../include/*.h
 CONFIG -= app_bundle
 CONFIG += qt debug
-

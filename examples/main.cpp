@@ -3,6 +3,8 @@
 #include <Scene.h>
 #include <View.h>
 
+#include <NaubPairSpammer.h>
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -12,22 +14,12 @@ int main(int argc, char *argv[])
     View view(scene);
     view.show();
 
-    Naub &a = naubino.addNaub(Vec(-0.30, 0));
-    Naub &b = naubino.addNaub(Vec( 0.30, 0));
-    naubino.joinNaubs(a, b);
-    naubino.joinWithCenter(a);
-    naubino.joinWithCenter(b);
+    QTimer timer;
+    timer.connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
+    timer.start(50);
 
-    QTimer *timer = new QTimer();
-    timer->connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
-    timer->start(50);
+    NaubPairSpammer spam(&naubino);
+    spam.start(2000);
 
-    int ret = app.exec();
-
-    timer->stop();
-    timer->disconnect();
-    delete timer;
-    timer = 0;
-
-    return ret;
+    return app.exec();
 }
