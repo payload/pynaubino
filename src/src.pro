@@ -6,5 +6,5 @@ DESTDIR = $$LIBRARYPATH
 SOURCES += *.cpp
 HEADERS += ../include/*.h
 CONFIG -= app_bundle
-CONFIG += qt debug warn_on
+CONFIG += qt debug
 
