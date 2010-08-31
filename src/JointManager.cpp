@@ -22,11 +22,11 @@ JointManager::~JointManager() {
 
 
 NaubJoint& JointManager::joinNaubs(Naub &a, Naub &b) {
-    NaubJoint *joint = new NaubJoint(world());
+    NaubJoint *joint = new NaubJoint(&world());
     joints().append(joint);
     a.jointNaubs().insert(&b, joint);
     b.jointNaubs().insert(&a, joint);
-    joint->join(a, b);
+    joint->join(&a, &b);
     return *joint;
 }
 
@@ -47,7 +47,7 @@ void JointManager::rejoinNaubs(NaubJoint &joint,
     joint.unjoin();
     a.jointNaubs().insert(&b, &joint);
     b.jointNaubs().insert(&a, &joint);
-    joint.join(a, b);
+    joint.join(&a, &b);
 }
 
 
@@ -57,10 +57,10 @@ NaubJoint* JointManager::naubJoint(Naub &a, Naub &b) {
 
 
 CenterJoint& JointManager::joinWithCenter(Naub &naub, b2Body &center) {
-    CenterJoint *joint = new CenterJoint(world());
+    CenterJoint *joint = new CenterJoint(&world());
     joints().append(joint);
     naub.centerJoint = joint;
-    joint->join(naub, center);
+    joint->join(&naub, &center);
     return *joint;
 }
 
@@ -80,11 +80,11 @@ CenterJoint* JointManager::centerJoint(Naub &naub) {
 
 PointerJoint& JointManager::selectNaub(Naub &naub,
                                        Pointer &pointer) {
-    PointerJoint *joint = new PointerJoint(world());
+    PointerJoint *joint = new PointerJoint(&world());
     joints().append(joint);
     naub.pointerJoints().insert(&pointer, joint);
     pointer.joints().append(joint);
-    joint->join(naub, pointer);
+    joint->join(&naub, &pointer);
     return *joint;
 }
 

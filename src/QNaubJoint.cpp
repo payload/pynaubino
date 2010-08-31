@@ -14,13 +14,13 @@ QNaubJoint::QNaubJoint(NaubJoint &joint) :
     setPen( QPen( Qt::black ) );
     setPenWidth( 4.0f );
 
-    joint.qnaubjoint = this;
+    joint.setQNaubJoint(this);
     jointChanged();
 }
 
 
 QNaubJoint::~QNaubJoint() {
-    joint().qnaubjoint = 0;
+    joint().setQNaubJoint(0);
     joint_ = 0;
 }
 

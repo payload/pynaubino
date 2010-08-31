@@ -14,53 +14,54 @@ class QNaubJoint;
 
 class Joint {
 public:
-    Joint(b2World &world);
+    Joint(b2World *world);
     virtual ~Joint();
+
     virtual void update() = 0;
 
 protected:
-    b2World& world();
-
-private:
     b2World *world_;
 };
 
 
 class NaubJoint : public Joint {
 public:
-    NaubJoint(b2World &world);
+    NaubJoint(b2World *world);
     virtual ~NaubJoint();
 
-    void update();
+    virtual void update();
 
-    void join(Naub &a, Naub &b);
+    void join(Naub *a, Naub *b);
     void unjoin();
 
     Naub &a();
+    const Naub &a() const;
     Naub &b();
+    const Naub &b() const;
 
-    // QNaubJoint >>
-    QNaubJoint *qnaubjoint;
-    // << QNaubJoint
-    //
+    void setQNaubJoint(QNaubJoint*);
+
 private:
     Naub *a_, *b_;
     b2Body *help_body_;
+    QNaubJoint *qnaubjoint_;
 };
 
 
 class CenterJoint : public Joint {
 public:
-    CenterJoint(b2World &world);
+    CenterJoint(b2World *world);
     virtual ~CenterJoint();
 
     virtual void update();
 
-    void join(Naub &naub, b2Body &center);
+    void join(Naub *naub, b2Body *center);
     void unjoin();
 
     Naub &naub();
+    const Naub &naub() const;
     b2Body &center();
+    const b2Body &center() const;
 
 private:
     Naub *naub_;
@@ -71,16 +72,18 @@ private:
 
 class PointerJoint : public Joint {
 public:
-    PointerJoint(b2World &world);
+    PointerJoint(b2World *world);
     virtual ~PointerJoint();
 
     virtual void update();
 
-    void join(Naub &naub, Pointer &pointer);
+    void join(Naub *naub, Pointer *pointer);
     void unjoin();
 
     Naub& naub();
+    const Naub& naub() const;
     Pointer& pointer();
+    const Pointer& pointer() const;
 
 private:
     Naub *naub_;
