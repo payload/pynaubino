@@ -20,10 +20,10 @@ QString Color::readableName() { return name_; }
 QColor Color::qcolor() { return qcolor_; }
 
 
-#define INSERT_IN_MAP(r, g, b, n) colors->insert(n, Color(r, g, b, n));
-QMap<QString, Color>* Color::naubino() {
-    static QMap<QString, Color> *colors = new QMap<QString, Color>();
-    if (colors->isEmpty()) {
+#define INSERT_IN_MAP(r, g, b, n) colors.insert(n, Color(r, g, b, n));
+const QMap<QString, Color>& Color::naubinoColors() {
+    static QMap<QString, Color> colors;
+    if (colors.isEmpty()) {
         INSERT_IN_MAP(229,  53,  23, "red");
         INSERT_IN_MAP(226,   0, 122, "pink");
         INSERT_IN_MAP(151, 190,  13, "green");
@@ -39,10 +39,10 @@ QMap<QString, Color>* Color::naubino() {
 #undef INSERT_IN_MAP
 
 
-#define APPEND_TO_LIST(n) colors->append(naubino()->value(n));
-QList<Color>* Color::naub() {
-    static QList<Color> *colors = new QList<Color>();
-    if (colors->isEmpty()) {
+#define APPEND_TO_LIST(n) colors.append(naubinoColors()[n]);
+const QList<Color>& Color::possibleNaubColors() {
+    static QList<Color> colors;
+    if (colors.isEmpty()) {
         APPEND_TO_LIST("red");
         APPEND_TO_LIST("pink");
         APPEND_TO_LIST("green");
@@ -56,6 +56,6 @@ QList<Color>* Color::naub() {
 
 
 Color Color::randomNaub() {
-    return naub()->at(qrand() * 1.0f * naub()->count() / RAND_MAX);
+    return possibleNaubColors().at(qrand() * 1.0f * possibleNaubColors().count() / RAND_MAX);
 }
 

@@ -15,8 +15,8 @@ public:
     QString readableName();
     QColor qcolor();
 
-    static QMap<QString, Color>* naubino();
-    static QList<Color>* naub();
+    static const QMap<QString, Color>& naubinoColors();
+    static const QList<Color>& possibleNaubColors();
 
     static Color randomNaub();
 
