@@ -4,7 +4,7 @@ TEMPLATE = lib
 TARGET = cutenaubino
 DESTDIR = $$LIBRARYPATH
 SOURCES += *.cpp
-HEADERS += ../include/*.h \
-    ../include/QNaub.h
+HEADERS += ../include/*.h
 CONFIG -= app_bundle
-CONFIG += qt debug
+CONFIG += qt debug warn_on
+
