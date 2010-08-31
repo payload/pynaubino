@@ -113,7 +113,7 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.enableLimit = false;
-        //world_->CreateJoint(&def);
+        world_->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
@@ -121,10 +121,10 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
         def.bodyB = help_body_;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
-        def.length = 0.01;
+        def.length = 0.001;
         def.dampingRatio = 0.8;
-        def.frequencyHz = 0.3;
-        //world_->CreateJoint(&def);
+        def.frequencyHz = 1.5;
+        world_->CreateJoint(&def);
     }
     {
         b2FrictionJointDef def;
