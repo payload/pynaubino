@@ -13,7 +13,8 @@
 #include "Joints.h"
 
 
-class Naubino : public QObject {
+class Naubino : public QObject
+{
     Q_OBJECT
 public:
     Naubino();
@@ -38,10 +39,16 @@ public:
     void mergeNaubs(Naub &a, Naub &b);
 
     NaubManager& naubs();
+    const NaubManager& naubs() const;
     JointManager& joints();
+    const JointManager& joints() const;
     b2World& world();
+    const b2World& world() const;
     b2Body& center();
+    const b2Body& center() const;
     Pointer& pointer();
+    const Pointer& pointer() const;
+
 signals:
     void newNaub(Naub &naub);
     void newNaubJoint(NaubJoint &joint);
@@ -49,15 +56,16 @@ signals:
     void newPointerJoint(PointerJoint &joint);
     void mergedJoint(NaubJoint &joint);
     void mergedNaub(Naub &naub);
+
 public slots:
     void update();
+
 private:
     void setupCenter();
-    void setupPointer();
 
+    b2World *world_;
     NaubManager *naubs_;
     JointManager *joints_;
-    b2World *world_;
     b2Body *center_;
     Pointer *pointer_;
 };
