@@ -6,6 +6,9 @@ NaubManager::NaubManager(b2World *world) : world_(world) {
 
 
 NaubManager::~NaubManager() {
+    foreach (Naub* naub, naubs_) {
+        delete naub;
+    }
     world_ = 0;
 }
 
