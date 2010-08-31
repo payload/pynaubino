@@ -1,15 +1,13 @@
-#include "Vec.h" 
+#include "Vec.h"
 
-#include <qmath.h> 
-
-
-Vec::Vec(float32 x, float32 y) : b2Vec2(x, y) {}
-Vec::Vec(b2Vec2 vec) : b2Vec2(vec.x, vec.y) {}
-Vec::Vec(QPointF vec) : b2Vec2(vec.x()/100, vec.y()/100) {}
-Vec::Vec() : b2Vec2(0, 0) {}
+#include <qmath.h>
 
 
-QPointF Vec::q() { return QPointF(x*100, y*100); }
+Vec::Vec() : b2Vec2(0.0, 0.0) { }
+Vec::Vec(float x, float y) : b2Vec2(x, y) { }
+Vec::Vec(const b2Vec2& vec) : b2Vec2(vec.x, vec.y) { }
+Vec::Vec(const QPointF& vec) : b2Vec2(vec.x()/100.0, vec.y()/100.0) { }
+QPointF Vec::q() const { return QPointF(x*100.0, y*100.0); }
 
 
 Vec Vec::rand() {

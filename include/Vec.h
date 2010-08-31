@@ -9,13 +9,14 @@
 #include <Box2D/Box2D.h>
 
 
-class Vec : public b2Vec2 {
+class Vec : public b2Vec2
+{
 public:
-    Vec(float32 x, float32 y);
-    Vec(b2Vec2 vec);
-    Vec(QPointF vec);
     Vec();
-    QPointF q();
+    Vec(float32 x, float32 y);
+    Vec(const b2Vec2& vec);
+    Vec(const QPointF& vec);
+    QPointF q() const;
     static Vec rand();
 };
 
