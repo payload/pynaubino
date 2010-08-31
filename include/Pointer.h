@@ -1,10 +1,21 @@
 #ifndef POINTER_H
 #define POINTER_H
 
-#include <Box2D.h>
+
+#include "Prereqs.h"
+
+#include <QList>
+
+#include <Box2D/Box2D.h>
+
 #include "Vec.h"
 
+
 class PointerJoint;
+
+
+class PointerJoint;
+
 
 class Pointer {
 public:

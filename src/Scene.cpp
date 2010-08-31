@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+
 Scene::Scene(Naubino &naubino)
     : QGraphicsScene(), naubino_(&naubino) {
 

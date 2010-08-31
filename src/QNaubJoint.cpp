@@ -1,6 +1,11 @@
 #include "QNaubJoint.h"
+
+#include <QPen>
+#include <QPropertyAnimation>
+
 #include "Naub.h"
 #include "Joints.h"
+
 
 QNaubJoint::QNaubJoint(NaubJoint &joint) :
         QObject(), QGraphicsLineItem(), joint_(&joint)

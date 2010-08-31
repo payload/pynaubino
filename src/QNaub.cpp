@@ -1,6 +1,8 @@
 #include "QNaub.h"
+
 #include "Naub.h"
 #include "Scene.h"
+
 
 QNaub::QNaub(Scene &scene, Naub &naub) :
     QObject(), QGraphicsEllipseItem(0, 0, 10, 10),

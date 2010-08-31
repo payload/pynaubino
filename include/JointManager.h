@@ -1,14 +1,20 @@
 #ifndef JOINTMANAGER_H
 #define JOINTMANAGER_H
 
-#include <QtCore>
-#include <Box2D.h>
+
+#include "Prereqs.h"
+
+#include <Box2D/Box2D.h>
+
 #include "Naub.h"
-#include "Joints.h"
+
+class Joint;
+
+
 
 class JointManager {
 public:
-    explicit JointManager(b2World &world);
+    JointManager(b2World &world);
     ~JointManager();
 
     NaubJoint& joinNaubs(Naub &a, Naub &b);

@@ -1,5 +1,11 @@
 #include "Joints.h"
+
+#include <Box2D/Dynamics/Joints/b2FrictionJoint.h>
+#include <Box2D/Dynamics/Joints/b2WeldJoint.h>
+
 #include "Naub.h"
+#include "QNaubJoint.h"
+
 
 Joint::Joint(b2World &world) : world_(&world) {}
 

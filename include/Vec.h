@@ -1,9 +1,13 @@
 #ifndef VEC_H
 #define VEC_H
 
-#include <Box2D.h>
-#include <QtCore>
+
+#include "Prereqs.h"
+
 #include <QPointF>
+
+#include <Box2D/Box2D.h>
+
 
 class Vec : public b2Vec2
 {

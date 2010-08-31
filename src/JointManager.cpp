@@ -1,5 +1,11 @@
 #include "JointManager.h"
 
+
+#include <QMap>
+
+#include "Joints.h"
+
+
 JointManager::JointManager(b2World &world)
     : world_(&world) {
     joints_ = new QList<Joint *>();

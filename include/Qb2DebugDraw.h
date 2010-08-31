@@ -1,8 +1,14 @@
 #ifndef QB2DEBUGDRAW_H
 #define QB2DEBUGDRAW_H
 
+
+#include "Prereqs.h"
+
 #include <QtGui>
-#include <Box2D.h>
+
+#include <Box2D/Box2D.h>
+
+
 
 class Qb2DebugDraw : public b2DebugDraw
 {

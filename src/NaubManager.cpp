@@ -1,5 +1,6 @@
 #include "NaubManager.h"
 
+
 NaubManager::NaubManager(b2World &world)
     : world_(&world) {
     naubs_ = new QList<Naub *>();

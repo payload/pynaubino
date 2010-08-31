@@ -1,15 +1,21 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+
+#include "Prereqs.h"
+
 #include <QGraphicsView>
+
 #include "Scene.h"
-#include "Qb2DebugDraw.h"
+
+class Qb2DebugDrawItem;
+
 
 class View : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit View(Scene &scene);
+    View(Scene &scene);
 signals:
 
 public slots:

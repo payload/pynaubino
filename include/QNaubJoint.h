@@ -1,15 +1,21 @@
 #ifndef QNAUBJOINT_H
 #define QNAUBJOINT_H
 
-#include <QtGui>
+
+#include "Prereqs.h"
+
+#include <QGraphicsLineItem>
+#include <QObject>
+
 class NaubJoint;
+
 
 class QNaubJoint : public QObject, public QGraphicsLineItem
 {
     Q_OBJECT
     Q_PROPERTY(qreal penWidth READ penWidth WRITE setPenWidth)
 public:
-    explicit QNaubJoint(NaubJoint &joint);
+    QNaubJoint(NaubJoint &joint);
     ~QNaubJoint();
 
     NaubJoint& joint();

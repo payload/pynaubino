@@ -1,8 +1,11 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <QtCore>
+
+#include "Prereqs.h"
+
 #include <QColor>
+
 
 class Color {
 public:
@@ -21,5 +24,6 @@ protected:
     QString _name;
     QColor _qcolor;
 };
+
 
 #endif // COLOR_H

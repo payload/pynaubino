@@ -1,17 +1,23 @@
 #ifndef QNAUB_H
 #define QNAUB_H
 
+
+#include "Prereqs.h"
+
 #include <QtGui>
+
 #include "Vec.h"
+
 class Naub;
 class Scene;
+
 
 class QNaub : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 public:
-    explicit QNaub(Scene &scene, Naub &naub);
+    QNaub(Scene &scene, Naub &naub);
     ~QNaub();
 
     Naub& naub();

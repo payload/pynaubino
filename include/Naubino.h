@@ -1,17 +1,24 @@
 #ifndef NAUBINO_H
 #define NAUBINO_H
 
+
+#include "Prereqs.h"
+
 #include <QObject>
-#include <Box2D.h>
+
+#include <Box2D/Box2D.h>
+
 #include "NaubManager.h"
 #include "JointManager.h"
 #include "Joints.h"
+
+
 
 class Naubino : public QObject
 {
     Q_OBJECT
 public:
-    explicit Naubino();
+    Naubino();
     ~Naubino();
 
     Naub& addNaub(Vec pos);

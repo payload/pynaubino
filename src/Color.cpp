@@ -1,5 +1,12 @@
 #include "Color.h"
 
+
+#include <cstdlib>
+
+#include <QMap>
+#include <QtGlobal>
+
+
 Color::Color() : _name("unnamed") {
     _qcolor = QColor();
 }

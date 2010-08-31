@@ -1,14 +1,22 @@
 #ifndef NAUB_H
 #define NAUB_H
 
-#include <QtCore>
-#include <Box2D.h>
+
+#include "Prereqs.h"
+
+#include <Box2D/Box2D.h>
 
 #include "Vec.h"
-#include "Pointer.h"
 #include "Color.h"
-#include "Joints.h"
-#include "QNaub.h"
+
+class CenterJoint;
+class NaubJoint;
+class QNaub;
+class PointerJoint;
+
+class Pointer;
+
+
 
 class Naub {
 public:

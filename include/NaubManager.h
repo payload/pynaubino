@@ -1,14 +1,18 @@
 #ifndef NAUBMANAGER_H
 #define NAUBMANAGER_H
 
-#include <QtCore>
+
+#include "Prereqs.h"
+
 #include "Color.h"
 #include "Vec.h"
 #include "Naub.h"
 
+
+
 class NaubManager {
 public:
-    explicit NaubManager(b2World &world);
+    NaubManager(b2World &world);
     ~NaubManager();
 
     Naub& add(Vec pos);

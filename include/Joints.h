@@ -1,11 +1,17 @@
 #ifndef JOINTS_H
 #define JOINTS_H
 
-#include <Box2D.h>
+
+#include "Prereqs.h"
+
+#include <Box2D/Box2D.h>
+
 #include "Pointer.h"
-#include "QNaubJoint.h"
 
 class Naub;
+class QNaubJoint;
+
+
 
 class Joint {
 public:

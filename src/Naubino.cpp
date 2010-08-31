@@ -1,5 +1,8 @@
 #include "Naubino.h"
 
+#include <QMapIterator>
+
+
 Naubino::Naubino()
     : QObject() {
     world_ = new b2World(Vec(), true);

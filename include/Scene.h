@@ -1,16 +1,19 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+
 #include <QtGui>
+
 #include "Naubino.h"
 #include "QNaub.h"
 #include "QNaubJoint.h"
+
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit Scene(Naubino &naubino);
+    Scene(Naubino &naubino);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

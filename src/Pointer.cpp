@@ -1,5 +1,7 @@
 #include "Pointer.h"
+
 #include "Joints.h"
+
 
 Pointer::Pointer(b2World &world) : world_(&world) {
     b2BodyDef def;

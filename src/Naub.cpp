@@ -1,5 +1,8 @@
 #include "Naub.h"
 
+#include "QNaub.h"
+
+
 Naub::Naub(b2World &world)
     : world_(&world) {
     jointNaubs_ = new QMap<Naub *, NaubJoint *>();

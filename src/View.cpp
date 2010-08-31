@@ -1,11 +1,12 @@
 #include "View.h"
+
 #include "Scene.h"
 #include "Qb2DebugDraw.h"
 #include "Naubino.h"
 
-#include <QtGui>
 
 #define DEBUG_PHYSICS
+
 
 View::View(Scene &scene) : QGraphicsView(&scene)
 {
