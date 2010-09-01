@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     view.show();
 
     QTimer timer;
-    timer.connect(timer, SIGNAL(timeout()), &naubino, SLOT(update()));
+    timer.connect(&timer, SIGNAL(timeout()), &naubino, SLOT(update()));
     timer.start(50);
 
     NaubPairSpammer spam(&naubino);
