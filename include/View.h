@@ -17,7 +17,7 @@ public:
     View(Scene &scene);
 
 private:
-    Qb2DebugDrawItem *debugDraw_;
+    Qb2DebugDrawItem *_debugDraw;
 };
 
 

@@ -28,7 +28,7 @@ public slots:
     void newNaubJoint(NaubJoint &joint);
 
 private:
-    Naubino *naubino_;
+    Naubino *_naubino;
 };
 
 

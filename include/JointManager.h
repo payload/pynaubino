@@ -36,8 +36,8 @@ public:
     QList<Joint *>& joints();
 
 private:
-    QList<Joint *> *joints_;
-    b2World *world_;
+    QList<Joint *> *_joints;
+    b2World *_world;
 };
 
 

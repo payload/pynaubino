@@ -18,9 +18,9 @@ View::View(Scene &scene) : QGraphicsView(&scene) {
 #ifdef DEBUG_PHYSICS
     setRenderHint(QPainter::Antialiasing, false);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    debugDraw_ = new Qb2DebugDrawItem(&scene.naubino().world());
-    debugDraw_->setZValue(-100);
-    scene.addItem(debugDraw_);
+    _debugDraw = new Qb2DebugDrawItem(&scene.naubino().world());
+    _debugDraw->setZValue(-100);
+    scene.addItem(_debugDraw);
 #endif
 }
 

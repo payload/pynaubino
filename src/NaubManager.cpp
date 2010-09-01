@@ -1,15 +1,15 @@
 #include "NaubManager.h"
 
 
-NaubManager::NaubManager(b2World *world) : world_(world) {
+NaubManager::NaubManager(b2World *world) : _world(world) {
 }
 
 
 NaubManager::~NaubManager() {
-    foreach (Naub* naub, naubs_) {
+    foreach (Naub* naub, _naubs) {
         delete naub;
     }
-    world_ = 0;
+    _world = 0;
 }
 
 
@@ -19,28 +19,28 @@ Naub* NaubManager::add(const Vec& pos) {
 
 
 Naub* NaubManager::add(const Vec& pos, const Color& color) {
-    Naub *naub = new Naub(world_);
-    Q_ASSERT(naubs_.contains(naub) == false);
+    Naub *naub = new Naub(_world);
+    Q_ASSERT(_naubs.contains(naub) == false);
 
     naub->setPos(pos);
     naub->setColor(color);
-    naubs_.insert(naub);
+    _naubs.insert(naub);
 
     return naub;
 }
 
 
 void NaubManager::remove(Naub *naub) {
-    naubs_.remove(naub);
+    _naubs.remove(naub);
     delete naub;
 }
 
 
-int NaubManager::count() const { return naubs_.count(); }
+int NaubManager::count() const { return _naubs.count(); }
 
 
 void NaubManager::update() {
-    foreach (Naub *naub, naubs_) {
+    foreach (Naub *naub, _naubs) {
         naub->update();
     }
 }

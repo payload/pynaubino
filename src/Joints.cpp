@@ -9,82 +9,82 @@
 
 /* *** Joint *************************************************************** */
 
-Joint::Joint(b2World *world) : world_(world) {}
+Joint::Joint(b2World *world) : _world(world) {}
 
 
 Joint::~Joint() {
-    world_ = 0;
+    _world = 0;
 }
 
 
 /* *** NaubJoint ********************************************************** */
 
-NaubJoint::NaubJoint(b2World *world) : Joint(world), a_(0),
-        b_(0), helpBody_(0), qnaubjoint_(0) { }
+NaubJoint::NaubJoint(b2World *world) : Joint(world), _a(0),
+        _b(0), _helpBody(0), _qnaubJoint(0) { }
 
 
 NaubJoint::~NaubJoint() {
     unjoin();
-    qnaubjoint_ = 0;
+    _qnaubJoint = 0;
 }
 
 
 void NaubJoint::update() {
-    if (qnaubjoint_ != 0) {
-        qnaubjoint_->jointChanged();
+    if (_qnaubJoint != 0) {
+        _qnaubJoint->jointChanged();
     }
 }
 
 
 void NaubJoint::join(Naub *a, Naub *b) {
-    a_ = a;
-    b_ = b;
+    _a = a;
+    _b = b;
 
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
-        def.position = a_->pos();
-        helpBody_ = world_->CreateBody(&def);
+        def.position = _a->pos();
+        _helpBody = _world->CreateBody(&def);
     }
     {
         b2WeldJointDef def;
-        def.Initialize(&a_->body(), helpBody_, a_->pos());
-        world_->CreateJoint(&def);
+        def.Initialize(&_a->body(), _helpBody, _a->pos());
+        _world->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
-        def.bodyA = helpBody_;
+        def.bodyA = _helpBody;
         def.bodyB = &b->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.6;
         def.dampingRatio = 0.5;
         def.frequencyHz = 3;
-        world_->CreateJoint(&def);
+        _world->CreateJoint(&def);
     }
 }
 
 
 void NaubJoint::unjoin() {
-    a_ = 0;
-    b_ = 0;
-    if (helpBody_ != 0) {
-        world_->DestroyBody(helpBody_);
-        helpBody_ = 0;
+    _a = 0;
+    _b = 0;
+    if (_helpBody != 0) {
+        _world->DestroyBody(_helpBody);
+        _helpBody = 0;
     }
 }
 
 
-Naub& NaubJoint::a() { return *a_; }
-const Naub& NaubJoint::a() const { return *a_; }
-Naub& NaubJoint::b() { return *b_; }
-const Naub& NaubJoint::b() const { return *b_; }
-void NaubJoint::setQNaubJoint(QNaubJoint *n) { qnaubjoint_ = n; }
+Naub& NaubJoint::a() { return *_a; }
+const Naub& NaubJoint::a() const { return *_a; }
+Naub& NaubJoint::b() { return *_b; }
+const Naub& NaubJoint::b() const { return *_b; }
+void NaubJoint::setQNaubJoint(QNaubJoint *n) { _qnaubJoint = n; }
 
 /* *** CenterJoint ********************************************************* */
 
-CenterJoint::CenterJoint(b2World *world) : Joint(world), naub_(0),
-        center_(0), helpBody_(0) {}
+CenterJoint::CenterJoint(b2World *world) : Joint(world), _naub(0),
+        _center(0), _helpBody(0) {}
 
 
 CenterJoint::~CenterJoint() {
@@ -97,68 +97,68 @@ void CenterJoint::update() {
 
 
 void CenterJoint::join(Naub *naub, b2Body *center) {
-    naub_ = naub;
-    center_ = center;
+    _naub = naub;
+    _center = center;
 
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
-        def.position = center_->GetPosition();
-        helpBody_ = world_->CreateBody(&def);
+        def.position = _center->GetPosition();
+        _helpBody = _world->CreateBody(&def);
     }
     {
         b2RevoluteJointDef def;
-        def.bodyA = center_;
-        def.bodyB = helpBody_;
+        def.bodyA = _center;
+        def.bodyB = _helpBody;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.enableLimit = false;
-        world_->CreateJoint(&def);
+        _world->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
-        def.bodyA = &naub_->body();
-        def.bodyB = helpBody_;
+        def.bodyA = &_naub->body();
+        def.bodyB = _helpBody;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.001;
         def.dampingRatio = 0.8;
         def.frequencyHz = 1.5;
-        world_->CreateJoint(&def);
+        _world->CreateJoint(&def);
     }
     {
         b2FrictionJointDef def;
-        def.bodyA = center_;
-        def.bodyB = &naub_->body();
+        def.bodyA = _center;
+        def.bodyB = &_naub->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.maxForce = 2;
         def.maxTorque = 2;
-        world_->CreateJoint(&def);
+        _world->CreateJoint(&def);
     }
 }
 
 
 void CenterJoint::unjoin() {
-    naub_ = 0;
-    center_ = 0;
-    if (helpBody_ != 0) {
-        world_->DestroyBody(helpBody_);
-        helpBody_ = 0;
+    _naub = 0;
+    _center = 0;
+    if (_helpBody != 0) {
+        _world->DestroyBody(_helpBody);
+        _helpBody = 0;
     }
 }
 
 
-Naub& CenterJoint::naub() { return *naub_; }
-const Naub& CenterJoint::naub() const { return *naub_; }
-b2Body& CenterJoint::center() { return *center_; }
-const b2Body& CenterJoint::center() const { return *center_; }
+Naub& CenterJoint::naub() { return *_naub; }
+const Naub& CenterJoint::naub() const { return *_naub; }
+b2Body& CenterJoint::center() { return *_center; }
+const b2Body& CenterJoint::center() const { return *_center; }
 
 
 /* *** PointerJoint ******************************************************** */
 
-PointerJoint::PointerJoint(b2World *world) : Joint(world), naub_(0),
-        pointer_(0), helpBody_(0) {
+PointerJoint::PointerJoint(b2World *world) : Joint(world), _naub(0),
+        _pointer(0), _helpBody(0) {
 }
 
 
@@ -172,46 +172,46 @@ void PointerJoint::update() {
 
 
 void PointerJoint::join(Naub *naub, Pointer *pointer) {
-    naub_ = naub;
-    pointer_ = pointer;
+    _naub = naub;
+    _pointer = pointer;
 
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
-        def.position = naub_->pos();
-        helpBody_ = world_->CreateBody(&def);
+        def.position = _naub->pos();
+        _helpBody = _world->CreateBody(&def);
     }
     {
         b2WeldJointDef def;
-        def.Initialize(&naub_->body(), helpBody_, naub_->pos());
-        world_->CreateJoint(&def);
+        def.Initialize(&_naub->body(), _helpBody, _naub->pos());
+        _world->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
-        def.bodyA = helpBody_;
-        def.bodyB = &pointer_->body();
+        def.bodyA = _helpBody;
+        def.bodyB = &_pointer->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.01;
         def.dampingRatio = 0.8;
         def.frequencyHz = 1;
-        world_->CreateJoint(&def);
+        _world->CreateJoint(&def);
     }
 }
 
 
 void PointerJoint::unjoin() {
-    naub_ = 0;
-    pointer_ = 0;
-    if (helpBody_ != 0) {
-        world_->DestroyBody(helpBody_);
-        helpBody_ = 0;
+    _naub = 0;
+    _pointer = 0;
+    if (_helpBody != 0) {
+        _world->DestroyBody(_helpBody);
+        _helpBody = 0;
     }
 }
 
 
-Naub& PointerJoint::naub() { return *naub_; }
-const Naub& PointerJoint::naub() const { return *naub_; }
-Pointer& PointerJoint::pointer() { return *pointer_; }
-const Pointer& PointerJoint::pointer() const { return *pointer_; }
+Naub& PointerJoint::naub() { return *_naub; }
+const Naub& PointerJoint::naub() const { return *_naub; }
+Pointer& PointerJoint::pointer() { return *_pointer; }
+const Pointer& PointerJoint::pointer() const { return *_pointer; }
 

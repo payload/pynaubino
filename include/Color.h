@@ -21,8 +21,8 @@ public:
     static Color randomNaub();
 
 protected:
-    QString name_;
-    QColor qcolor_;
+    QString _name;
+    QColor _qcolor;
 };
 
 

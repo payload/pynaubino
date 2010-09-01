@@ -3,22 +3,22 @@
 #include <QMapIterator>
 
 
-Naubino::Naubino() : QObject(), center_(0) {
-    world_ = new b2World(Vec(), true);
-    naubs_ = new NaubManager(&world());
-    joints_ = new JointManager(world());
-    pointer_ = new Pointer(world());
+Naubino::Naubino() : QObject(), _center(0) {
+    _world = new b2World(Vec(), true);
+    _naubs = new NaubManager(&world());
+    _joints = new JointManager(world());
+    _pointer = new Pointer(world());
 
     setupCenter();
 }
 
 
 Naubino::~Naubino() {
-    center_ = 0; //cannot be deleted
-    delete pointer_; pointer_ = 0;
-    delete joints_; joints_ = 0;
-    delete naubs_; naubs_ = 0;
-    delete world_; world_ = 0;
+    _center = 0; //cannot be deleted
+    delete _pointer; _pointer = 0;
+    delete _joints; _joints = 0;
+    delete _naubs; _naubs = 0;
+    delete _world; _world = 0;
 }
 
 
@@ -57,7 +57,7 @@ NaubJoint* Naubino::naubJoint(Naub &a, Naub &b) {
 
 
 CenterJoint& Naubino::joinWithCenter(Naub &naub) {
-    return joints().joinWithCenter(naub, *center_);
+    return joints().joinWithCenter(naub, *_center);
 }
 
 
@@ -109,20 +109,20 @@ void Naubino::update() {
 }
 
 
-NaubManager& Naubino::naubs() { return *naubs_; }
-const NaubManager& Naubino::naubs() const { return *naubs_; }
-JointManager& Naubino::joints() { return *joints_; }
-const JointManager& Naubino::joints() const { return *joints_; }
-b2World& Naubino::world() { return *world_; }
-const b2World& Naubino::world() const { return *world_; }
-b2Body& Naubino::center() { return *center_; }
-const b2Body& Naubino::center() const { return *center_; }
-Pointer& Naubino::pointer() { return *pointer_; }
-const Pointer& Naubino::pointer() const { return *pointer_; }
+NaubManager& Naubino::naubs() { return *_naubs; }
+const NaubManager& Naubino::naubs() const { return *_naubs; }
+JointManager& Naubino::joints() { return *_joints; }
+const JointManager& Naubino::joints() const { return *_joints; }
+b2World& Naubino::world() { return *_world; }
+const b2World& Naubino::world() const { return *_world; }
+b2Body& Naubino::center() { return *_center; }
+const b2Body& Naubino::center() const { return *_center; }
+Pointer& Naubino::pointer() { return *_pointer; }
+const Pointer& Naubino::pointer() const { return *_pointer; }
 
 
 void Naubino::setupCenter() {
     b2BodyDef def;
     def.type = b2_kinematicBody;
-    center_ = world().CreateBody(&def);
+    _center = world().CreateBody(&def);
 }

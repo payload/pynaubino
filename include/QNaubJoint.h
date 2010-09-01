@@ -29,7 +29,7 @@ public slots:
     void deleted();
 
 private:
-    NaubJoint *joint_;
+    NaubJoint *_joint;
 };
 
 
