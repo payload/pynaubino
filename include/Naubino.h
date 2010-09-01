@@ -63,11 +63,11 @@ public slots:
 private:
     void setupCenter();
 
-    b2World *world_;
-    NaubManager *naubs_;
-    JointManager *joints_;
-    b2Body *center_;
-    Pointer *pointer_;
+    b2World *_world;
+    NaubManager *_naubs;
+    JointManager *_joints;
+    b2Body *_center;
+    Pointer *_pointer;
 };
 
 

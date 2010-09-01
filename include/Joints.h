@@ -20,7 +20,7 @@ public:
     virtual void update() = 0;
 
 protected:
-    b2World *world_;
+    b2World *_world;
 };
 
 
@@ -42,9 +42,9 @@ public:
     void setQNaubJoint(QNaubJoint*);
 
 private:
-    Naub *a_, *b_;
-    b2Body *helpBody_;
-    QNaubJoint *qnaubjoint_;
+    Naub *_a, *_b;
+    b2Body *_helpBody;
+    QNaubJoint *_qnaubJoint;
 };
 
 
@@ -64,9 +64,9 @@ public:
     const b2Body &center() const;
 
 private:
-    Naub *naub_;
-    b2Body *center_;
-    b2Body *helpBody_;
+    Naub *_naub;
+    b2Body *_center;
+    b2Body *_helpBody;
 };
 
 
@@ -86,9 +86,9 @@ public:
     const Pointer& pointer() const;
 
 private:
-    Naub *naub_;
-    Pointer *pointer_;
-    b2Body *helpBody_;
+    Naub *_naub;
+    Pointer *_pointer;
+    b2Body *_helpBody;
 };
 
 

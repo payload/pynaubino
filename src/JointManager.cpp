@@ -6,18 +6,18 @@
 #include "Joints.h"
 
 
-JointManager::JointManager(b2World &world) : world_(&world) {
-    joints_ = new QList<Joint *>();
+JointManager::JointManager(b2World &world) : _world(&world) {
+    _joints = new QList<Joint *>();
 }
 
 
 JointManager::~JointManager() {
-    foreach (Joint *joint, *joints_) {
+    foreach (Joint *joint, *_joints) {
         delete joint;
     }
-    delete joints_;
-    joints_ = 0;
-    world_ = 0;
+    delete _joints;
+    _joints = 0;
+    _world = 0;
 }
 
 
@@ -78,8 +78,7 @@ CenterJoint* JointManager::centerJoint(Naub &naub) {
 }
 
 
-PointerJoint& JointManager::selectNaub(Naub &naub,
-                                       Pointer &pointer) {
+PointerJoint& JointManager::selectNaub(Naub &naub, Pointer &pointer) {
     PointerJoint *joint = new PointerJoint(&world());
     joints().append(joint);
     naub.pointerJoints().insert(&pointer, joint);
@@ -115,8 +114,8 @@ void JointManager::update() {
 }
 
 
-b2World& JointManager::world() { return *world_; }
+b2World& JointManager::world() { return *_world; }
 
 
-QList<Joint *>& JointManager::joints() { return *joints_; }
+QList<Joint *>& JointManager::joints() { return *_joints; }
 

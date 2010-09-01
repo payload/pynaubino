@@ -24,8 +24,8 @@ public:
     void update();
 
 private:
-    b2World *world_;
-    QSet<Naub *> naubs_;
+    b2World *_world;
+    QSet<Naub *> _naubs;
 };
 
 

@@ -25,9 +25,9 @@ public:
     QList<PointerJoint *>& joints();
 
 private:
-    b2World *world_;
-    b2Body *body_;
-    QList<PointerJoint *> *joints_;
+    b2World *_world;
+    b2Body *_body;
+    QList<PointerJoint *> *_joints;
 };
 
 

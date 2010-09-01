@@ -3,69 +3,69 @@
 #include "QNaub.h"
 
 
-Naub::Naub(b2World *world) : world_(world) {
-    centerJoint_ = 0;
-    qnaub_ = 0;
+Naub::Naub(b2World *world) : _world(world) {
+    _centerJoint = 0;
+    _qnaub = 0;
 
-    color_ = Color::randomNaub();
+    _color = Color::randomNaub();
 
     setupPhysics();
 }
 
 
 Naub::~Naub() {
-    centerJoint_ = 0;
-    world_ = 0;
-    qnaub_ = 0;
+    _centerJoint = 0;
+    _world = 0;
+    _qnaub = 0;
 }
 
 
 void Naub::update() {
-    if (qnaub_ != 0) {
-        qnaub_->naubChanged();
+    if (_qnaub != 0) {
+        _qnaub->naubChanged();
     }
 }
 
 
 void Naub::setupPhysics() {
-    radius_ = 0.15f;
-    friction_ = 0;
-    density_ = 1;
-    restitution_ = 0.4f;
+    _radius = 0.15f;
+    _friction = 0;
+    _density = 1;
+    _restitution = 0.4f;
 
     b2BodyDef def;
     def.type = b2_dynamicBody;
     b2Body *body = world().CreateBody(&def);
     body->SetUserData(this);
     b2CircleShape shape;
-    shape.m_radius = radius_;
+    shape.m_radius = _radius;
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
-    fixtureDef.friction = friction_;
-    fixtureDef.restitution = restitution_;
-    fixtureDef.density = density_;
+    fixtureDef.friction = _friction;
+    fixtureDef.restitution = _restitution;
+    fixtureDef.density = _density;
     b2Fixture *fix = body->CreateFixture(&fixtureDef);
     fix->SetUserData(this);
 
-    body_ = body;
+    _body = body;
 }
 
 
-void Naub::setPos(const Vec& pos) { body_->SetTransform(pos, rot()); }
-void Naub::setColor(const Color& color) { color_ = color; }
+void Naub::setPos(const Vec& pos) { _body->SetTransform(pos, rot()); }
+void Naub::setColor(const Color& color) { _color = color; }
 
 
-b2World& Naub::world() { return *world_; }
-const b2World& Naub::world() const { return *world_; }
-Vec Naub::pos() const { return Vec(body_->GetWorldCenter()); }
-float Naub::rot() const { return body_->GetAngle(); }
-float Naub::radius() const { return radius_; }
-const Color& Naub::color() const { return color_; }
-b2Body& Naub::body() { return *body_; }
-const b2Body& Naub::body() const { return *body_; }
-void Naub::setQNaub(QNaub *n) { qnaub_ = n; }
-CenterJoint *Naub::centerJoint() { return centerJoint_; }
-void Naub::setCenterJoint(CenterJoint *j) { centerJoint_ = j; }
-QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return jointNaubs_; }
-QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return pointerJoints_; }
+b2World& Naub::world() { return *_world; }
+const b2World& Naub::world() const { return *_world; }
+Vec Naub::pos() const { return Vec(_body->GetWorldCenter()); }
+float Naub::rot() const { return _body->GetAngle(); }
+float Naub::radius() const { return _radius; }
+const Color& Naub::color() const { return _color; }
+b2Body& Naub::body() { return *_body; }
+const b2Body& Naub::body() const { return *_body; }
+void Naub::setQNaub(QNaub *n) { _qnaub = n; }
+CenterJoint *Naub::centerJoint() { return _centerJoint; }
+void Naub::setCenterJoint(CenterJoint *j) { _centerJoint = j; }
+QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return _jointNaubs; }
+QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return _pointersJoints; }
 

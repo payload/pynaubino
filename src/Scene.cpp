@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 
-Scene::Scene(Naubino &naubino) : QGraphicsScene(), naubino_(&naubino) {
+Scene::Scene(Naubino &naubino) : QGraphicsScene(), _naubino(&naubino) {
     connect(&naubino,
             SIGNAL(newNaub(Naub&)),
             SLOT  (newNaub(Naub&)));
@@ -51,5 +51,5 @@ void Scene::deselectNaub(QNaub &qnaub) {
 
 
 Pointer& Scene::mainPointer() { return naubino().pointer(); }
-Naubino& Scene::naubino() { return *naubino_; }
+Naubino& Scene::naubino() { return *_naubino; }
 

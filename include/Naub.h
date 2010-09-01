@@ -51,17 +51,17 @@ public:
 private:
     void setupPhysics();
 
-    b2World *world_;
-    b2Body *body_;
-    float radius_, friction_, density_, restitution_;
-    Color color_;
+    b2World *_world;
+    b2Body *_body;
+    float _radius, _friction, _density, _restitution;
+    Color _color;
 
-    QNaub *qnaub_;
+    QNaub *_qnaub;
 
-    CenterJoint *centerJoint_;
+    CenterJoint *_centerJoint;
 
-    QMap<Naub *, NaubJoint *> jointNaubs_;
-    QMap<Pointer *, PointerJoint *> pointerJoints_;
+    QMap<Naub *, NaubJoint *> _jointNaubs;
+    QMap<Pointer *, PointerJoint *> _pointersJoints;
 };
 
 

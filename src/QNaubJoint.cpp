@@ -8,7 +8,7 @@
 
 
 QNaubJoint::QNaubJoint(NaubJoint &joint) :
-        QObject(), QGraphicsLineItem(), joint_(&joint)
+        QObject(), QGraphicsLineItem(), _joint(&joint)
 {
     setZValue(99);
     setPen( QPen( Qt::black ) );
@@ -21,11 +21,11 @@ QNaubJoint::QNaubJoint(NaubJoint &joint) :
 
 QNaubJoint::~QNaubJoint() {
     joint().setQNaubJoint(0);
-    joint_ = 0;
+    _joint = 0;
 }
 
 
-NaubJoint& QNaubJoint::joint() { return *joint_; }
+NaubJoint& QNaubJoint::joint() { return *_joint; }
 
 
 void QNaubJoint::jointChanged() {

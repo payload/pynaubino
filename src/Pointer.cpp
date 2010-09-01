@@ -3,33 +3,33 @@
 #include "Joints.h"
 
 
-Pointer::Pointer(b2World &world) : world_(&world) {
+Pointer::Pointer(b2World &world) : _world(&world) {
     b2BodyDef def;
     def.type = b2_kinematicBody;
-    body_ = this->world().CreateBody(&def);
-    joints_ = new QList<PointerJoint *>();
+    _body = this->world().CreateBody(&def);
+    _joints = new QList<PointerJoint *>();
 }
 
 
 Pointer::~Pointer() {
-    world().DestroyBody(body_);
-    body_ = 0;
-    world_ = 0;
-    delete joints_; joints_ = 0;
+    world().DestroyBody(_body);
+    _body = 0;
+    _world = 0;
+    delete _joints; _joints = 0;
 }
 
 
 void Pointer::setPos(Vec pos) {
-    body_->SetTransform(pos, 0);
+    _body->SetTransform(pos, 0);
 }
 
 
 Vec Pointer::pos() {
-    return Vec(body_->GetWorldCenter());
+    return Vec(_body->GetWorldCenter());
 }
 
 
-b2World& Pointer::world() { return *world_; }
-b2Body& Pointer::body() { return *body_; }
-QList<PointerJoint*>& Pointer::joints() { return *joints_; }
+b2World& Pointer::world() { return *_world; }
+b2Body& Pointer::body() { return *_body; }
+QList<PointerJoint*>& Pointer::joints() { return *_joints; }
 

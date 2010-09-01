@@ -4,9 +4,9 @@
 #include "Scene.h"
 
 
-QNaub::QNaub(Scene *scene__, Naub *naub__) :
+QNaub::QNaub(Scene *_scene_, Naub *_nau_b) :
         QObject(), QGraphicsEllipseItem(0, 0, 10, 10),
-        naub_(naub__), scene_(scene__)
+        _naub(_nau_b), _scene(_scene_)
 {
     setZValue(101);
     setPen(QPen(Qt::NoPen));
@@ -21,15 +21,15 @@ QNaub::QNaub(Scene *scene__, Naub *naub__) :
 
 QNaub::~QNaub() {
     naub().setQNaub(0);
-    naub_ = 0;
-    scene_ = 0;
+    _naub = 0;
+    _scene = 0;
 }
 
 
-Naub& QNaub::naub() { return *naub_; }
-const Naub& QNaub::naub() const { return *naub_; }
-Scene& QNaub::scene() { return *scene_; }
-const Scene& QNaub::scene() const { return *scene_; }
+Naub& QNaub::naub() { return *_naub; }
+const Naub& QNaub::naub() const { return *_naub; }
+Scene& QNaub::scene() { return *_scene; }
+const Scene& QNaub::scene() const { return *_scene; }
 
 
 void QNaub::naubChanged() {

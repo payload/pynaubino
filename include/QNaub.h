@@ -38,10 +38,10 @@ public slots:
     void deleted();
 
 private:
-    Naub *naub_;
-    Scene *scene_;
+    Naub *_naub;
+    Scene *_scene;
 };
 
 
-#endif // QNaub_H
+#endif // QNau_bH
 
