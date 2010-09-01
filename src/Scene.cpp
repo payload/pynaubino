@@ -12,7 +12,7 @@ Scene::Scene(Naubino &naubino) : QGraphicsScene(), naubino_(&naubino) {
 
 
 void Scene::newNaub(Naub &naub) {
-    QNaub *qnaub = new QNaub(*this, naub);
+    QNaub *qnaub = new QNaub(this, &naub);
     addItem(qnaub);
 }
 
