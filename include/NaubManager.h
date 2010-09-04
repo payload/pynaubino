@@ -10,10 +10,11 @@
 #include "Vec.h"
 #include "Naub.h"
 
+class Naubino;
 
 class NaubManager {
 public:
-    NaubManager(b2World *world);
+    NaubManager(Naubino *naubino);
     ~NaubManager();
 
     Naub* add(const Vec& pos);
@@ -24,6 +25,7 @@ public:
     void update();
 
 private:
+    Naubino *_naubino;
     b2World *_world;
     QSet<Naub *> _naubs;
 };

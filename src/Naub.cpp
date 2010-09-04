@@ -1,9 +1,9 @@
 #include "Naub.h"
 
 #include "QNaub.h"
+#include "Naubino.h"
 
-
-Naub::Naub(b2World *world) : _world(world) {
+Naub::Naub(Naubino *naubino) : _naubino(naubino), _world(&naubino->world()) {
     _centerJoint = 0;
     _qnaub = 0;
 
@@ -14,6 +14,7 @@ Naub::Naub(b2World *world) : _world(world) {
 
 
 Naub::~Naub() {
+    _naubino = 0;
     _centerJoint = 0;
     _world = 0;
     _qnaub = 0;
@@ -50,6 +51,28 @@ void Naub::setupPhysics() {
     _body = body;
 }
 
+void Naub::mergeNaub(Naub *other) {
+    _naubino->mergeNaubs(*this, *other);
+}
+
+bool Naub::isMergedWith(Naub * naub) {
+    return jointNaubs().contains(naub);
+}
+
+void Naub::handleContact(Naub *other) {
+    if (color().qcolor() == other->color().qcolor()
+        && !isMergedWith(other)) {
+        _naubino->mergeNaubs(*this, *other);
+    }
+}
+
+void Naub::setDeleted(bool deleted) {
+    if (_deleted == deleted) return;
+    _deleted = deleted;
+    if (deleted == true) {
+        if (_qnaub != 0) _qnaub->naubDeleted();
+    }
+}
 
 void Naub::setPos(const Vec& pos) { _body->SetTransform(pos, rot()); }
 void Naub::setColor(const Color& color) { _color = color; }
@@ -66,6 +89,8 @@ const b2Body& Naub::body() const { return *_body; }
 void Naub::setQNaub(QNaub *n) { _qnaub = n; }
 CenterJoint *Naub::centerJoint() { return _centerJoint; }
 void Naub::setCenterJoint(CenterJoint *j) { _centerJoint = j; }
+bool Naub::deleted() const { return _deleted; }
 QMap<Naub *, NaubJoint *>& Naub::jointNaubs() { return _jointNaubs; }
-QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() { return _pointersJoints; }
+QMap<Pointer *, PointerJoint *>& Naub::pointerJoints() {
+    return _pointersJoints; }
 

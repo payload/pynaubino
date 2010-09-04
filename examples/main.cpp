@@ -5,6 +5,7 @@
 
 #include <NaubPairSpammer.h>
 #include <ContactListener.h>
+#include <SimpleContactHandler.h>
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +25,12 @@ int main(int argc, char *argv[])
 
     ContactListener conlistener;
     naubino.world().SetContactListener(&conlistener);
+
+    SimpleContactHandler conhandler;
+    conhandler.connect(&conlistener,
+                       SIGNAL(naubOnNaub(Naub*,Naub*)),
+                       SLOT(naubOnNaub(Naub*,Naub*)));
+    conhandler.connect(&naubino, SIGNAL(preUpdate()), SLOT(handle()));
 
     return app.exec();
 }

@@ -5,7 +5,7 @@
 
 Naubino::Naubino() : QObject(), _center(0) {
     _world = new b2World(Vec(), true);
-    _naubs = new NaubManager(&world());
+    _naubs = new NaubManager(this);
     _joints = new JointManager(world());
     _pointer = new Pointer(world());
 
@@ -104,6 +104,7 @@ void Naubino::mergeNaubs(Naub &a, Naub &b) {
 void Naubino::update() {
     world().Step(0.04, 10, 10);
     world().ClearForces();
+    emit preUpdate();
     naubs().update();
     joints().update();
 }

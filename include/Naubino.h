@@ -56,6 +56,7 @@ signals:
     void newPointerJoint(PointerJoint &joint);
     void mergedJoint(NaubJoint &joint);
     void mergedNaub(Naub &naub);
+    void preUpdate();
 
 public slots:
     void update();

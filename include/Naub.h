@@ -11,6 +11,7 @@
 #include "Color.h"
 #include "Vec.h"
 
+class Naubino;
 class CenterJoint;
 class NaubJoint;
 class QNaub;
@@ -21,10 +22,15 @@ class Pointer;
 
 class Naub {
 public:
-    Naub(b2World *world);
+    Naub(Naubino *naubino);
     ~Naub();
 
     void update();
+
+    void mergeNaub(Naub *other);
+    bool isMergedWith(Naub * naub);
+
+    void handleContact(Naub *naub);
 
     void setPos(const Vec& pos);
     void setColor(const Color& color);
@@ -44,6 +50,8 @@ public:
     CenterJoint *centerJoint();
     void setCenterJoint(CenterJoint *);
 
+    bool deleted() const;
+    void setDeleted(bool deleted);
 
     QMap<Naub *, NaubJoint *>& jointNaubs();
     QMap<Pointer *, PointerJoint *>& pointerJoints();
@@ -51,10 +59,12 @@ public:
 private:
     void setupPhysics();
 
+    Naubino *_naubino;
     b2World *_world;
     b2Body *_body;
     float _radius, _friction, _density, _restitution;
     Color _color;
+    bool _deleted;
 
     QNaub *_qnaub;
 

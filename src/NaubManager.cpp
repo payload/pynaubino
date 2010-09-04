@@ -1,7 +1,9 @@
 #include "NaubManager.h"
 
+#include "Naubino.h"
 
-NaubManager::NaubManager(b2World *world) : _world(world) {
+NaubManager::NaubManager(Naubino *naubino) : _naubino(naubino),
+        _world(&naubino->world()) {
 }
 
 
@@ -19,7 +21,7 @@ Naub* NaubManager::add(const Vec& pos) {
 
 
 Naub* NaubManager::add(const Vec& pos, const Color& color) {
-    Naub *naub = new Naub(_world);
+    Naub *naub = new Naub(_naubino);
     Q_ASSERT(_naubs.contains(naub) == false);
 
     naub->setPos(pos);
@@ -32,7 +34,7 @@ Naub* NaubManager::add(const Vec& pos, const Color& color) {
 
 void NaubManager::remove(Naub *naub) {
     _naubs.remove(naub);
-    delete naub;
+    naub->setDeleted(true);
 }
 
 
