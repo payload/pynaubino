@@ -29,7 +29,7 @@ void SimpleContactHandler::handle() {
         i.remove();
 
         if (!a->deleted() && !b->deleted())
-            a->handleContact(b);
+					  a->handleContact(b);
         if (!a->deleted() && !b->deleted())
             b->handleContact(a);
     }

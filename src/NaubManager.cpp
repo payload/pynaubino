@@ -16,11 +16,11 @@ NaubManager::~NaubManager() {
 
 
 Naub* NaubManager::add(const Vec& pos) {
-    return add(pos, Color::randomNaub());
+    return add(pos, Color::randomNaub().first);
 }
 
 
-Naub* NaubManager::add(const Vec& pos, const Color& color) {
+Naub* NaubManager::add(const Vec& pos, const QColor& color) {
     Naub *naub = new Naub(_naubino);
     Q_ASSERT(_naubs.contains(naub) == false);
 

@@ -8,9 +8,16 @@
 
 #include <Box2D/Box2D.h>
 
-#include "NaubManager.h"
-#include "JointManager.h"
-#include "Joints.h"
+#include "Vec.h"
+
+
+class CenterJoint;
+class JointManager;
+class Naub;
+class NaubJoint;
+class NaubManager;
+class Pointer;
+class PointerJoint;
 
 
 class Naubino : public QObject
@@ -20,23 +27,23 @@ public:
     Naubino();
     ~Naubino();
 
-    Naub& addNaub(Vec pos);
-    void removeNaub(Naub &naub);
+    Naub* addNaub(const Vec& pos);
+    void removeNaub(Naub *naub);
 
-    NaubJoint& joinNaubs(Naub &a, Naub &b);
-    void unjoinNaubs(NaubJoint &joint);
-    void rejoinNaubs(NaubJoint &joint, Naub &a, Naub &b);
-    NaubJoint* naubJoint(Naub &a, Naub &b);
+    NaubJoint* joinNaubs(Naub *a, Naub *b);
+    void unjoinNaubs(NaubJoint *joint);
+    void rejoinNaubs(NaubJoint *joint, Naub *a, Naub *b);
+    NaubJoint* naubJoint(Naub *a, Naub *b);
 
-    CenterJoint& joinWithCenter(Naub &naub);
-    void unjoinFromCenter(CenterJoint &joint);
-    CenterJoint* centerJoint(Naub &naub);
+    CenterJoint* joinWithCenter(Naub *naub);
+    void unjoinFromCenter(CenterJoint *joint);
+    CenterJoint* centerJoint(Naub *naub);
 
-    PointerJoint& selectNaub(Naub &naub);
-    void deselectNaub(Naub &naub);
-    PointerJoint* pointerJoint(Naub &naub);
+    PointerJoint* selectNaub(Naub *naub);
+    void deselectNaub(Naub *naub);
+    PointerJoint* pointerJoint(Naub *naub);
 
-    void mergeNaubs(Naub &a, Naub &b);
+    void mergeNaubs(Naub *a, Naub *b);
 
     NaubManager& naubs();
     const NaubManager& naubs() const;
@@ -50,13 +57,13 @@ public:
     const Pointer& pointer() const;
 
 signals:
-    void newNaub(Naub &naub);
-    void newNaubJoint(NaubJoint &joint);
-    void newCenterJoint(CenterJoint &joint);
-    void newPointerJoint(PointerJoint &joint);
-    void mergedJoint(NaubJoint &joint);
-    void mergedNaub(Naub &naub);
-    void preUpdate();
+    void newNaub(Naub *naub);
+    void newNaubJoint(NaubJoint *joint);
+    void newCenterJoint(CenterJoint *joint);
+    void newPointerJoint(PointerJoint *joint);
+    void mergedJoint(NaubJoint *joint);
+    void mergedNaub(Naub *naub);
+		void preUpdate();
 
 public slots:
     void update();

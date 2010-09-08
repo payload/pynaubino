@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QGraphicsEllipseItem>
+#include <QPropertyAnimation>
 
 class Naub;
 class Scene;
@@ -13,7 +14,10 @@ class Scene;
 
 class QNaub : public QObject, public QGraphicsEllipseItem {
     Q_OBJECT
-    Q_PROPERTY(qreal scale READ scale WRITE setScale)
+    Q_PROPERTY(qreal scale READ scale WRITE setScale);
+    Q_PROPERTY(int contactHighlight
+               READ contactHighlight
+               WRITE setContactHighlight);
 public:
     QNaub(Scene *scene, Naub *naub);
     ~QNaub();
@@ -23,9 +27,14 @@ public:
     Scene& scene();
     const Scene& scene() const;
 
+    void handleContact(Naub *other);
     void naubChanged();
     void naubDeleted();
 
+    int contactHighlight() const { return _contactHighlight; }
+    void setContactHighlight(int contactHighlight) {
+        _contactHighlight = contactHighlight;
+    }
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -35,11 +44,13 @@ protected:
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 public slots:
-    void deleted();
+    void naubDeletionAnimationFinished();
 
 private:
     Naub *_naub;
     Scene *_scene;
+    QPropertyAnimation *_contactAni;
+    int _contactHighlight;
 };
 
 

@@ -18,7 +18,7 @@ public:
     ~NaubManager();
 
     Naub* add(const Vec& pos);
-    Naub* add(const Vec& pos, const Color& color);
+    Naub* add(const Vec& pos, const QColor& color);
     void remove(Naub *naub);
 
     int count() const;

@@ -1,13 +1,16 @@
 #include "Naub.h"
 
+#include <QColor>
+
 #include "QNaub.h"
 #include "Naubino.h"
+#include "Cycler.h"
 
 Naub::Naub(Naubino *naubino) : _naubino(naubino), _world(&naubino->world()) {
     _centerJoint = 0;
     _qnaub = 0;
 
-    _color = Color::randomNaub();
+    _color = Color::randomNaub().first;
 
     setupPhysics();
 }
@@ -52,7 +55,7 @@ void Naub::setupPhysics() {
 }
 
 void Naub::mergeNaub(Naub *other) {
-    _naubino->mergeNaubs(*this, *other);
+    _naubino->mergeNaubs(this, other);
 }
 
 bool Naub::isMergedWith(Naub * naub) {
@@ -60,10 +63,10 @@ bool Naub::isMergedWith(Naub * naub) {
 }
 
 void Naub::handleContact(Naub *other) {
-    if (color().qcolor() == other->color().qcolor()
-        && !isMergedWith(other)) {
-        _naubino->mergeNaubs(*this, *other);
-    }
+    _qnaub->handleContact(other); // NOTE payload: here or below?
+    if (color() == other->color()
+        && !isMergedWith(other))
+        _naubino->mergeNaubs(this, other);
 }
 
 void Naub::setDeleted(bool deleted) {
@@ -75,7 +78,7 @@ void Naub::setDeleted(bool deleted) {
 }
 
 void Naub::setPos(const Vec& pos) { _body->SetTransform(pos, rot()); }
-void Naub::setColor(const Color& color) { _color = color; }
+void Naub::setColor(const QColor& color) { _color = color; }
 
 
 b2World& Naub::world() { return *_world; }
@@ -83,7 +86,7 @@ const b2World& Naub::world() const { return *_world; }
 Vec Naub::pos() const { return Vec(_body->GetWorldCenter()); }
 float Naub::rot() const { return _body->GetAngle(); }
 float Naub::radius() const { return _radius; }
-const Color& Naub::color() const { return _color; }
+const QColor& Naub::color() const { return _color; }
 b2Body& Naub::body() { return *_body; }
 const b2Body& Naub::body() const { return *_body; }
 void Naub::setQNaub(QNaub *n) { _qnaub = n; }

@@ -123,7 +123,7 @@ void CenterJoint::join(Naub *naub, b2Body *center) {
         def.localAnchorB = Vec();
         def.length = 0.001;
         def.dampingRatio = 0.8;
-        def.frequencyHz = 1.5;
+        def.frequencyHz = 1.1;
         _world->CreateJoint(&def);
     }
     {
@@ -194,7 +194,7 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
         def.localAnchorB = Vec();
         def.length = 0.01;
         def.dampingRatio = 0.8;
-        def.frequencyHz = 1;
+        def.frequencyHz = 1.3;
         _world->CreateJoint(&def);
     }
 }
