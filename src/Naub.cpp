@@ -62,8 +62,6 @@ bool Naub::isMergedWith(Naub * naub) {
     return jointNaubs().contains(naub);
 }
 
-#include <QDebug>
-
 void Naub::handleContact(Naub *other) {
     _qnaub->handleContact(other); // NOTE payload: here or below?
     if (color() == other->color()

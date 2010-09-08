@@ -15,7 +15,7 @@ class Scene;
 class QNaub : public QObject, public QGraphicsEllipseItem {
     Q_OBJECT
     Q_PROPERTY(qreal scale READ scale WRITE setScale);
-    Q_PROPERTY(bool _contactHighlight
+    Q_PROPERTY(int contactHighlight
                READ contactHighlight
                WRITE setContactHighlight);
 public:
@@ -31,8 +31,8 @@ public:
     void naubChanged();
     void naubDeleted();
 
-    bool contactHighlight() const { return _contactHighlight; }
-    void setContactHighlight(bool contactHighlight) {
+    int contactHighlight() const { return _contactHighlight; }
+    void setContactHighlight(int contactHighlight) {
         _contactHighlight = contactHighlight;
     }
 protected:
@@ -50,7 +50,7 @@ private:
     Naub *_naub;
     Scene *_scene;
     QPropertyAnimation *_contactAni;
-    bool _contactHighlight;
+    int _contactHighlight;
 };
 
 

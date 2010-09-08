@@ -16,6 +16,12 @@ QNaub::QNaub(Scene *scene_, Naub *naub_) :
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 
+    _contactHighlight = 0;
+    _contactAni = new QPropertyAnimation(this, "contactHighlight");
+    _contactAni->setStartValue(100);
+    _contactAni->setEndValue(0);
+    _contactAni->setDuration(100);
+
     naub().setQNaub(this);
     naubChanged();
 }
@@ -25,6 +31,7 @@ QNaub::~QNaub() {
     naub().setQNaub(0);
     _naub = 0;
     _scene = 0;
+    delete _contactAni; _contactAni = NULL;
 }
 
 
@@ -36,6 +43,9 @@ const Scene& QNaub::scene() const { return *_scene; }
 
 void QNaub::handleContact(Naub *other) {
     Q_UNUSED(other);
+    _contactAni->stop();
+    _contactAni->start();
+    qDebug(".");
 }
 
 void QNaub::naubChanged() {
@@ -49,11 +59,11 @@ void QNaub::naubChanged() {
     setRotation(naub().rot());
 
     QColor color = naub().color();
-    if (color != brush().color()) {
-        setBrush(QBrush(color));
-    }
-    if (contactHighlight())
+    if (contactHighlight() > 0)
         setBrush(QBrush( Qt::red ));
+    else
+        if(color != brush().color())
+            setBrush(QBrush(color));
 }
 
 
