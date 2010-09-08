@@ -2,99 +2,106 @@
 
 #include <QMapIterator>
 
+#include "Joints.h"
+#include "JointManager.h"
+#include "Naub.h"
+#include "NaubManager.h"
+#include "Pointer.h"
 
-Naubino::Naubino() : QObject(), center_(0) {
-    world_ = new b2World(Vec(), true);
-    naubs_ = new NaubManager(&world());
-    joints_ = new JointManager(world());
-    pointer_ = new Pointer(world());
+Naubino::Naubino() : QObject(), _center(0) {
+    _world = new b2World(Vec(), true);
+    _naubs = new NaubManager(this);
+    _joints = new JointManager(world());
+    _pointer = new Pointer(world());
 
     setupCenter();
 }
 
 
 Naubino::~Naubino() {
-    center_ = 0; //cannot be deleted
-    delete pointer_; pointer_ = 0;
-    delete joints_; joints_ = 0;
-    delete naubs_; naubs_ = 0;
-    delete world_; world_ = 0;
+    _center = 0; //cannot be deleted
+    delete _pointer; _pointer = 0;
+    delete _joints; _joints = 0;
+    delete _naubs; _naubs = 0;
+    delete _world; _world = 0;
 }
 
 
-Naub& Naubino::addNaub(Vec pos) {
+Naub* Naubino::addNaub(const Vec& pos) {
     Naub *naub = naubs().add(pos);
-    emit newNaub(*naub);
-    return *naub;
+    emit newNaub(naub);
+    return naub;
 }
 
 
-void Naubino::removeNaub(Naub &naub) {
-    naubs().remove(&naub);
+void Naubino::removeNaub(Naub *naub) {
+    naubs().remove(naub);
 }
 
 
-NaubJoint& Naubino::joinNaubs(Naub &a, Naub &b) {
-    NaubJoint &joint = joints().joinNaubs(a, b);
+NaubJoint* Naubino::joinNaubs(Naub *a, Naub *b) {
+    NaubJoint *joint = joints().joinNaubs(a, b);
     emit newNaubJoint(joint);
     return joint;
 }
 
 
-void Naubino::unjoinNaubs(NaubJoint &joint) {
+void Naubino::unjoinNaubs(NaubJoint *joint) {
     joints().unjoinNaubs(joint);
 }
 
 
-void Naubino::rejoinNaubs(NaubJoint &joint, Naub &a, Naub &b) {
+void Naubino::rejoinNaubs(NaubJoint *joint, Naub *a, Naub *b) {
     joints().rejoinNaubs(joint, a, b);
 }
 
 
-NaubJoint* Naubino::naubJoint(Naub &a, Naub &b) {
+NaubJoint* Naubino::naubJoint(Naub *a, Naub *b) {
     return joints().naubJoint(a, b);
 }
 
 
-CenterJoint& Naubino::joinWithCenter(Naub &naub) {
-    return joints().joinWithCenter(naub, *center_);
+CenterJoint* Naubino::joinWithCenter(Naub *naub) {
+    return joints().joinWithCenter(naub, _center);
 }
 
 
-void Naubino::unjoinFromCenter(CenterJoint &joint) {
+void Naubino::unjoinFromCenter(CenterJoint *joint) {
     unjoinFromCenter(joint);
 }
 
 
-CenterJoint* Naubino::centerJoint(Naub &naub) {
+CenterJoint* Naubino::centerJoint(Naub *naub) {
     return joints().centerJoint(naub);
 }
 
 
-PointerJoint& Naubino::selectNaub(Naub &naub) {
-    return joints().selectNaub(naub, pointer());
+PointerJoint* Naubino::selectNaub(Naub *naub) {
+    return joints().selectNaub(naub, &pointer());
 }
 
 
-void Naubino::deselectNaub(Naub &naub) {
+void Naubino::deselectNaub(Naub *naub) {
     PointerJoint *joint = pointerJoint(naub);
-    if (joint != 0) joints().deselectNaub(*joint);
+    if (joint != 0) {
+        joints().deselectNaub(joint);
+    }
 }
 
 
-PointerJoint* Naubino::pointerJoint(Naub &naub) {
-    return joints().pointerJoint(naub, pointer());
+PointerJoint* Naubino::pointerJoint(Naub *naub) {
+    return joints().pointerJoint(naub, &pointer());
 }
 
 
-void Naubino::mergeNaubs(Naub &a, Naub &b) {
-    QMapIterator<Naub *, NaubJoint *> i(b.jointNaubs());
+void Naubino::mergeNaubs(Naub *a, Naub *b) {
+    QMapIterator<Naub *, NaubJoint *> i(b->jointNaubs());
     while (i.hasNext()) {
         i.next();
-        if (&a == i.key())
-            unjoinNaubs(*i.value());
+        if (a == i.key())
+            unjoinNaubs(i.value());
         else
-            rejoinNaubs(*i.value(), a, *i.key());
+            rejoinNaubs(i.value(), a, i.key());
     }
     removeNaub(b);
     emit mergedNaub(a);
@@ -104,25 +111,27 @@ void Naubino::mergeNaubs(Naub &a, Naub &b) {
 void Naubino::update() {
     world().Step(0.04, 10, 10);
     world().ClearForces();
+    emit preUpdate();
     naubs().update();
     joints().update();
 }
 
 
-NaubManager& Naubino::naubs() { return *naubs_; }
-const NaubManager& Naubino::naubs() const { return *naubs_; }
-JointManager& Naubino::joints() { return *joints_; }
-const JointManager& Naubino::joints() const { return *joints_; }
-b2World& Naubino::world() { return *world_; }
-const b2World& Naubino::world() const { return *world_; }
-b2Body& Naubino::center() { return *center_; }
-const b2Body& Naubino::center() const { return *center_; }
-Pointer& Naubino::pointer() { return *pointer_; }
-const Pointer& Naubino::pointer() const { return *pointer_; }
+NaubManager& Naubino::naubs() { return *_naubs; }
+const NaubManager& Naubino::naubs() const { return *_naubs; }
+JointManager& Naubino::joints() { return *_joints; }
+const JointManager& Naubino::joints() const { return *_joints; }
+b2World& Naubino::world() { return *_world; }
+const b2World& Naubino::world() const { return *_world; }
+b2Body& Naubino::center() { return *_center; }
+const b2Body& Naubino::center() const { return *_center; }
+Pointer& Naubino::pointer() { return *_pointer; }
+const Pointer& Naubino::pointer() const { return *_pointer; }
 
 
 void Naubino::setupCenter() {
     b2BodyDef def;
     def.type = b2_kinematicBody;
-    center_ = world().CreateBody(&def);
+    _center = world().CreateBody(&def);
 }
+

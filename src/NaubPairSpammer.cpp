@@ -18,12 +18,11 @@ void NaubPairSpammer::timerEvent(QTimerEvent *e) {
     Vec pos( rx*qCos(x), ry*qSin(x) );
     Vec jadd(0.3, 0);
 
-    Naubino &naubino = *_naubino;
-    Naub &a = naubino.addNaub(pos - jadd);
-    Naub &b = naubino.addNaub(pos + jadd);
-    naubino.joinNaubs(a, b);
-    naubino.joinWithCenter(a);
-    naubino.joinWithCenter(b);
+    Naub *a = _naubino->addNaub(pos - jadd);
+    Naub *b = _naubino->addNaub(pos + jadd);
+    _naubino->joinNaubs(a, b);
+    _naubino->joinWithCenter(a);
+    _naubino->joinWithCenter(b);
 
     QTimer::timerEvent(e);
 }

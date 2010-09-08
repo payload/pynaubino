@@ -6,18 +6,18 @@
 
 #include <QGraphicsView>
 
-#include "Scene.h"
 
 class Qb2DebugDrawItem;
+class Scene;
 
 
 class View : public QGraphicsView {
     Q_OBJECT
 public:
-    View(Scene &scene);
+    View(Scene *scene);
 
 private:
-    Qb2DebugDrawItem *debugDraw_;
+    Qb2DebugDrawItem *_debugDraw;
 };
 
 

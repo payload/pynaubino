@@ -4,12 +4,16 @@
 
 #include "Prereqs.h"
 
+#include <QColor>
 #include <QMap>
 
 #include <Box2D/Box2D.h>
 
 #include "Color.h"
 #include "Vec.h"
+#include "Cycler.h" // NOTE payload: extra header for NaubTarjan?
+
+class Naubino;
 
 class CenterJoint;
 class NaubJoint;
@@ -21,13 +25,18 @@ class Pointer;
 
 class Naub {
 public:
-    Naub(b2World *world);
+    Naub(Naubino *naubino);
     ~Naub();
 
     void update();
 
+    void mergeNaub(Naub *other);
+    bool isMergedWith(Naub * naub);
+
+    void handleContact(Naub *naub);
+
     void setPos(const Vec& pos);
-    void setColor(const Color& color);
+    void setColor(const QColor& color);
 
     b2World& world();
     const b2World& world() const;
@@ -35,7 +44,7 @@ public:
     Vec pos() const;
     float rot() const;
     float radius() const;
-    const Color& color() const;
+    const QColor& color() const;
     b2Body& body();
     const b2Body& body() const;
 
@@ -44,6 +53,10 @@ public:
     CenterJoint *centerJoint();
     void setCenterJoint(CenterJoint *);
 
+    bool deleted() const;
+    void setDeleted(bool deleted);
+
+    NaubTarjan tarjan; // NOTE payload: used by Cycler, maybe a friend?
 
     QMap<Naub *, NaubJoint *>& jointNaubs();
     QMap<Pointer *, PointerJoint *>& pointerJoints();
@@ -51,17 +64,20 @@ public:
 private:
     void setupPhysics();
 
-    b2World *world_;
-    b2Body *body_;
-    float radius_, friction_, density_, restitution_;
-    Color color_;
+    Naubino *_naubino;
+    b2World *_world;
+    b2Body *_body;
+    float _radius, _friction, _density, _restitution;
 
-    QNaub *qnaub_;
+    QColor _color;
+    bool _deleted;
 
-    CenterJoint *centerJoint_;
+    QNaub *_qnaub;
 
-    QMap<Naub *, NaubJoint *> jointNaubs_;
-    QMap<Pointer *, PointerJoint *> pointerJoints_;
+    CenterJoint *_centerJoint;
+
+    QMap<Naub *, NaubJoint *> _jointNaubs;
+    QMap<Pointer *, PointerJoint *> _pointersJoints;
 };
 
 

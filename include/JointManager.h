@@ -16,18 +16,18 @@ public:
     JointManager(b2World &world);
     ~JointManager();
 
-    NaubJoint& joinNaubs(Naub &a, Naub &b);
-    void unjoinNaubs(NaubJoint &joint);
-    void rejoinNaubs(NaubJoint &joint, Naub &a, Naub &b);
-    NaubJoint* naubJoint(Naub &a, Naub &b);
+    NaubJoint* joinNaubs(Naub *a, Naub *b);
+    void unjoinNaubs(NaubJoint *joint);
+    void rejoinNaubs(NaubJoint *joint, Naub *a, Naub *b);
+    NaubJoint* naubJoint(Naub *a, Naub *b);
 
-    CenterJoint& joinWithCenter(Naub &naub, b2Body &center);
-    void unjoinFromCenter(CenterJoint &joint);
-    CenterJoint* centerJoint(Naub &naub);
+    CenterJoint* joinWithCenter(Naub *naub, b2Body *center);
+    void unjoinFromCenter(CenterJoint *joint);
+    CenterJoint* centerJoint(Naub *naub);
 
-    PointerJoint& selectNaub(Naub &naub, Pointer &pointer);
-    void deselectNaub(PointerJoint &joint);
-    PointerJoint* pointerJoint(Naub &naub, Pointer &pointer);
+    PointerJoint* selectNaub(Naub *naub, Pointer *pointer);
+    void deselectNaub(PointerJoint *joint);
+    PointerJoint* pointerJoint(Naub *naub, Pointer *pointer);
 
     int count();
     void update();
@@ -36,8 +36,8 @@ public:
     QList<Joint *>& joints();
 
 private:
-    QList<Joint *> *joints_;
-    b2World *world_;
+    QList<Joint *> *_joints;
+    b2World *_world;
 };
 
 

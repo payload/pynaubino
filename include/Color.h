@@ -4,25 +4,17 @@
 
 #include "Prereqs.h"
 
-#include <QColor>
+#include <QPair>
+
+class QColor;
 
 
-class Color {
-public:
-    Color();
-    Color(int r, int g, int b, QString name);
+namespace Color {
 
-    const QString& readableName() const;
-    const QColor& qcolor() const;
+    const QColor& nameToColor(const QString&);
+    const QString& colorToName(const QColor& color);
+    QPair<const QColor&, const QString&> randomNaub();
 
-    static const QMap<QString, Color>& naubinoColors();
-    static const QList<Color>& possibleNaubColors();
-
-    static Color randomNaub();
-
-protected:
-    QString name_;
-    QColor qcolor_;
 };
 
 

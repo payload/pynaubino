@@ -2,33 +2,41 @@
 #define SCENE_H
 
 
-#include <QtGui>
+#include "Prereqs.h"
 
-#include "Naubino.h"
-#include "QNaub.h"
-#include "QNaubJoint.h"
+#include <QGraphicsScene>
+
+class Naub;
+class NaubJoint;
+class Naubino;
+class Pointer;
+class QNaub;
 
 
 class Scene : public QGraphicsScene {
     Q_OBJECT
 public:
-    Scene(Naubino &naubino);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    Scene(Naubino *naubino);
 
-    void selectNaub(QNaub &qnaub);
-    void deselectNaub(QNaub &qnaub);
+    void selectNaub(QNaub*);
+    void deselectNaub(QNaub*);
 
     Pointer& mainPointer();
+    const Pointer& mainPointer() const;
     Naubino& naubino();
+    const Naubino& naubino() const;
 
 public slots:
-    void newNaub(Naub &naub);
-    void newNaubJoint(NaubJoint &joint);
+    void newNaub(Naub *naub);
+    void newNaubJoint(NaubJoint *joint);
+
+protected:
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    Naubino *naubino_;
+    Naubino *_naubino;
 };
 
 
