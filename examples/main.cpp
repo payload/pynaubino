@@ -19,7 +19,15 @@ int main(int argc, char *argv[])
     qsrand(QTime().currentTime().msec());
 
     Naubino naubino;
+
     Scene scene(&naubino);
+    scene.connect(&naubino,
+            SIGNAL(newNaub(Naub*)),
+            SLOT(newNaub(Naub*)));
+    scene.connect(&naubino,
+            SIGNAL(newNaubJoint(NaubJoint*)),
+            SLOT(newNaubJoint(NaubJoint*)));
+
     View view(&scene);
     view.show();
 

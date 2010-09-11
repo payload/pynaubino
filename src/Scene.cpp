@@ -9,12 +9,7 @@
 
 
 Scene::Scene(Naubino *naubino) : QGraphicsScene(), _naubino(naubino) {
-    connect(naubino,
-            SIGNAL(newNaub(Naub*)),
-            SLOT(newNaub(Naub*)));
-    connect(naubino,
-            SIGNAL(newNaubJoint(NaubJoint*)),
-            SLOT(newNaubJoint(NaubJoint*)));
+
 }
 
 

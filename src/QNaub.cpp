@@ -6,34 +6,38 @@
 #include "Scene.h"
 
 
-QNaub::QNaub(Scene *scene_, Naub *naub_) :
-        QObject(), QGraphicsEllipseItem(0, 0, 10, 10),
-        _naub(naub_), _scene(scene_)
+QNaub::QNaub(Scene *scene, Naub *naub) :
+        QObject(), QGraphicsItemGroup(), _naub(naub), _scene(scene)
 {
     setZValue(101);
-    setPen(Qt::NoPen);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 
-    _contactHighlight = 0;
-    _contactAni = new QPropertyAnimation(this, "contactHighlight");
-    _contactAni->setStartValue(100);
-    _contactAni->setEndValue(0);
-    _contactAni->setDuration(100);
+    _contactItem = new QGraphicsEllipseItem(this);
+    _contactItem->setPen(Qt::NoPen);
+    _contactItem->setBrush(QBrush( Qt::black ));
 
-    naub().setQNaub(this);
+    _naubItem = new QGraphicsEllipseItem(this);
+    _naubItem->setPen(Qt::NoPen);
+
+    addToGroup(_contactItem);
+    addToGroup(_naubItem);
+
+    _contactAni = new QPropertyAnimation(this, "contactScale");
+    _contactAni->setStartValue(1.2);
+    _contactAni->setEndValue(1);
+    _contactAni->setDuration(500);
+
+    this->naub().setQNaub(this);
     naubChanged();
 }
-
 
 QNaub::~QNaub() {
     naub().setQNaub(0);
     _naub = 0;
     _scene = 0;
-    delete _contactAni; _contactAni = NULL;
 }
-
 
 Naub& QNaub::naub() { return *_naub; }
 const Naub& QNaub::naub() const { return *_naub; }
@@ -45,7 +49,6 @@ void QNaub::handleContact(Naub *other) {
     Q_UNUSED(other);
     _contactAni->stop();
     _contactAni->start();
-    qDebug(".");
 }
 
 void QNaub::naubChanged() {
@@ -53,17 +56,16 @@ void QNaub::naubChanged() {
     float x = pos.x();
     float y = pos.y();
     float r = naub().radius() * 100;
-    setRect(QRectF(0-r, 0-r, r*2, r*2).normalized());
+    _naubItem->setRect(QRectF(0-r, 0-r, r*2, r*2).normalized());
+    _contactItem->setRect(_naubItem->rect());
+
     setX(x);
     setY(y);
     setRotation(naub().rot());
 
     QColor color = naub().color();
-    if (contactHighlight() > 0)
-        setBrush(QBrush( Qt::red ));
-    else
-        if(color != brush().color())
-            setBrush(QBrush(color));
+    if(color != _naubItem->brush().color())
+        _naubItem->setBrush(QBrush(color));
 }
 
 
