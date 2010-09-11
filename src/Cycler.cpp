@@ -1,9 +1,12 @@
 #include "Cycler.h"
 #include "Naub.h"
 
+#include <QDebug>
+
 void Cycler::testForCycle(Naub *naub) {
     Tarjan t;
     tarjan(*naub, NULL, t);
+    qDebug() << "sccs" << t.sccs->count();
     foreach(QList<Naub *> *scc, *t.sccs) {
         emit cycleFound(scc);
         delete scc; scc = 0;
@@ -42,6 +45,7 @@ void Cycler::tarjan(Naub &v, Naub *u, Tarjan &t) {
     v.tarjan.in_s = true;
     v.tarjan.visited = true;
     foreach (Naub *w, v.jointNaubs().keys()) {
+        qDebug() << "index" << w->tarjan;
         if (w != u) {
             if (w->tarjan.index == 0) {
                 tarjan(*w, &v, t);
