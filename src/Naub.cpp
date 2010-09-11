@@ -64,7 +64,8 @@ bool Naub::isMergedWith(Naub * naub) {
 
 void Naub::handleContact(Naub *other) {
     _qnaub->handleContact(other); // NOTE payload: here or below?
-    if (color() == other->color()
+    if (!pointerJoints().empty()
+        && color() == other->color()
         && !isMergedWith(other))
         _naubino->mergeNaubs(this, other);
 }
