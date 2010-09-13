@@ -1,49 +1,17 @@
 #include "NaubManager.h"
 
-#include "Naubino.h"
-
-NaubManager::NaubManager(Naubino *naubino) : _naubino(naubino),
-        _world(&naubino->world()) {
+void NaubManager::add(Naub *naub) {
+    emit added(naub);
 }
-
-
-NaubManager::~NaubManager() {
-    foreach (Naub* naub, _naubs) {
-        delete naub;
-    }
-    _world = 0;
-}
-
-
-Naub* NaubManager::add(const Vec& pos) {
-    return add(pos, Color::randomNaub().first);
-}
-
-
-Naub* NaubManager::add(const Vec& pos, const QColor& color) {
-    Naub *naub = new Naub(_naubino);
-    Q_ASSERT(_naubs.contains(naub) == false);
-
-    naub->setPos(pos);
-    naub->setColor(color);
-    _naubs.insert(naub);
-
-    return naub;
-}
-
 
 void NaubManager::remove(Naub *naub) {
-    _naubs.remove(naub);
-    naub->setDeleted(true);
+    emit remove(naub);
 }
 
-
-int NaubManager::count() const { return _naubs.count(); }
-
-
-void NaubManager::update() {
-    foreach (Naub *naub, _naubs) {
-        naub->update();
-    }
+void NaubManager::join(Naub *a, Naub *b) {
+    emit joined(a, b);
 }
 
+void NaubManager::merge(Naub *a, Naub *b) {
+    emit merged(a, b);
+}

@@ -1,11 +1,14 @@
 #include <QApplication>
 
+#include <QTime>
+
+/*
 #include <Naubino.h>
 #include <NaubPairSpammer.h>
 #include <Scene.h>
 #include <View.h>
 
-#include <QTime>
+
 
 #include <NaubPairSpammer.h>
 #include <ContactListener.h>
@@ -13,12 +16,14 @@
 #include <Cycler.h>
 #include <Popper.h>
 #include <Menu.h>
+*/
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qsrand(QTime().currentTime().msec());
 
+    /*
     Naubino naubino;
 
     NaubPairSpammer spam(&naubino);
@@ -62,6 +67,7 @@ int main(int argc, char *argv[])
     QTimer timer;
     timer.connect(&timer, SIGNAL(timeout()), &naubino, SLOT(update()));
     timer.start(50);
+*/
 
     return app.exec();
 }

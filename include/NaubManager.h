@@ -4,30 +4,21 @@
 
 #include "Prereqs.h"
 
-#include <QSet>
-
-#include "Color.h"
-#include "Vec.h"
+#include <QObject>
 #include "Naub.h"
 
-class Naubino;
-
-class NaubManager {
-public:
-    NaubManager(Naubino *naubino);
-    ~NaubManager();
-
-    Naub* add(const Vec& pos);
-    Naub* add(const Vec& pos, const QColor& color);
+class NaubManager : public QObject {
+    Q_OBJECT
+signals:
+    void added(Naub *naub);
+    void removeed(Naub *naub);
+    void joined(Naub *a, Naub *b);
+    void merged(Naub *a, Naub *b);
+public slots:
+    void add(Naub *naub);
     void remove(Naub *naub);
-
-    int count() const;
-    void update();
-
-private:
-    Naubino *_naubino;
-    b2World *_world;
-    QSet<Naub *> _naubs;
+    void join(Naub *a, Naub *b);
+    void merge(Naub *a, Naub *b);
 };
 
 
