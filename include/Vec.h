@@ -17,6 +17,10 @@ public:
     Vec(const b2Vec2& vec);
     Vec(const QPointF& vec);
     QPointF q() const;
+    qreal Angle();
+
+    Vec rotate(qreal angle);
+
     static Vec rand();
 };
 

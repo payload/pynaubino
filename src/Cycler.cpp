@@ -45,7 +45,7 @@ void Cycler::tarjan(Naub &v, Naub *u, Tarjan &t) {
     v.tarjan.in_s = true;
     v.tarjan.visited = true;
     foreach (Naub *w, v.jointNaubs().keys()) {
-        qDebug() << "index" << w->tarjan;
+        qDebug() << "index" << w->tarjan.index;
         if (w != u) {
             if (w->tarjan.index == 0) {
                 tarjan(*w, &v, t);

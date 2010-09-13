@@ -12,6 +12,7 @@
 #include <SimpleContactHandler.h>
 #include <Cycler.h>
 #include <Popper.h>
+#include <Menu.h>
 
 int main(int argc, char *argv[])
 {
@@ -19,21 +20,6 @@ int main(int argc, char *argv[])
     qsrand(QTime().currentTime().msec());
 
     Naubino naubino;
-
-    Scene scene(&naubino);
-    scene.connect(&naubino,
-            SIGNAL(newNaub(Naub*)),
-            SLOT(newNaub(Naub*)));
-    scene.connect(&naubino,
-            SIGNAL(newNaubJoint(NaubJoint*)),
-            SLOT(newNaubJoint(NaubJoint*)));
-
-    View view(&scene);
-    view.show();
-
-    QTimer timer;
-    timer.connect(&timer, SIGNAL(timeout()), &naubino, SLOT(update()));
-    timer.start(50);
 
     NaubPairSpammer spam(&naubino);
     spam.start(2000);
@@ -58,6 +44,24 @@ int main(int argc, char *argv[])
     popper.connect(&cycler,
                    SIGNAL(cycleFound(QList<Naub*>*)),
                    SLOT(popNaubs(QList<Naub*>*)));
+
+    Scene scene(&naubino);
+    scene.connect(&naubino,
+            SIGNAL(newNaub(Naub*)),
+            SLOT(newNaub(Naub*)));
+    scene.connect(&naubino,
+            SIGNAL(newNaubJoint(NaubJoint*)),
+            SLOT(newNaubJoint(NaubJoint*)));
+
+    Menu menu(&scene);
+    menu.start();
+
+    View view(&scene);
+    view.show();
+
+    QTimer timer;
+    timer.connect(&timer, SIGNAL(timeout()), &naubino, SLOT(update()));
+    timer.start(50);
 
     return app.exec();
 }
