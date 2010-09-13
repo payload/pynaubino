@@ -4,13 +4,14 @@
 #include "Prereqs.h"
 
 #include <QObject>
-#include "Naub.h"
-#include "Joint.h"
+
+class Naub;
+class Joint;
 
 class JointManager : public QObject {
     Q_OBJECT
 signals:
-    void joined(Joint *joint);
+    void added(Joint *joint);
 public slots:
     void join(Naub *a, Naub *b);
 };

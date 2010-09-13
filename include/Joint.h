@@ -4,7 +4,8 @@
 #include "Prereqs.h"
 
 #include <QObject>
-#include "Naub.h"
+
+class Naub;
 
 class Joint : public QObject {
     Q_OBJECT

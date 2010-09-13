@@ -1,17 +1,17 @@
 #ifndef NAUBMANAGER_H
 #define NAUBMANAGER_H
 
-
 #include "Prereqs.h"
 
 #include <QObject>
-#include "Naub.h"
+
+class Naub;
 
 class NaubManager : public QObject {
     Q_OBJECT
 signals:
     void added(Naub *naub);
-    void removeed(Naub *naub);
+    void removed(Naub *naub);
     void joined(Naub *a, Naub *b);
     void merged(Naub *a, Naub *b);
 public slots:

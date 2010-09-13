@@ -1,6 +1,8 @@
 #include <QApplication>
-
 #include <QTime>
+#include <Naub.h>
+#include <NaubManager.h>
+#include <JointManager.h>
 
 /*
 #include <Naubino.h>
@@ -22,6 +24,12 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qsrand(QTime().currentTime().msec());
+
+    NaubManager naubs;
+    JointManager joints;
+
+    Naub *n0 = new Naub();
+    naubs.add(n0);
 
     /*
     Naubino naubino;
