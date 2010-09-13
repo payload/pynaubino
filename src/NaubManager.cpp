@@ -2,7 +2,7 @@
 #include <Naub.h>
 
 void NaubManager::add(Naub *naub) {
-    connect(naub, SIGNAL(remove(Naub*)), SLOT(remove(Naub*)));
+    connect(naub, SIGNAL(removed(Naub*)), SLOT(remove(Naub*)));
     emit added(naub);
 }
 

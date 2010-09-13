@@ -11,7 +11,10 @@ signals:
     void selected();
     void deselected();
 public slots:
+    void select();
+    void deselect();
     void update(Naub *naub);
+    void remove(Naub *naub);
 };
 
 #endif // QNAUB_H
