@@ -24,6 +24,7 @@ private:
     ~Tarjan();
     QStack<Naub *> *s;
     QList<QList<Naub *> *> *sccs;
+    QList<Naub *> *naubs;
     int index;
     friend class Cycler;
 };

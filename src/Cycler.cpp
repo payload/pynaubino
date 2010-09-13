@@ -16,10 +16,16 @@ void Cycler::testForCycle(Naub *naub) {
 Tarjan::Tarjan() {
     s = new QStack<Naub *>();
     sccs = new QList< QList<Naub *> *>();
+    naubs = new QList<Naub *>();
     index = 1;
 }
 
 Tarjan::~Tarjan() {
+    foreach (Naub *naub, *naubs) {
+        new (&naub->tarjan) NaubTarjan();
+    }
+
+    delete naubs; naubs = 0;
     delete s; s = 0;
     delete sccs; sccs = 0;
     index = 0;
@@ -38,6 +44,7 @@ http://en.wikipedia.org/wiki/Tarjan's_strongly_connected_components_algorithm
 "u" to prevent moving back in our undirected graph
 */
 void Cycler::tarjan(Naub &v, Naub *u, Tarjan &t) {
+    t.naubs->append(&v);
     v.tarjan.index = t.index;
     v.tarjan.lowlink = t.index;
     t.index++;
