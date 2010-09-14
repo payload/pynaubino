@@ -2,10 +2,11 @@
 #define QNAUB_H
 
 #include <QObject>
+#include <QGraphicsEllipseItem>
 
 class Naub;
 
-class QNaub : public QObject {
+class QNaub : public QObject, public QGraphicsEllipseItem {
     Q_OBJECT
 signals:
     void selected();
@@ -15,6 +16,9 @@ public slots:
     void deselect();
     void update(Naub *naub);
     void remove(Naub *naub);
+public:
+    QNaub();
+    virtual ~QNaub();
 };
 
 #endif // QNAUB_H
