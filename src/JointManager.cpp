@@ -1,6 +1,6 @@
 #include "JointManager.h"
 #include "Naub.h"
-#include "NaubJoint.h"
+#include "Joint.h"
 
 void JointManager::add(Joint *joint) {
     connect(joint, SIGNAL(joined(Joint*)), SLOT(join(Joint*)));

@@ -5,11 +5,16 @@
 class Naub;
 class b2Body;
 class b2World;
+class Vec;
 
 class NaubJoint : public Joint {
     Q_OBJECT
 public slots:
     void join(Naub *a, Naub *b);
+    void unjoin();
+public:
+    Vec posA() const;
+    Vec posB() const;
 private:
     Naub *_a;
     Naub *_b;

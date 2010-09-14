@@ -31,3 +31,16 @@ void NaubJoint::join(Naub *a, Naub *b) {
     }
     Joint::join();
 }
+
+void NaubJoint::unjoin() {
+    _world->DestroyBody(_helpBody);
+    Joint::unjoin();
+}
+
+Vec NaubJoint::posA() const {
+    return Vec(_a->body()->GetPosition());
+}
+
+Vec NaubJoint::posB() const {
+    return Vec(_b->body()->GetPosition());
+}

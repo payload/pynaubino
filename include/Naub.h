@@ -23,6 +23,9 @@ public slots:
     void deselect();
     void contact(Naub *naub);
     void update();
+    //void remove();
+    //void join(Naub *naub);
+    //void merge(Naub *naub);
 public:
     Naub(b2World *world);
     virtual ~Naub();

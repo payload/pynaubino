@@ -39,9 +39,13 @@ int main(int argc, char *argv[])
     QJointManager *qjoints = new QJointManager();
 
     naubs->connect(sim, SIGNAL(timeout()), SLOT(update()));
-    joints->connect(naubs, SIGNAL(added(Joint*)), SLOT(add(Joint*)));
+    joints->connect(naubs,
+                    SIGNAL(added(Joint*)),
+                    SLOT(add(Joint*)));
     qnaubs->connect(naubs, SIGNAL(added(Naub*)), SLOT(add(Naub*)));
-    qjoints->connect(joints, SIGNAL(added(Joint*)), SLOT(add(Joint*)));
+    qjoints->connect(joints,
+                     SIGNAL(added(Joint*)),
+                     SLOT(add(Joint*)));
 
     QScene *scene = new QScene();
     scene->connect(qnaubs, SIGNAL(added(QNaub*)), SLOT(add(QNaub*)));
