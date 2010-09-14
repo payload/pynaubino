@@ -14,11 +14,13 @@ signals:
     void removed(Naub *naub);
     void joined(Naub *a, Naub *b);
     void merged(Naub *a, Naub *b);
+    void updated();
 public slots:
     void add(Naub *naub);
     void remove(Naub *naub);
     void join(Naub *a, Naub *b);
     void merge(Naub *a, Naub *b);
+    void update();
 };
 
 

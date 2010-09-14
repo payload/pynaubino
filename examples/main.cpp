@@ -7,6 +7,7 @@
 #include <QJointManager.h>
 #include <QScene.h>
 #include <QGraphicsView>
+#include <Simulator.h>
 
 /*
 #include <Naubino.h>
@@ -29,13 +30,14 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     qsrand(QTime().currentTime().msec());
 
-    b2World *world = new b2World(Vec(), true);
+    Simulator *sim = new Simulator();
 
     NaubManager *naubs = new NaubManager();
     JointManager *joints = new JointManager();
     QNaubManager *qnaubs = new QNaubManager();
     QJointManager *qjoints = new QJointManager();
 
+    naubs->connect(sim, SIGNAL(timeout()), SLOT(update()));
     qnaubs->connect(naubs, SIGNAL(added(Naub*)), SLOT(add(Naub*)));
     qjoints->connect(joints, SIGNAL(added(Joint*)), SLOT(add(Joint*)));
 
@@ -46,13 +48,15 @@ int main(int argc, char *argv[])
     view->setScene(scene);
     view->show();
 
-    Naub *n0 = new Naub(world);
-    Naub *n1 = new Naub(world);
+    Naub *n0 = new Naub(sim->world());
+    Naub *n1 = new Naub(sim->world());
     n0->setPos(Vec(-1, 0));
     n1->setPos(Vec( 1, 0));
     naubs->add(n0);
     naubs->add(n1);
     naubs->join(n0, n1);
+
+    sim->start(50);
 
     /*
     Naubino naubino;
