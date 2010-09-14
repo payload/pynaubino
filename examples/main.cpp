@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QTime>
 #include <Naub.h>
+#include <NaubJoint.h>
 #include <NaubManager.h>
 #include <JointManager.h>
 #include <QNaubManager.h>
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
     QJointManager *qjoints = new QJointManager();
 
     naubs->connect(sim, SIGNAL(timeout()), SLOT(update()));
+    joints->connect(naubs, SIGNAL(added(Joint*)), SLOT(add(Joint*)));
     qnaubs->connect(naubs, SIGNAL(added(Naub*)), SLOT(add(Naub*)));
     qjoints->connect(joints, SIGNAL(added(Joint*)), SLOT(add(Joint*)));
 
@@ -50,11 +52,11 @@ int main(int argc, char *argv[])
 
     Naub *n0 = new Naub(sim->world());
     Naub *n1 = new Naub(sim->world());
-    n0->setPos(Vec(-1, 0));
-    n1->setPos(Vec( 1, 0));
+    n0->setPos(Vec(-0.4, 0));
+    n1->setPos(Vec( 0.4, 0));
     naubs->add(n0);
     naubs->add(n1);
-    naubs->join(n0, n1);
+    n0->contact(n1);
 
     sim->start(50);
 

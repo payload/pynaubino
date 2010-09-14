@@ -1,4 +1,5 @@
 #include "Naub.h"
+#include "NaubJoint.h"
 
 void Naub::select() {
     emit selected();
@@ -9,6 +10,10 @@ void Naub::deselect() {
 }
 
 void Naub::contact(Naub *naub) {
+    NaubJoint *joint = new NaubJoint();
+    emit added(joint);
+    joint->join(this, naub);
+    emit joined(joint);
     /*
     emit removed(naub);
     emit joined(this, naub);

@@ -5,8 +5,6 @@
 
 #include <QObject>
 
-class Naub;
-
 class Joint : public QObject {
     Q_OBJECT
 signals:
@@ -14,9 +12,9 @@ signals:
     void joined(Joint *joint);
     void unjoined(Joint *joint);
 public slots:
-    void join(Naub *a, Naub *b);
-    void unjoin();
-    void update();
+    virtual void join();
+    virtual void unjoin();
+    virtual void update();
 };
 
 #endif // JOINT_H

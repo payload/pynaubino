@@ -12,8 +12,10 @@ class JointManager : public QObject {
     Q_OBJECT
 signals:
     void added(Joint *joint);
+    void joined(Joint *joint);
 public slots:
-    void join(Naub *a, Naub *b);
+    void add(Joint *joint);
+    void join(Joint *joint);
 };
 
 

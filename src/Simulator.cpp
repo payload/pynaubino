@@ -3,7 +3,7 @@
 #include <Vec.h>
 
 Simulator::Simulator() : QTimer() {
-    _world = new b2World(Vec(1, 0.5), true);
+    _world = new b2World(Vec(), true);
 }
 
 Simulator::~Simulator() {
@@ -12,5 +12,6 @@ Simulator::~Simulator() {
 
 void Simulator::timerEvent(QTimerEvent *e) {
     _world->Step(interval()/1000.0, 10, 10);
+    _world->ClearForces();
     QTimer::timerEvent(e);
 }
