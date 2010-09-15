@@ -7,8 +7,12 @@ void QNaubManager::add(Naub *naub) {
     QNaub *qnaub = new QNaub();
     qnaub->connect(naub, SIGNAL(changed(Naub*)), SLOT(update(Naub*)));
     qnaub->connect(naub, SIGNAL(removed(Naub*)), SLOT(remove(Naub*)));
-    naub->connect(qnaub, SIGNAL(selected()), SLOT(select()));
-    naub->connect(qnaub, SIGNAL(deselected()), SLOT(deselect()));
+    naub->connect(qnaub,
+                  SIGNAL(selected(Pointer*)),
+                  SLOT(select(Pointer*)));
+    naub->connect(qnaub,
+                  SIGNAL(deselected(Pointer*)),
+                  SLOT(deselect(Pointer*)));
     qnaub->update(naub);
     emit added(qnaub);
 }

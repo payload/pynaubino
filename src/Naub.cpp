@@ -1,12 +1,20 @@
 #include "Naub.h"
-#include "NaubJoint.h"
+#include <NaubJoint.h>
+#include <PointerJoint.h>
+#include <Pointer.h>
 
-void Naub::select() {
-    emit selected();
+void Naub::select(Pointer *pointer) {
+    PointerJoint *joint = new PointerJoint();
+    emit added(joint);
+    joint->join(this, pointer);
+    emit joined(joint);
+    joint->connect(this, SIGNAL(deselected(Pointer*)), SLOT(unjoin()));
+    emit selected(pointer);
+    qDebug("select");
 }
 
-void Naub::deselect() {
-    emit deselected();
+void Naub::deselect(Pointer *pointer) {
+    emit deselected(pointer);
 }
 
 void Naub::contact(Naub *naub) {

@@ -7,6 +7,7 @@
 #include <Box2D/Box2D.h>
 #include "Vec.h"
 class Joint;
+class Pointer;
 
 class Naub : public QObject {
     Q_OBJECT
@@ -16,11 +17,11 @@ signals:
     void added(Joint *joint);
     void joined(Joint *joint);
     void merged(Naub *a, Naub *b);
-    void selected();
-    void deselected();
+    void selected(Pointer *pointer);
+    void deselected(Pointer *pointer);
 public slots:
-    void select();
-    void deselect();
+    void select(Pointer *pointer);
+    void deselect(Pointer *pointer);
     void contact(Naub *naub);
     void update();
     //void remove();

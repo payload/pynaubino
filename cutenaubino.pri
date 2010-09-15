@@ -5,4 +5,3 @@ MOC_DIR = $$PWD/temp/moc
 OBJECTS_DIR = $$PWD/temp/o
 
 CONFIG += warn_on
-

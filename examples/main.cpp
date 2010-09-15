@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
                      SIGNAL(added(Joint*)),
                      SLOT(add(Joint*)));
 
-    QScene *scene = new QScene();
+    QScene *scene = new QScene(sim->world());
     scene->connect(qnaubs, SIGNAL(added(QNaub*)), SLOT(add(QNaub*)));
 
     QGraphicsView *view = new QGraphicsView();
