@@ -7,7 +7,7 @@ class b2World;
 class Simulator : public QTimer {
     Q_OBJECT
 public:
-    Simulator();
+    Simulator(QObject *parent = 0);
     virtual ~Simulator();
 
     b2World* world() const { return _world; }

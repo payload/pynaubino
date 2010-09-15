@@ -73,6 +73,7 @@ protected:
 class Qb2DebugDrawItem : public QGraphicsObject {
 public:
     Qb2DebugDrawItem(b2World *world);
+    virtual ~Qb2DebugDrawItem();
 
     b2World *_world;
     Qb2DebugDraw *_drawer;

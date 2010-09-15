@@ -23,6 +23,8 @@ public slots:
     void join(Joint *joint);
     void merge(Naub *a, Naub *b);
     void update();
+public:
+    NaubManager(QObject *parent = 0) : QObject(parent) {}
 };
 
 

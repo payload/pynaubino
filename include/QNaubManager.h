@@ -12,6 +12,8 @@ signals:
     void added(QNaub *qnaub);
 public slots:
     void add(Naub *naub);
+public:
+    QNaubManager(QObject *parent = 0) : QObject(parent) {}
 };
 
 #endif // QNAUBMANAGER_H

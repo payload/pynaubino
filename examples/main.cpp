@@ -16,12 +16,12 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     qsrand(QTime().currentTime().msec());
 
-    Simulator *sim = new Simulator();
+    Simulator *sim = new Simulator(&app);
 
-    NaubManager *naubs = new NaubManager();
-    JointManager *joints = new JointManager();
-    QNaubManager *qnaubs = new QNaubManager();
-    QJointManager *qjoints = new QJointManager();
+    NaubManager *naubs = new NaubManager(&app);
+    JointManager *joints = new JointManager(&app);
+    QNaubManager *qnaubs = new QNaubManager(&app);
+    QJointManager *qjoints = new QJointManager(&app);
 
     naubs->connect(sim, SIGNAL(timeout()), SLOT(update()));
     joints->connect(naubs,
@@ -54,6 +54,11 @@ int main(int argc, char *argv[])
     Qb2DebugDrawItem *dd = new Qb2DebugDrawItem(sim->world());
     scene->addItem(dd);
 
-    return app.exec();
+    int ret = app.exec();
+
+    delete view;
+    delete scene;
+
+    return ret;
 }
 

@@ -13,6 +13,8 @@ signals:
 public slots:
     void add(Joint *joint);
     void remove(QJoint *qjoint);
+public:
+    QJointManager(QObject *parent = 0) : QObject(parent) {}
 };
 
 #endif // QJOINTMANAGER_H

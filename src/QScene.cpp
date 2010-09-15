@@ -6,8 +6,13 @@
 #include <Vec.h>
 #include <Box2D/Dynamics/b2World.h>
 
-QScene::QScene(b2World *world) : QGraphicsScene() {
+QScene::QScene(b2World *world, QObject *parent) : QGraphicsScene(parent) {
     pointer = new Pointer(world, this);
+}
+
+QScene::~QScene() {
+    delete pointer;
+    pointer = NULL;
 }
 
 void QScene::add(QNaub *qnaub) {

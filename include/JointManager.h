@@ -17,6 +17,8 @@ public slots:
     void add(Joint *joint);
     void join(Joint *joint);
     void unjoin(Joint *joint);
+public:
+    JointManager(QObject *parent = 0) : QObject(parent) {}
 };
 
 

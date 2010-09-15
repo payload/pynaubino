@@ -4,6 +4,8 @@
 #include <Box2D/Dynamics/b2Body.h>
 
 void NaubJoint::join(Naub *a, Naub *b) {
+    connect(a, SIGNAL(removed(Naub*)), SLOT(unjoin()));
+    connect(b, SIGNAL(removed(Naub*)), SLOT(unjoin()));
     _a = a;
     _b = b;
     _world = _a->world();

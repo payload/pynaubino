@@ -7,6 +7,11 @@ Qb2DebugDrawItem::Qb2DebugDrawItem(b2World *world) : _world(world) {
     startTimer(50);
 }
 
+Qb2DebugDrawItem::~Qb2DebugDrawItem() {
+    delete _drawer;
+    _drawer = NULL;
+}
+
 
 void Qb2DebugDrawItem::timerEvent(QTimerEvent *event) {
     Q_UNUSED(event);
