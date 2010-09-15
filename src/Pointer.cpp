@@ -11,5 +11,5 @@ Pointer::Pointer(b2World *world, QObject *parent)
 }
 
 void Pointer::setPos(const Vec &pos) {
-    _body->SetTransform(pos, _body->GetAngle());
+    _body->SetTransform(pos, 0);
 }

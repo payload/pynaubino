@@ -47,6 +47,7 @@ private:
     b2Body *_body;
     Vec _pos;
     QColor _color;
+    bool _isSelected;
 };
 
 #endif // NAUB_H

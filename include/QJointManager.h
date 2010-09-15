@@ -12,6 +12,7 @@ signals:
     void added(QJoint *qjoint);
 public slots:
     void add(Joint *joint);
+    void remove(QJoint *qjoint);
 };
 
 #endif // QJOINTMANAGER_H

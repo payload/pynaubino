@@ -22,14 +22,15 @@ QNaub::QNaub() : QObject(), QGraphicsEllipseItem() {
     setAcceptHoverEvents(true);
     setRect(-15, -15, 30, 30);
     setBrush( Qt::black );
+    pointer = NULL;
 }
 
 void QNaub::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    select(pointer);
+    if (pointer != NULL) select(pointer);
     QGraphicsEllipseItem::mouseReleaseEvent(event);
 }
 
 void QNaub::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    deselect(pointer);
+    if (pointer != NULL) deselect(pointer);
     QGraphicsEllipseItem::mouseReleaseEvent(event);
 }

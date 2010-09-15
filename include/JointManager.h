@@ -16,6 +16,7 @@ signals:
 public slots:
     void add(Joint *joint);
     void join(Joint *joint);
+    void unjoin(Joint *joint);
 };
 
 

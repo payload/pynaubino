@@ -12,9 +12,13 @@ class PointerJoint : public Joint {
 public slots:
     void join(Naub *naub, Pointer *pointer);
     void unjoin();
+public:
+    virtual Vec posA() const;
+    virtual Vec posB() const;
 private:
     b2World *_world;
     b2Body *_helpBody;
+    b2Body *_pointerBody;
 };
 
 #endif // POINTERJOINT_H

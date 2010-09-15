@@ -8,12 +8,14 @@ void Naub::select(Pointer *pointer) {
     emit added(joint);
     joint->join(this, pointer);
     emit joined(joint);
-    joint->connect(this, SIGNAL(deselected(Pointer*)), SLOT(unjoin()));
+    _isSelected = true;
     emit selected(pointer);
-    qDebug("select");
+    joint->connect(this, SIGNAL(deselected(Pointer*)), SLOT(unjoin()));
 }
 
 void Naub::deselect(Pointer *pointer) {
+    if (!_isSelected) return;
+    _isSelected = false;
     emit deselected(pointer);
 }
 
@@ -38,7 +40,11 @@ Naub::Naub(b2World *world) : _world(world) {
     b2BodyDef def;
     def.type = b2_dynamicBody;
     _body = _world->CreateBody(&def);
+    b2CircleShape shape;
+    shape.m_radius = 0.15;
+    _body->CreateFixture(&shape, 1);
     _color = Qt::black;
+    _isSelected = false;
 }
 
 Naub::~Naub() {

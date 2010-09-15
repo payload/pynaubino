@@ -3,9 +3,11 @@
 #include <Naub.h>
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2World.h>
+#include <Vec.h>
 
 void PointerJoint::join(Naub *naub, Pointer *pointer) {
     _world = naub->world();
+    _pointerBody = pointer->body();
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
@@ -20,7 +22,7 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
     {
         b2DistanceJointDef def;
         def.bodyA = _helpBody;
-        def.bodyB = pointer->body();
+        def.bodyB = _pointerBody;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.01;
@@ -32,6 +34,19 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
 }
 
 void PointerJoint::unjoin() {
+    // TODO payload: defensive prog or trace where a wrong usage occurs?
+    if (!isJoined()) return;
     _world->DestroyBody(_helpBody);
+    _helpBody = NULL;
     Joint::unjoin();
+}
+
+Vec PointerJoint::posA() const {
+    if (!isJoined()) return Vec();
+    return Vec(_helpBody->GetPosition());
+}
+
+Vec PointerJoint::posB() const {
+    if (!isJoined()) return Vec();
+    return Vec(_pointerBody->GetPosition());
 }

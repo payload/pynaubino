@@ -34,13 +34,16 @@ void NaubJoint::join(Naub *a, Naub *b) {
 
 void NaubJoint::unjoin() {
     _world->DestroyBody(_helpBody);
+    _helpBody = NULL;
     Joint::unjoin();
 }
 
 Vec NaubJoint::posA() const {
+    if (!isJoined()) return Vec();
     return Vec(_a->body()->GetPosition());
 }
 
 Vec NaubJoint::posB() const {
+    if (!isJoined()) return Vec();
     return Vec(_b->body()->GetPosition());
 }

@@ -4,6 +4,7 @@
 #include "Prereqs.h"
 
 #include <QObject>
+#include <Vec.h>
 
 class Joint : public QObject {
     Q_OBJECT
@@ -15,6 +16,13 @@ public slots:
     virtual void join();
     virtual void unjoin();
     virtual void update();
+public:
+    virtual ~Joint();
+    virtual Vec posA() const = 0;
+    virtual Vec posB() const = 0;
+    bool isJoined() const { return _isJoined; }
+private:
+    bool _isJoined;
 };
 
 #endif // JOINT_H
