@@ -6,7 +6,7 @@
 
 QJoint::QJoint(QObject *parent)
     : QObject(parent), QGraphicsLineItem() {
-    setPen(QPen( QBrush(Qt::black), 4 ));
+    setPen(QPen( QBrush(Qt::red), 4 ));
     _joint = NULL;
 }
 

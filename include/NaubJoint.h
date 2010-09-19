@@ -13,6 +13,7 @@ public slots:
     void join(Naub *a, Naub *b);
     void unjoin();
 public:
+    virtual void init() const {}
     virtual Vec posA() const;
     virtual Vec posB() const;
 private:

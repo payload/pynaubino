@@ -6,8 +6,8 @@
 #include <Vec.h>
 
 void PointerJoint::join(Naub *naub, Pointer *pointer) {
-    _world = naub->world();
-    _pointerBody = pointer->body();
+    _world = &naub->world();
+    _pointerBody = &pointer->body();
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
@@ -16,7 +16,7 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
     }
     {
         b2WeldJointDef def;
-        def.Initialize(naub->body(), _helpBody, naub->pos());
+        def.Initialize(&naub->body(), _helpBody, naub->pos());
         _world->CreateJoint(&def);
     }
     {
@@ -34,7 +34,6 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
 }
 
 void PointerJoint::unjoin() {
-    // TODO payload: defensive prog or trace where a wrong usage occurs?
     if (!isJoined()) return;
     _world->DestroyBody(_helpBody);
     _helpBody = NULL;

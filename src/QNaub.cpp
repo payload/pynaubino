@@ -10,16 +10,21 @@ void QNaub::deselect(Pointer *pointer) {
     emit deselected(pointer);
 }
 
-void QNaub::update(Naub *naub) {
-    setPos(naub->pos().q());
+void QNaub::remove() {
+    emit removed(this);
 }
 
-void QNaub::remove(Naub *naub) {
-    Q_UNUSED(naub);
+void QNaub::paint(QPainter *painter,
+                  const QStyleOptionGraphicsItem *option,
+                  QWidget *widget) {
+    if (_naub == NULL) throw "give me a naub!";
+    setPos(_naub->pos().q());
+    QGraphicsEllipseItem::paint(painter, option, widget);
 }
 
 QNaub::QNaub() : QObject(), QGraphicsEllipseItem() {
     setAcceptHoverEvents(true);
+    setAcceptTouchEvents(true);
     setRect(-15, -15, 30, 30);
     setBrush( Qt::black );
     pointer = NULL;

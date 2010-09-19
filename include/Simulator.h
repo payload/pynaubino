@@ -10,7 +10,7 @@ public:
     Simulator(QObject *parent = 0);
     virtual ~Simulator();
 
-    b2World* world() const { return _world; }
+    b2World& world() const { return *_world; }
 protected:
     virtual void timerEvent(QTimerEvent *e);
 private:

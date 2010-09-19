@@ -14,6 +14,6 @@ void Joint::unjoin() {
     emit unjoined(this);
 }
 
-void Joint::update() {
-    emit changed(this);
+void Joint::remove() {
+    emit removed(this);
 }

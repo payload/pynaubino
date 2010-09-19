@@ -11,9 +11,9 @@ class Pointer : public QObject {
 public slots:
     void setPos(const Vec &pos);
 public:
-    Pointer(b2World *world, QObject *parent = 0);
+    Pointer(b2World &world, QObject *parent = 0);
 
-    b2Body* body() const { return _body; }
+    b2Body& body() const { return *_body; }
 private:
     b2Body *_body;
     b2World *_world;

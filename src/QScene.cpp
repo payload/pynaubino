@@ -5,9 +5,11 @@
 #include <QGraphicsSceneMouseEvent>
 #include <Vec.h>
 #include <Box2D/Dynamics/b2World.h>
+#include <QNaubino.h>
 
-QScene::QScene(b2World *world, QObject *parent) : QGraphicsScene(parent) {
-    pointer = new Pointer(world, this);
+QScene::QScene(QNaubino *qnaubino)
+    : QGraphicsScene(qnaubino), _qnaubino(qnaubino) {
+    pointer = new Pointer(_qnaubino->world(), this);
 }
 
 QScene::~QScene() {

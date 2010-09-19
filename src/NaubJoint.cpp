@@ -8,7 +8,7 @@ void NaubJoint::join(Naub *a, Naub *b) {
     connect(b, SIGNAL(removed(Naub*)), SLOT(unjoin()));
     _a = a;
     _b = b;
-    _world = _a->world();
+    _world = &_a->world();
     {
         b2BodyDef def;
         def.type = b2_dynamicBody;
@@ -17,13 +17,13 @@ void NaubJoint::join(Naub *a, Naub *b) {
     }
     {
         b2WeldJointDef def;
-        def.Initialize(_a->body(), _helpBody, _a->pos());
+        def.Initialize(&_a->body(), _helpBody, _a->pos());
         _world->CreateJoint(&def);
     }
     {
         b2DistanceJointDef def;
         def.bodyA = _helpBody;
-        def.bodyB = _b->body();
+        def.bodyB = &_b->body();
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
         def.length = 0.6;
@@ -35,6 +35,7 @@ void NaubJoint::join(Naub *a, Naub *b) {
 }
 
 void NaubJoint::unjoin() {
+    if (!isJoined()) return;
     _world->DestroyBody(_helpBody);
     _helpBody = NULL;
     Joint::unjoin();
@@ -42,10 +43,10 @@ void NaubJoint::unjoin() {
 
 Vec NaubJoint::posA() const {
     if (!isJoined()) return Vec();
-    return Vec(_a->body()->GetPosition());
+    return Vec(_a->body().GetPosition());
 }
 
 Vec NaubJoint::posB() const {
     if (!isJoined()) return Vec();
-    return Vec(_b->body()->GetPosition());
+    return Vec(_b->body().GetPosition());
 }
