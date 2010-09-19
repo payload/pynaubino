@@ -3,6 +3,7 @@
 #include <Naubino.h>
 #include <QNaubino.h>
 #include <TestGame.h>
+#include <Spammer.h>
 
 int main(int argc, char *argv[])
 {
@@ -12,8 +13,8 @@ int main(int argc, char *argv[])
     Naubino naubino;
     QNaubino qnaubino(naubino);
     qnaubino.init();
-
-    foo(naubino);
+    Spammer spammer(naubino);
+    spammer.start(1000);
 
     return app.exec();
 }
