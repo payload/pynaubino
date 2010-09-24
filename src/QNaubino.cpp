@@ -2,6 +2,7 @@
 #include <Naubino.h>
 #include <Naub.h>
 #include <Joint.h>
+#include <NaubJoint.h>
 #include <QNaub.h>
 #include <QJoint.h>
 #include <QScene.h>
@@ -58,6 +59,7 @@ void QNaubino::add(Naub *naub) {
 }
 
 void QNaubino::add(Joint *joint) {
+    if (dynamic_cast<NaubJoint*>(joint) == NULL) return;
     QJoint *qjoint = new QJoint();
     qjoint->setJoint(joint);
     qjoint->connect(joint,
