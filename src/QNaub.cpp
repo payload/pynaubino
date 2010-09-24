@@ -19,6 +19,8 @@ void QNaub::paint(QPainter *painter,
                   QWidget *widget) {
     if (_naub == NULL) throw "give me a naub!";
     setPos(_naub->pos().q());
+    if (brush().color() != _naub->color())
+        setBrush(QBrush( _naub->color() ));
     QGraphicsEllipseItem::paint(painter, option, widget);
 }
 

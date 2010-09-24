@@ -4,6 +4,7 @@
 #include <Pointer.h>
 #include <QList>
 #include <Naubino.h>
+#include <Color.h>
 
 void Naub::select(Pointer *pointer) {
     PointerJoint *joint = new PointerJoint();
@@ -98,7 +99,7 @@ void Naub::init() {
     shape.m_radius = 0.15;
     b2Fixture *fix = _body->CreateFixture(&shape, 1);
     fix->SetUserData(static_cast<void*>(this));
-    _color = Qt::black;
+    _color = Color::randomNaub().first;
     _isSelected = false;
     _joinedNaubs = new QList<Naub*>();
 }
