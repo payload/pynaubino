@@ -27,13 +27,22 @@ void Naub::deselect(Pointer *pointer) {
     emit deselected(pointer);
 }
 
-void Naub::touch(Naub *naub) {
-    emit touched(this, naub);
+void Naub::touch(Naub *a, Naub *b) {
+    if (a == b) return;
+    if (a != this) {
+        if (b != this) return;
+        else {
+            Naub *c = b;
+            b = a;
+            a = c;
+        }
+    }
+    emit touched(this, b);
     if (true
-        && naub->color() == color()
-        && !joinedNaubs().contains(naub)
-        && bfsDistance(naub) > 2) {
-        join(naub);
+        && b->color() == color()
+        && !joinedNaubs().contains(b)
+        && !bfsDistanceLess3(b)) {
+        join(b);
     }
 }
 
@@ -65,8 +74,13 @@ void Naub::unjoin(Naub *naub) {
         emit unjoined(this, naub);
 }
 
-int Naub::bfsDistance(Naub *naub) {
-    return 0;
+int Naub::bfsDistanceLess3(Naub *naub) {
+    if (this == naub) return true;
+    if (joinedNaubs().contains(naub)) return true;
+    foreach (Naub *naub, joinedNaubs())
+        if (naub->joinedNaubs().contains(naub))
+            return true;
+    return false;
 }
 
 Naub::Naub() : QObject() {}
@@ -82,7 +96,8 @@ void Naub::init() {
     _body = _world->CreateBody(&def);
     b2CircleShape shape;
     shape.m_radius = 0.15;
-    _body->CreateFixture(&shape, 1);
+    b2Fixture *fix = _body->CreateFixture(&shape, 1);
+    fix->SetUserData(static_cast<void*>(this));
     _color = Qt::black;
     _isSelected = false;
     _joinedNaubs = new QList<Naub*>();

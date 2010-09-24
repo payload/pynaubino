@@ -25,7 +25,7 @@ public slots:
     void select(Pointer *pointer);
     void deselect(Pointer *pointer);
     void remove();
-    void touch(Naub *naub);
+    void touch(Naub *a, Naub *b);
     void join(Naub *naub);
     void unjoin(Naub *naub);
 public:
@@ -42,7 +42,7 @@ public:
     inline QList<Naub*>& joinedNaubs() const { return *_joinedNaubs; }
     inline Naubino& naubino() const { return *_naubino; }
 private:
-    int bfsDistance(Naub *naub);
+    int bfsDistanceLess3(Naub *naub);
 
     Naubino *_naubino;
     b2World *_world;

@@ -12,6 +12,7 @@ class Naubino : public QObject {
 signals:
     void added(Naub *naub);
     void added(Joint *joint);
+    void naubOnNaub(Naub *a, Naub *b);
 public slots:
     void add(Naub *naub);
     void add(Joint *joint);
