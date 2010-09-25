@@ -37,10 +37,18 @@ void Naubino::add(Naub *naub) {
     connect(naub,
             SIGNAL(added(Joint*)),
             SLOT(add(Joint*)));
+    connect(naub,
+            SIGNAL(merged(Naub*)),
+            SIGNAL(merged(Naub*)));
     naub->connect(this,
                   SIGNAL(naubOnNaub(Naub*,Naub*)),
                   SLOT(touch(Naub*,Naub*)));
     emit added(naub);
+}
+
+void Naubino::remove(QList<Naub*> &naubs) {
+    foreach(Naub *naub, naubs)
+        naub->remove();
 }
 
 void Naubino::remove(Naub *obj) {

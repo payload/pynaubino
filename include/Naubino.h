@@ -2,6 +2,7 @@
 #define NAUBINO_H
 
 #include <QObject>
+#include <QList>
 class Simulator;
 class Naub;
 class Joint;
@@ -14,9 +15,11 @@ signals:
     void added(Naub *naub);
     void added(Joint *joint);
     void naubOnNaub(Naub *a, Naub *b);
+    void merged(Naub *naub);
 public slots:
     void add(Naub *naub);
     void add(Joint *joint);
+    void remove(QList<Naub*> &naubs);
 private slots:
     void remove(Joint *obj);
     void remove(Naub *obj);

@@ -21,6 +21,7 @@ signals:
     void touched(Naub *a, Naub *b);
     void joined(Naub *a, Naub *b);
     void unjoined(Naub *a, Naub *b);
+    void merged(Naub *naub);
 public slots:
     void select(Pointer *pointer);
     void deselect(Pointer *pointer);

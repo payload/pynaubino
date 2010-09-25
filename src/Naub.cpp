@@ -94,6 +94,7 @@ void Naub::merge(Naub *naub) {
     foreach (Naub *other, naub->joinedNaubs())
         join(other);
     naub->remove();
+    emit merged(this);
 }
 
 int Naub::bfsDistanceLess3(Naub *naub) {

@@ -5,6 +5,7 @@
 #include <QNaubino.h>
 #include <TestGame.h>
 #include <Spammer.h>
+#include <Cycler.h>
 
 int main(int argc, char *argv[])
 {
@@ -15,8 +16,16 @@ int main(int argc, char *argv[])
     QNaubino qnaubino(naubino);
     qnaubino.init();
 
+    Cycler cycler;
+    cycler.connect(&naubino,
+                   SIGNAL(merged(Naub*)),
+                   SLOT(testForCycle(Naub*)));
+    naubino.connect(&cycler,
+                    SIGNAL(cycleFound(QList<Naub*>&)),
+                    SLOT(remove(QList<Naub*>&)));
+
     Spammer spammer(naubino);
-    spammer.start(1000);
+    spammer.start(2000);
 
     TestGame foo(naubino);
     QTimer timer;
