@@ -8,6 +8,7 @@ QJoint::QJoint(QObject *parent)
     : QObject(parent), QGraphicsLineItem() {
     setPen(QPen( QBrush(Qt::red), 4 ));
     _joint = NULL;
+    setZValue(-1);
 }
 
 QJoint::~QJoint() {

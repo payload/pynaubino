@@ -16,10 +16,16 @@ signals:
     void added(Joint *joint);
     void naubOnNaub(Naub *a, Naub *b);
     void merged(Naub *naub);
+
+    void started();
+    void paused();
 public slots:
     void add(Naub *naub);
     void add(Joint *joint);
     void remove(QList<Naub*> &naubs);
+
+    void start();
+    void pause();
 private slots:
     void remove(Joint *obj);
     void remove(Naub *obj);

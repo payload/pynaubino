@@ -25,7 +25,13 @@ int main(int argc, char *argv[])
                     SLOT(remove(QList<Naub*>&)));
 
     Spammer spammer(naubino);
-    spammer.start(2000);
+    spammer.setInterval(2000);
+    spammer.connect(&naubino,
+                    SIGNAL(started()),
+                    SLOT(start()));
+    spammer.connect(&naubino,
+                    SIGNAL(paused()),
+                    SLOT(stop()));
 
     TestGame foo(naubino);
     QTimer timer;

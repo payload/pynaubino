@@ -10,6 +10,10 @@ class QNaubino;
 
 class QScene : public QGraphicsScene {
     Q_OBJECT
+signals:
+    void play();
+    void tutorial();
+    void highscore();
 public slots:
     void add(QNaub *qnaub);
     void add(QJoint *qjoint);
@@ -19,6 +23,7 @@ public:
     Pointer *pointer; // TODO payload: :p
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     QNaubino *_qnaubino;
 };
 

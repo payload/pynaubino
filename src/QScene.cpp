@@ -6,6 +6,7 @@
 #include <Vec.h>
 #include <Box2D/Dynamics/b2World.h>
 #include <QNaubino.h>
+#include <QKeyEvent>
 
 QScene::QScene(QNaubino *qnaubino)
     : QGraphicsScene(qnaubino), _qnaubino(qnaubino) {
@@ -29,4 +30,11 @@ void QScene::add(QJoint *qjoint) {
 void QScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     pointer->setPos(Vec(event->scenePos()));
     QGraphicsScene::mouseMoveEvent(event);
+}
+
+void QScene::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Q) emit play();
+    if (event->key() == Qt::Key_W) emit tutorial();
+    if (event->key() == Qt::Key_E) emit highscore();
+    QGraphicsScene::keyPressEvent(event);
 }

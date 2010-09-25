@@ -25,7 +25,9 @@ public slots:
 public:
     QNaubino(Naubino &naubino, QObject *parent = 0);
     void setNaubino(Naubino &naubino);
+    Naubino& naubino() const { return *_naubino; }
     void init();
+    void initMenu();
     QScene *scene;
     QGraphicsView *view;
     Qb2DebugDrawItem *dd;

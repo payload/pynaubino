@@ -7,7 +7,6 @@
 
 Naubino::Naubino(QObject *parent) : QObject(parent) {
     sim = new Simulator(this);
-    sim->start(50);
     connect(sim,
             SIGNAL(naubOnNaub(Naub*,Naub*)),
             SIGNAL(naubOnNaub(Naub*,Naub*)));
@@ -57,4 +56,14 @@ void Naubino::remove(Naub *obj) {
 
 void Naubino::remove(Joint *obj) {
     obj->deleteLater();
+}
+
+void Naubino::start() {
+    sim->start(50);
+    emit started();
+}
+
+void Naubino::pause() {
+    sim->stop();
+    emit paused();
 }
