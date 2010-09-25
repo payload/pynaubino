@@ -19,6 +19,7 @@ void Naub::select(Pointer *pointer) {
 }
 
 void Naub::remove() {
+    if (_isRemoved) return;
     _isRemoved = true;
     emit removed(this);
 }
