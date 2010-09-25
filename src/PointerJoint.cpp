@@ -25,9 +25,9 @@ void PointerJoint::join(Naub *naub, Pointer *pointer) {
         def.bodyB = _pointerBody;
         def.localAnchorA = Vec();
         def.localAnchorB = Vec();
-        def.length = 0.01;
+        def.length = 0;
         def.dampingRatio = 0.8;
-        def.frequencyHz = 1.3;
+        def.frequencyHz = 1.4;
         _world->CreateJoint(&def);
     }
     Joint::join();
