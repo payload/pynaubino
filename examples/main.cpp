@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QTime>
+#include <QTimer>
 #include <Naubino.h>
 #include <QNaubino.h>
 #include <TestGame.h>
@@ -13,8 +14,13 @@ int main(int argc, char *argv[])
     Naubino naubino;
     QNaubino qnaubino(naubino);
     qnaubino.init();
+
     Spammer spammer(naubino);
     spammer.start(1000);
+
+    TestGame foo(naubino);
+    QTimer timer;
+    //timer.singleShot(50, &foo, SLOT(foo()));
 
     return app.exec();
 }

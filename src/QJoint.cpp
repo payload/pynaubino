@@ -15,6 +15,7 @@ QJoint::~QJoint() {
 }
 
 void QJoint::remove() {
+    _joint = NULL;
     emit removed(this);
 }
 

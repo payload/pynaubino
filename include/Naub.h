@@ -28,6 +28,7 @@ public slots:
     void touch(Naub *a, Naub *b);
     void join(Naub *naub);
     void unjoin(Naub *naub);
+    void merge(Naub *naub);
 public:
     Naub();
     void setNaubino(Naubino &naubino);
@@ -37,10 +38,13 @@ public:
     inline const Vec pos() const { return Vec(_body->GetPosition()); }
     void setPos(const Vec &pos);
     inline const QColor& color() const { return _color; }
+    inline void setColor(const QColor &color) { _color = color; }
     inline b2World& world() const { return *_world; }
     inline b2Body& body() const { return *_body; }
     inline QList<Naub*>& joinedNaubs() const { return *_joinedNaubs; }
     inline Naubino& naubino() const { return *_naubino; }
+    inline bool isRemoved() const { return _isRemoved; }
+    bool isJokerNaub() const;
 private:
     int bfsDistanceLess3(Naub *naub);
 
@@ -50,6 +54,7 @@ private:
     QColor _color;
     bool _isSelected;
     QList<Naub*> *_joinedNaubs;
+    bool _isRemoved;
 };
 
 #endif // NAUB_H

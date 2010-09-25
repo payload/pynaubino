@@ -1,8 +1,9 @@
-#include "Naubino.h"
+    #include "Naubino.h"
 #include <Simulator.h>
 #include <Naub.h>
 #include <NaubJoint.h>
 #include <Box2D/Dynamics/b2World.h>
+#include <Box2D/Dynamics/b2Body.h>
 
 Naubino::Naubino(QObject *parent) : QObject(parent) {
     sim = new Simulator(this);
@@ -10,6 +11,11 @@ Naubino::Naubino(QObject *parent) : QObject(parent) {
     connect(sim,
             SIGNAL(naubOnNaub(Naub*,Naub*)),
             SIGNAL(naubOnNaub(Naub*,Naub*)));
+
+    b2BodyDef def;
+    def.type = b2_kinematicBody;
+    def.position = Vec();
+    center = world().CreateBody(&def);
 }
 
 b2World& Naubino::world() const {

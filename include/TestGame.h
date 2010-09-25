@@ -1,39 +1,27 @@
 #ifndef TESTGAME_H
 #define TESTGAME_H
 
-#include <Naub.h>
-#include <Naubino.h>
-#include <CenterJoint.h>
+#include <Prereqs.h>
 
-void foo(Naubino &naubino) {
-    Naub *n0 = new Naub();
-    naubino.add(n0);
-    n0->init();
+#include <QObject>
+#include <QList>
+class Naubino;
+class Naub;
+class Vec;
 
-    Naub *n1 = new Naub();
-    naubino.add(n1);
-    n1->init();
+class TestGame : public QObject {
+    Q_OBJECT
+public:
+    TestGame(Naubino &naubino);
+    Naubino *_naubino;
+    Naubino& naubino() const;
 
-    n0->setPos(Vec(-0.4, 0));
-    n1->setPos(Vec( 0.4, 0));
-    n0->join(n1);
-    n1->join(n0);
+    Naub* addNaub();
 
-    b2BodyDef def;
-    def.type = b2_kinematicBody;
-    def.position = Vec();
-    b2Body *center = naubino.world().CreateBody(&def);
-
-    CenterJoint *j0 = new CenterJoint();
-    naubino.add(j0);
-    j0->init();
-
-    CenterJoint *j1 = new CenterJoint();
-    naubino.add(j1);
-    j1->init();
-
-    j0->join(n0, center);
-    j1->join(n1, center);
-}
+    QList<Naub*> addNaubPair(Vec pos);
+    QList<Naub*> addNaubTriple(Vec pos);
+public slots:
+    void foo();
+};
 
 #endif // TESTGAME_H

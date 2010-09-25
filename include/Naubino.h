@@ -6,6 +6,7 @@ class Simulator;
 class Naub;
 class Joint;
 class b2World;
+class b2Body;
 
 class Naubino : public QObject {
     Q_OBJECT
@@ -23,6 +24,7 @@ public:
     Naubino(QObject *parent = NULL);
     Simulator *sim;
     b2World& world() const;
+    b2Body *center;
 };
 
 #endif // NAUBINO_H

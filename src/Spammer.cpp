@@ -28,11 +28,6 @@ void Spammer::timerEvent(QTimerEvent *e) {
     n0->join(n1);
     n1->join(n0);
 
-    b2BodyDef def;
-    def.type = b2_kinematicBody;
-    def.position = Vec();
-    b2Body *center = naubino.world().CreateBody(&def);
-
     CenterJoint *j0 = new CenterJoint();
     naubino.add(j0);
     j0->init();
@@ -41,8 +36,8 @@ void Spammer::timerEvent(QTimerEvent *e) {
     naubino.add(j1);
     j1->init();
 
-    j0->join(n0, center);
-    j1->join(n1, center);
+    j0->join(n0, naubino.center);
+    j1->join(n1, naubino.center);
 
     QTimer::timerEvent(e);
 }

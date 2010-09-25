@@ -41,6 +41,12 @@ void NaubJoint::unjoin() {
     Joint::unjoin();
 }
 
+void NaubJoint::unjoin(Naub *a, Naub *b) {
+    if ((a == _a && b == _b)
+    ||  (a == _b && b == _a))
+        unjoin();
+}
+
 Vec NaubJoint::posA() const {
     if (!isJoined()) return Vec();
     return Vec(_a->body().GetPosition());

@@ -19,6 +19,7 @@ void Naub::select(Pointer *pointer) {
 }
 
 void Naub::remove() {
+    _isRemoved = true;
     emit removed(this);
 }
 
@@ -29,6 +30,8 @@ void Naub::deselect(Pointer *pointer) {
 }
 
 void Naub::touch(Naub *a, Naub *b) {
+    if (a->isRemoved()) return; //TODO look how to get rid of this
+    if (b->isRemoved()) return;
     if (a == b) return;
     if (a != this) {
         if (b != this) return;
@@ -39,49 +42,71 @@ void Naub::touch(Naub *a, Naub *b) {
         }
     }
     emit touched(this, b);
-    if (true
-        && b->color() == color()
+    if (isJokerNaub())
+        join(b);
+    if (b->color() == color()
+        && !b->isJokerNaub()
         && !joinedNaubs().contains(b)
         && !bfsDistanceLess3(b)) {
-        join(b);
+        merge(b);
     }
 }
 
 void Naub::join(Naub *naub) {
-    if (!joinedNaubs().contains(naub)) {
+    if (naub == this) return;
+    bool me_to_other = this->joinedNaubs().contains(naub);
+    bool other_to_me = naub->joinedNaubs().contains(this);
+    if ( me_to_other &&  other_to_me) return;
+    if (!me_to_other && !other_to_me) {
+        this->joinedNaubs().append(naub);
+        me_to_other = true;
+
         NaubJoint *joint = new NaubJoint();
         emit added(joint);
         joint->init();
 
-        joinedNaubs().append(naub);
-        naub->joinedNaubs().append(this);
         joint->join(this, naub);
         connect(naub,
                 SIGNAL(removed(Naub*)),
                 SLOT(unjoin(Naub*)));
         joint->connect(this,
-                       SIGNAL(removed(Naub*)),
-                       SLOT(unjoin()));
-        joint->connect(this,
                        SIGNAL(unjoined(Naub*, Naub*)),
-                       SLOT(unjoin()));
+                       SLOT(unjoin(Naub*,Naub*)));
         emit joined(this, naub);
+    }
+    if (me_to_other && !other_to_me)
+        naub->join(this);
+    if (!me_to_other && other_to_me) {
+        this->joinedNaubs().append(naub);
+        this->connect(naub,
+                      SIGNAL(removed(Naub*)),
+                      SLOT(unjoin(Naub*)));
     }
 }
 
 void Naub::unjoin(Naub *naub) {
     joinedNaubs().removeOne(naub);
     naub->disconnect(this, SLOT(unjoin(Naub*)));
-        emit unjoined(this, naub);
+    emit unjoined(this, naub);
+}
+
+void Naub::merge(Naub *naub) {
+    foreach (Naub *other, naub->joinedNaubs())
+        join(other);
+    naub->remove();
 }
 
 int Naub::bfsDistanceLess3(Naub *naub) {
     if (this == naub) return true;
     if (joinedNaubs().contains(naub)) return true;
-    foreach (Naub *naub, joinedNaubs())
-        if (naub->joinedNaubs().contains(naub))
+    foreach (Naub *third, joinedNaubs())
+        if (third->joinedNaubs().contains(naub))
             return true;
     return false;
+}
+
+bool Naub::isJokerNaub() const {
+    return joinedNaubs().empty();
 }
 
 Naub::Naub() : QObject() {}
@@ -102,6 +127,7 @@ void Naub::init() {
     _color = Color::randomNaub().first;
     _isSelected = false;
     _joinedNaubs = new QList<Naub*>();
+    _isRemoved = false;
 }
 
 Naub::~Naub() {
