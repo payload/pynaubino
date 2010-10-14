@@ -2,3 +2,59 @@ Qt/C++ port of naubino
 
 Play the flash version at http://www1.inf.tu-dresden.de/~s8880935/naubino/
 
+concept:
+
+Naubino ←→ QNaubino
+add Joint →
+add Naub →
+
+Naubino ←→ Cycler
+merged Naub → testForCycle Naub
+remove NaubList ← cycleFound NaubList
+
+Naubino ←→ Spammer
+started → start
+paused → stop
+
+== versteckt - bitte öffentlicher machen ==
+
+in QNaubino::init
+
+QNaubino ←→ Scene
+added QJoint → add QJoint
+added QNaub → add QNaub
+
+Scene ←→ Simulator
+invalidate ← timeout
+
+in Naubino::Naubino
+
+Naubino ←→ Simulator
+naubOnNaub Naub Naub ← 
+
+/* in slots */
+
+Naubino::add Joint
+
+Naubino ←→ Joint
+remove Joint ← removed Joint
+
+Naubino::add Naub
+
+Naubino ←→ Naub
+remove Naub ← removed Naub
+add Naub ← added Naub
+*merged Naub ← merged Naub
+naubOnNaub Naub Naub → touch Naub Naub
+
+Naub::select Pointer
+
+Naub ←→ PointerJoint
+deselected Pointer → unjoin
+removed Naub → unjoin
+
+Naub::join Naub
+
+Naub ←→ Naub
+removed Naub → unjoin Naub
+
