@@ -35,7 +35,9 @@ int main(int argc, char *argv[])
 
     TestGame foo(naubino);
     QTimer timer;
-    //timer.singleShot(50, &foo, SLOT(foo()));
+    timer.singleShot(50, &foo, SLOT(foo()));
+
+    naubino.start();
 
     return app.exec();
 }

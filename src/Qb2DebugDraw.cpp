@@ -1,10 +1,11 @@
 #include "Qb2DebugDraw.h"
 
-
 Qb2DebugDrawItem::Qb2DebugDrawItem(b2World *world) : _world(world) {
     _drawer = new Qb2DebugDraw();
-    _world->SetDebugDraw(_drawer);
-    startTimer(50);
+    if (false) {
+        _world->SetDebugDraw(_drawer);
+        startTimer(50);
+    }
 }
 
 Qb2DebugDrawItem::~Qb2DebugDrawItem() {

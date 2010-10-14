@@ -6,7 +6,7 @@
 #include <QNaub.h>
 #include <QJoint.h>
 #include <QScene.h>
-//#include <Qb2DebugDraw.h>
+#include <Qb2DebugDraw.h>
 #include <QGraphicsView>
 #include <Box2D/Dynamics/b2World.h>
 #include <Simulator.h>
@@ -25,7 +25,7 @@ void QNaubino::setNaubino(Naubino &naubino) {
 void QNaubino::init() {
     scene   = new QScene(this);
     view    = new QGraphicsView();
-    //dd      = new Qb2DebugDrawItem(&world());
+    dd      = new Qb2DebugDrawItem(&world());
 
     scene->connect(this, SIGNAL(added(QJoint*)), SLOT(add(QJoint*)));
     scene->connect(this, SIGNAL(added(QNaub*)), SLOT(add(QNaub*)));
@@ -37,7 +37,7 @@ void QNaubino::init() {
     connect(_naubino, SIGNAL(added(Naub*)), SLOT(add(Naub*)));
 
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    //scene->addItem(dd);
+    scene->addItem(dd);
 
     view->setScene(scene);
     view->show();
