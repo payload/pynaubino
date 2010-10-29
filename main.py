@@ -35,7 +35,7 @@ class NaubJoint(NaubJoint):
         b = naubb.body
         center = (0,0)
         joint = pymunk.PinJoint(a, b, center, center)
-        joint.distance = 40
+        joint.distance = 60
         self.joint = joint
         self.joined.emit(self)
 
@@ -79,21 +79,26 @@ class Spammer(QObject):
     addedNaub = pyqtSignal( Naub )
     addedNaubJoint = pyqtSignal( NaubJoint )
 
+    def __random_vec(self, xv, yv):
+        return Vec2d(
+            random.uniform(-xv, xv),
+            random.uniform(-yv, yv))
+
     def spamPair(self, pos = None):
         if pos is None:
-            pos = Vec2d(
-                random.uniform(-300, 300),
-                random.uniform(-200, 200))
+            pos = self.__random_vec(300, 200)
         
         naub = Naub()
         naub.body.position = Vec2d(-40, 0) + pos
-        naub.body.apply_impulse((80, -20))
+        impulse = self.__random_vec(100, 100)
+        naub.body.apply_impulse(impulse)
         self.addedNaub.emit(naub)
         a = naub
 
         naub = Naub()
         naub.body.position = Vec2d(40, 0) + pos
-        naub.body.apply_impulse((-80, 20))
+        impulse = self.__random_vec(100, 100)
+        naub.body.apply_impulse(impulse)
         self.addedNaub.emit(naub)
         b = naub
 
