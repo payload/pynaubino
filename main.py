@@ -141,8 +141,9 @@ class CuteJoint(Cute):
     def __init__(self):
         Cute.__init__(self)
 
+        self.hide()
+
         line = QGraphicsLineItem()
-        line.hide()
         line.setParentItem(self)
         color = QColor(0, 0, 0)
         brush = QBrush(color)
@@ -152,6 +153,9 @@ class CuteJoint(Cute):
         self.setGraphicsItem(line)
 
     def pre_paint(self):
+        self.update_joint()
+
+    def update_joint(self):
         joint = self.joint
         if joint is None: return
         joint = joint.joint
@@ -162,10 +166,14 @@ class CuteJoint(Cute):
 
     def full_connect(self, joint):
         self.joint = joint
+        self.update_joint()
+        self.show()
 
 class CuteNaub(Cute):
     def __init__(self):
         Cute.__init__(self)
+
+        self.hide()
 
         elli = QGraphicsEllipseItem()
         elli.setParentItem(self)
@@ -176,10 +184,15 @@ class CuteNaub(Cute):
         self.setGraphicsItem(elli)
 
     def pre_paint(self):
+        self.update_naub()
+
+    def update_naub(self):
         self.setPos(*self.naub.body.position)
 
     def full_connect(self, naub):
         self.naub = naub
+        self.update_naub()
+        self.show()
 
 class CuteNaubino(QObject):
     addedCute = pyqtSignal( Cute )
@@ -219,16 +232,14 @@ def main():
 
     # original C++ Qt 4 code would be this :D
     # cute_naubino.connect(&naubino, SIGNAL("addedNaub(Naub&)"), SLOT("addNaub(Naub&)")
-    naubino.addedNaub.connect(cute_naubino.addNaub)
-    naubino.addedNaubJoint.connect(cute_naubino.addJoint)
-    naubino.addedNaub.connect(naub_simulator.addNaub)
+    naubino.addedNaub     .connect(cute_naubino  .addNaub )
+    naubino.addedNaubJoint.connect(cute_naubino  .addJoint)
+    naubino.addedNaub     .connect(naub_simulator.addNaub )
     naubino.addedNaubJoint.connect(naub_simulator.addJoint)
 
-    spammer.addedNaub.connect(naubino.addNaub)
+    spammer.addedNaub     .connect(naubino.addNaub)
     spammer.addedNaubJoint.connect(naubino.addNaubJoint)
-
-    spammer.spamPair()
-
+    
     timer = QTimer()
     timer.setInterval(50)
     def sim_step():
@@ -241,7 +252,7 @@ def main():
 
         view = QGraphicsView(frame)
         view.setGeometry(0, 0, 600, 400)
-        view.setSceneRect(-300, -200, 300, 200)
+        view.setSceneRect(-290, -190, 580, 380)
         view.setScene(scene)
         #view.setRenderHints(QPainter.Antialiasing)
         view.show()
