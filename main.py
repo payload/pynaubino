@@ -1,7 +1,7 @@
 import sys
 from PyQt4.QtCore import (
     QObject, pyqtSignal, SIGNAL,
-    QTimer, QRectF)
+    QTimer, QRectF, Qt)
 from PyQt4.QtGui import (
     QApplication, QGraphicsView, QGraphicsScene,
     QGraphicsEllipseItem, QBrush, QColor,
@@ -13,6 +13,16 @@ import pymunk
 from pymunk import Vec2d
 
 class Naub(QObject):
+    changedColor = pyqtSignal( QColor )
+    
+    @property
+    def color(self): return self.__color
+    @color.setter
+    def color(self, value):
+        if value != self.__color:
+            self.__color = value
+            self.changedColor.emit(self.__color)
+    
     def __init__(self):
         QObject.__init__(self)
 
@@ -22,9 +32,11 @@ class Naub(QObject):
         body = pymunk.Body(mass, inertia)
         body.position = 0, 0
         shape = pymunk.Circle(body, radius)
+        color = QColor(0, 0, 255)
 
         self.body = body
         self.shape = shape
+        self.__color = color
 
 class NaubJoint(QObject): pass
 class NaubJoint(NaubJoint):
@@ -113,6 +125,14 @@ class Spammer(QObject):
         timer.start()
         self.timer = timer
 
+class Colorizer(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+    
+    def colorizeNaub(self, naub):
+        r = lambda: random.randint(0, 255)
+        naub.color = QColor(r(), r(), r())
+
 class Cute(QGraphicsObject):
     def __init__(self):
         QGraphicsObject.__init__(self)
@@ -183,19 +203,23 @@ class CuteNaub(Cute):
         elli = QGraphicsEllipseItem()
         elli.setParentItem(self)
         elli.setRect(-15, -15, 30, 30)
-        color = QColor(0, 0, 0)
-        brush = QBrush(color)
-        elli.setBrush(brush)
+        elli.setPen(QPen(Qt.NoPen))
+        self.elli = elli
         self.setGraphicsItem(elli)
 
     def pre_paint(self):
         self.update_naub()
 
-    def update_naub(self):
+    def update_naub(self): 
         self.setPos(*self.naub.body.position)
+
+    def update_color(self, color):
+        brush = QBrush(color)
+        self.elli.setBrush(brush)
 
     def full_connect(self, naub):
         self.naub = naub
+        naub.changedColor.connect(self.update_color)
         self.update_naub()
         self.show()
 
@@ -227,11 +251,12 @@ def main():
     frame.setGeometry(0, 0, 600, 400)
     frame.show()
 
-    scene = QGraphicsScene()
-    cute_naubino = CuteNaubino()
-    naubino = Naubino()
+    scene          = QGraphicsScene()
+    cute_naubino   = CuteNaubino()
+    naubino        = Naubino()
     naub_simulator = NaubSimulator()
-    spammer = Spammer()
+    spammer        = Spammer()
+    colorizer      = Colorizer()
 
     cute_naubino.addedCute.connect(scene.addItem)
 
@@ -241,6 +266,7 @@ def main():
     naubino.addedNaubJoint.connect(cute_naubino  .addJoint)
     naubino.addedNaub     .connect(naub_simulator.addNaub )
     naubino.addedNaubJoint.connect(naub_simulator.addJoint)
+    naubino.addedNaub     .connect(colorizer     .colorizeNaub)
 
     spammer.addedNaub     .connect(naubino.addNaub)
     spammer.addedNaubJoint.connect(naubino.addNaubJoint)
