@@ -163,11 +163,14 @@ class Cute(QGraphicsObject):
         pass
 
 class CuteJoint(Cute):
+    layer = -2
+    
     def __init__(self):
         Cute.__init__(self)
 
         self.hide()
-
+        self.setZValue(self.layer)
+        
         line = QGraphicsLineItem()
         line.setParentItem(self)
         color = QColor(0, 0, 0)
@@ -195,10 +198,13 @@ class CuteJoint(Cute):
         self.show()
 
 class CuteNaub(Cute):
+    layer = -1
+    
     def __init__(self):
         Cute.__init__(self)
 
         self.hide()
+        self.setZValue(self.layer)
 
         elli = QGraphicsEllipseItem()
         elli.setParentItem(self)
