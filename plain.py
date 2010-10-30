@@ -4,7 +4,6 @@ from PyQt4.QtGui import *
 import random
 import pymunk
 from pymunk import Vec2d
-from cute import *
 
 class Pointer:
     @property
@@ -153,10 +152,9 @@ def random_not_white():
 class QGraphicsScene(QGraphicsScene):
     __QGraphicsScene = QGraphicsScene
 
-    def __init__(self, pointer, space):
+    def __init__(self, pointer):
         self.__QGraphicsScene.__init__(self)
         self.pointer = pointer
-        self.space = space
 
     def mousePressEvent(self, event):
         event.naubino_pointer = self.pointer
@@ -181,7 +179,7 @@ def main():
     pointer = Pointer()
     space.add(pointer.body)
 
-    scene = QGraphicsScene(pointer, space)
+    scene = QGraphicsScene(pointer)
 
     naubs = []
     joints = []
