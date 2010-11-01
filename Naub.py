@@ -24,6 +24,7 @@ class Naub(Naub):
         naubino.space.add(body, shape)
 
         self.alive = True
+        self.cute = None
         self.body = body
         self.shape = shape
         self.color = color
@@ -36,6 +37,7 @@ class Naub(Naub):
     def remove(self):
         if self.alive:
             self.alive = False
+            self.naubino.pre_remove_naub(self)
             self.naubino.space.remove(self.pointer_joints.values())
             self.unjoin_naubs(*self.naubs_joints)
             self.naubino.space.remove(self.body, self.shape)
@@ -45,6 +47,7 @@ class Naub(Naub):
         if not self.alive: return
         pj = self.pointer_joints
         if pointer in pj: return
+
         a = self.body
         b = pointer.body
         center = (0,0)
@@ -56,6 +59,7 @@ class Naub(Naub):
     def deselect(self, pointer):
         pj = self.pointer_joints
         if pointer not in pj: return
+
         self.naubino.space.remove(pj[pointer])
         del pj[pointer]
 

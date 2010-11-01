@@ -38,14 +38,23 @@ class Naubino:
     def remove_cute(self, cute):
         if self.parent: self.parent.removeCute(cute)
 
+    def add_cute_naub(self, cute):
+        if cute not in self.cute_naubs:
+            self.cute_naubs.append(cute)
+            self.add_cute(cute)
+
+    def remove_cute_naub(self, cute):
+        if cute in self.cute_naubs:
+            self.cute_naubs.remove(cute)
+            self.remove_cute(cute)
+
     def add_naub(self, naub):
         naub.naubino = self
 
         if naub not in self.cutes:
-            cute = CuteNaub(naub)
-            self.cute_naubs.append(cute)
+            cute = CuteNaub(self, naub)
             self.cutes[naub] = cute
-            self.add_cute(cute)
+            self.add_cute_naub(cute)
 
         if naub not in self.naub_center_joints:
             a = naub.body
@@ -58,19 +67,23 @@ class Naubino:
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
-    def add_naubs(self, *naubs):
-        for naub in naubs: self.add_naub(naub)
-
     def remove_naub(self, naub):
         if naub in self.cutes:
-            cute = self.cutes[naub]
             del self.cutes[naub]
-            self.cute_naubs.remove(cute)
-            self.remove_cute(cute)
+            # dont remove the cute naub now, it will remind you by calling
+            # remove_cute_naub
+            
         if naub in self.naub_center_joints:
             joint = self.naub_center_joints[naub]
             del self.naub_center_joints[naub]
             self.space.remove(joint)
+
+    def pre_remove_naub(self, naub):
+        if naub in self.cutes:
+            self.cutes[naub].remove_naub()
+
+    def add_naubs(self, *naubs):
+        for naub in naubs: self.add_naub(naub)
 
     def add_naub_joint(self, joint):
         if joint not in self.cutes:

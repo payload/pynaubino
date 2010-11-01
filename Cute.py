@@ -1,8 +1,9 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-class Cute:
+class Cute(QObject):
     def __init__(self, graphics_item):
+        QObject.__init__(self)
         self.graphics_item = graphics_item
         self.graphics_item.setAcceptHoverEvents(True)
         self.graphics_item.setAcceptTouchEvents(True)
@@ -30,7 +31,12 @@ class CuteJoint(Cute):
         self.line.setLine(a.x, a.y, b.x, b.y)
 
 class CuteNaub(Cute):
-    def __init__(self, naub, layer = -1):
+    @pyqtProperty(float)
+    def scale(self): return self.elli.scale()
+    @scale.setter
+    def scale(self, x): self.elli.setScale(x)
+    
+    def __init__(self, naubino, naub, layer = -1):
         elli = QGraphicsEllipseItem()
         Cute.__init__(self, elli)
 
@@ -54,7 +60,9 @@ class CuteNaub(Cute):
         self.naub = naub
         self.select = None
         self.deselect = None
+        self.naubino = naubino
         self.update_object()
+        self.naubino.add_cute_naub(self)
 
     def update_object(self):
         self.elli.show()
@@ -64,3 +72,21 @@ class CuteNaub(Cute):
         if naub.color != self.color:
             self.color = naub.color
             self.elli.setBrush(QBrush(self.color))
+
+    def remove(self):
+        self.naubino.remove_cute_naub(self)
+
+    def remove_naub(self):
+        ani = QPropertyAnimation(self, "scale")
+        ani.setStartValue(1)
+        ani.setEndValue(0)
+        ani.setDuration(500)
+        ani.finished.connect(self.remove)
+        ani.start()
+        self.ani = ani
+
+    def select_naub(self, pointer):
+        pass
+
+    def deselect_naub(self, pointer):
+        pass
