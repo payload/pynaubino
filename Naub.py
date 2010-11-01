@@ -19,7 +19,7 @@ class Naub(Naub):
         body = pymunk.Body(mass, inertia)
         body.naubino_obj = self
         body.position = pos
-        shape = pymunk.Circle(body, radius)
+        shape = pymunk.Circle(body, radius+2)
         color = QColor("black")
         naubino.space.add(body, shape)
 
@@ -79,6 +79,7 @@ class Naub(Naub):
         for naub in naubs: self.unjoin_naub(naub)
 
     def merge_naub(self, naub):
+        # copy is necessary cause unjoin_naub changes the naubs_joints table
         naubs_joints = naub.naubs_joints.copy()
         for n in naubs_joints:
             naub.unjoin_naub(n)
@@ -103,11 +104,14 @@ class Naub(Naub):
         
         if colors_alike and not naub_near:
             self.merge_naub(naub)
+            # TODO replace this with pop_cycle
             self.remove_random_reachable_naub()
 
-    def remove_random_reachable_naub(self):
+    # TODO def pop_cycle(self):
+
+    def remove_random_reachable_naub(self, min_naubs = 6):
         nodes = self.reachable_nodes()
-        if len(nodes) < 6: return
+        if len(nodes) < min_naubs: return
         random.shuffle(nodes)
         nodes[0].remove()
 
@@ -117,10 +121,11 @@ class Naub(Naub):
             if naub in n.naubs_joints: return True
         return False
 
-    def reachable_nodes(self, nodes = None):
-        if not nodes: nodes = []
-        nodes.append(self)
+    def reachable_nodes(self, visited = None):
+        if not visited: visited = []
+        elif self in visited: return []
+        visited.append(self)
+        nodes = [self]
         for x in self.naubs_joints:
-            if x not in nodes:
-                x.reachable_nodes(nodes)
+            nodes.extend(x.reachable_nodes(visited))
         return nodes
