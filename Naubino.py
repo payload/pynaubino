@@ -54,7 +54,6 @@ class Naubino:
         if naub not in self.cutes:
             cute = CuteNaub(self, naub)
             self.cutes[naub] = cute
-            self.add_cute_naub(cute)
 
         if naub not in self.naub_center_joints:
             a = naub.body
@@ -85,19 +84,26 @@ class Naubino:
     def add_naubs(self, *naubs):
         for naub in naubs: self.add_naub(naub)
 
+    def add_cute_joint(self, cute):
+        self.cute_joints.append(cute)
+        self.add_cute(cute)
+
+    def remove_cute_joint(self, cute):
+        self.cute_joints.remove(cute)
+        self.remove_cute(cute)
+
     def add_naub_joint(self, joint):
         if joint not in self.cutes:
-            cute = CuteJoint(joint.joint)
-            self.cute_joints.append(cute)
+            cute = CuteJoint(self, joint.joint)
             self.cutes[joint] = cute
-            self.add_cute(cute)
 
     def remove_naub_joint(self, joint):
         if joint in self.cutes:
-           cute = self.cutes[joint]
            del self.cutes[joint]
-           self.cute_joints.remove(cute)
-           self.remove_cute(cute)
+
+    def pre_remove_naub_joint(self, joint):
+        if joint in self.cutes:
+            self.cutes[joint].remove_joint()
 
     def create_naub_pair(self, pos = (0, 0)):
         pos = Vec2d(pos)

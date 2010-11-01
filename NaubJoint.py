@@ -19,5 +19,6 @@ class NaubJoint:
     def remove(self):
         if self.alive:
             self.alive = False
+            self.naubino.pre_remove_naub_joint(self)
             self.naubino.space.remove(self.joint)
             self.naubino.remove_naub_joint(self)

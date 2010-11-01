@@ -12,23 +12,48 @@ class Cute(QObject):
         pass
 
 class CuteJoint(Cute):
-    def __init__(self, joint, layer = -2):
+    @pyqtProperty(float)
+    def pen_width(self): return self.__pen_width
+    @pen_width.setter
+    def pen_width(self, x):
+        if self.__pen_width != x:
+            self.__pen_width = x
+            if x == 0: pen = QPen(Qt.NoPen)
+            else: pen = QPen(self.brush, x)
+            self.line.setPen(pen)
+    
+    def __init__(self, naubino, joint, layer = -2):
         line = QGraphicsLineItem()
         Cute.__init__(self, line)
 
         line.hide()
         line.setZValue(layer)
-        brush = QBrush(QColor("black"))
-        pen = QPen(brush, 4.0)
+        self.brush = QBrush(QColor("black"))
+        self.__pen_width = 4.0
+        pen = QPen(self.brush, self.__pen_width)
         line.setPen(pen)
         self.line = line
         self.joint = joint
+        self.naubino = naubino
+        self.naubino.add_cute_joint(self)
 
     def update_object(self):
         self.line.show()
         a = self.joint.a.position
         b = self.joint.b.position
         self.line.setLine(a.x, a.y, b.x, b.y)
+
+    def remove(self):
+        self.naubino.remove_cute_joint(self)
+
+    def remove_joint(self):
+        ani = QPropertyAnimation(self, "pen_width")
+        ani.setStartValue(self.pen_width)
+        ani.setEndValue(0)
+        ani.setDuration(500)
+        ani.finished.connect(self.remove)
+        ani.start()
+        self.ani = ani
 
 class CuteNaub(Cute):
     @pyqtProperty(float)
@@ -78,7 +103,7 @@ class CuteNaub(Cute):
 
     def remove_naub(self):
         ani = QPropertyAnimation(self, "scale")
-        ani.setStartValue(1)
+        ani.setStartValue(self.scale)
         ani.setEndValue(0)
         ani.setDuration(500)
         ani.finished.connect(self.remove)
