@@ -21,7 +21,9 @@ class GraphicsScene(QGraphicsScene):
         QGraphicsScene.mouseMoveEvent(self, event)
         
     def addCute(self, cute):
-        self.addItem(cute.graphics_item)
+        for x in cute.graphics:
+            self.addItem(x)
 
     def removeCute(self, cute):
-        self.removeItem(cute.graphics_item)
+        for x in cute.graphics:
+            self.removeItem(x)

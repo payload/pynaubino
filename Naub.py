@@ -78,6 +78,7 @@ class Naub(Naub):
         joint.remove()
         self.naubino.remove_naub_joint(joint)
         del self.naubs_joints[naub]
+        naub.unjoin_naub(self)
 
     def unjoin_naubs(self, *naubs):
         for naub in naubs: self.unjoin_naub(naub)
@@ -126,7 +127,6 @@ class Naub(Naub):
             if naub in n.naubs_joints: return True
         return False
 
-    # TODO wrong?!
     def reachable_nodes(self, visited = None):    
         if not visited: visited = []
         elif self in visited: return []

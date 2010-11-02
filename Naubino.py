@@ -121,6 +121,7 @@ class Naubino:
         if len(self.cute_naubs) > 16: return
         pos = random_vec(300, 200)
         naub = Naub(self, pos)
+        #naub.color = random_naub_color()
         self.add_naub(naub)
 
     def spam_naub_pair(self):
