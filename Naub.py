@@ -116,7 +116,6 @@ class Naub(Naub):
 
     def remove_random_reachable_naub(self, min_naubs = 6):
         nodes = self.reachable_nodes()
-        print(len(nodes))
         if len(nodes) < min_naubs: return
         random.shuffle(nodes)
         nodes[0].remove()

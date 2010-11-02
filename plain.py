@@ -7,9 +7,12 @@ from GraphicsScene import GraphicsScene
 def main():
     app = QApplication([])
 
+    # TODO ugly
     naubino = Naubino()
     scene = GraphicsScene(naubino.pointer)
     naubino.parent = scene
+    for c in naubino.cutes:
+        scene.addCute(c)
 
     frame = QFrame()
     frame.setGeometry(0, 0, 600, 400)
