@@ -1,15 +1,3 @@
-*.pro.user
-moc_*
-*.moc
-*.o
-*/bin*
-tests/*/bin*
-Makefile
-lib/lib*
-*.bak
-examples/cutenaubino
-*/bin/*
-\#*
-*.swp
-Makefile*
 *~
+*.bak
+*.pyc
