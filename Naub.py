@@ -115,6 +115,7 @@ class Naub(Naub):
 
     def remove_random_reachable_naub(self, min_naubs = 6):
         nodes = self.reachable_nodes()
+        print(len(nodes))
         if len(nodes) < min_naubs: return
         random.shuffle(nodes)
         nodes[0].remove()
@@ -125,7 +126,8 @@ class Naub(Naub):
             if naub in n.naubs_joints: return True
         return False
 
-    def reachable_nodes(self, visited = None):
+    # TODO wrong?!
+    def reachable_nodes(self, visited = None):    
         if not visited: visited = []
         elif self in visited: return []
         visited.append(self)

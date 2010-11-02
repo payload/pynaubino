@@ -18,7 +18,7 @@ def main():
     view.setGeometry(0, 0, 600, 400)
     view.setSceneRect(-290, -190, 580, 380)
     view.setScene(scene)
-    #view.setRenderHints(QPainter.Antialiasing)
+    view.setRenderHints(QPainter.Antialiasing)
 
     timer = QTimer()
     timer.setInterval(50)

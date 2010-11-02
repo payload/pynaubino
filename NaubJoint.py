@@ -6,7 +6,7 @@ class NaubJoint:
         b = b.body
         center = (0,0)
         joint = pymunk.PinJoint(a, b, center, center)
-        joint.distance = 60
+        joint.distance = 50
         joint.max_force = 3000
         naubino.space.add(joint)
 
