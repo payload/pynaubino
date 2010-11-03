@@ -26,19 +26,21 @@ class CuteJoint(Cute):
             self.line.setPen(pen)
     
     def __init__(self, naubino, joint, layer = -2):
-        line = QGraphicsLineItem()
-        Cute.__init__(self, line)
-
-        line.hide()
-        line.setZValue(layer)
-        self.brush = QBrush(QColor("black"))
-        self.__pen_width = 4.0
-        pen = QPen(self.brush, self.__pen_width)
-        line.setPen(pen)
-        self.line = line
+        Cute.__init__(self)
         self.joint = joint
         self.naubino = naubino
+
+        line = self.line = QGraphicsLineItem()
+        line.hide()
+        line.setZValue(layer)
+        
+        brush = self.brush = QBrush(QColor("black"))
+        pen_width = self.__pen_width = 4.0
+        pen = QPen(brush, pen_width)
+        line.setPen(pen)
+
         self.naubino.add_cute_joint(self)
+        self.naubino.add_item(line)
 
     def update_object(self):
         self.line.show()
@@ -48,6 +50,7 @@ class CuteJoint(Cute):
 
     def remove(self):
         self.naubino.remove_cute_joint(self)
+        self.naubino.remove_item(self.line)
 
     def remove_joint(self):
         ani = QPropertyAnimation(self, "pen_width")

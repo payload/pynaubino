@@ -5,6 +5,7 @@ class GraphicsScene(QGraphicsScene):
     def __init__(self):
         QGraphicsScene.__init__(self)
         self.pointer = None
+        self.items = []
 
     def mousePressEvent(self, event):
         if not self.pointer: return
@@ -23,10 +24,12 @@ class GraphicsScene(QGraphicsScene):
             self.pointer.pos = pos
         QGraphicsScene.mouseMoveEvent(self, event)
         
-    def addCute(self, cute):
-        for x in cute.graphics:
-            self.addItem(x)
+    def add_item(self, *items):
+        for x in items:
+            if x not in self.items:
+                self.addItem(x)
 
-    def removeCute(self, cute):
-        for x in cute.graphics:
-            self.removeItem(x)
+    def remove_item(self, *items):
+        for x in items:
+            if x in self.items:
+                self.removeItem(x)

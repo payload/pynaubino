@@ -36,13 +36,19 @@ class Naubino:
 
         self.menu = NaubinoMenu(self)
 
+    def add_item(self, *items):
+        if self.scene: self.scene.add_item(*items)
+
+    def remove_item(self, *items):
+        if self.scene: self.scene.remove_item(*items)
+    
     def add_cute(self, cute):
-        self.cutes.append(cute)
-        if self.scene: self.scene.addCute(cute)
+        if cute not in self.cutes:
+            self.cutes.append(cute)
 
     def remove_cute(self, cute):
-        self.cutes.remove(cute)
-        if self.scene: self.scene.removeCute(cute)
+        if cute in self.cutes:
+            self.cutes.remove(cute)
 
     def add_cute_naub(self, cute):
         if cute not in self.cute_naubs:
@@ -91,11 +97,13 @@ class Naubino:
         for naub in naubs: self.add_naub(naub)
 
     def add_cute_joint(self, cute):
-        self.cute_joints.append(cute)
+        if cute not in self.cute_joints:
+            self.cute_joints.append(cute)
         self.add_cute(cute)
 
     def remove_cute_joint(self, cute):
-        self.cute_joints.remove(cute)
+        if cute in self.cute_joints:
+            self.cute_joints.remove(cute)
         self.remove_cute(cute)
 
     def add_naub_joint(self, joint):
