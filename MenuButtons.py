@@ -38,7 +38,8 @@ class Button(Cute):
         self.group = group = QGraphicsItemGroup()
         Cute.__init__(self, group)
 
-        self.set_clickable(group, True)
+        group.setAcceptHoverEvents(True)
+        group.setAcceptTouchEvents(True)
         def mousePressEvent(event):
             if not hasattr(event, "naubino_pointer"): return
             if event.button() == Qt.LeftButton:

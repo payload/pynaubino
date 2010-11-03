@@ -3,13 +3,9 @@ from PyQt4.QtGui import *
 import random
 
 class Cute(QObject):
-    def __init__(self, *graphics):
+    def __init__(self, naubino):
         QObject.__init__(self)
-        self.graphics = graphics
-
-    def set_clickable(self, graphic, clickable):
-        graphic.setAcceptHoverEvents(clickable)
-        graphic.setAcceptTouchEvents(clickable)
+        self.naubino = naubino
 
     def update_object(self):
         pass
@@ -26,9 +22,8 @@ class CuteJoint(Cute):
             self.line.setPen(pen)
     
     def __init__(self, naubino, joint, layer = -2):
-        Cute.__init__(self)
+        Cute.__init__(self, naubino)
         self.joint = joint
-        self.naubino = naubino
 
         line = self.line = QGraphicsLineItem()
         line.hide()
@@ -68,9 +63,13 @@ class CuteNaub(Cute):
     def scale(self, x): self.elli.setScale(x)
     
     def __init__(self, naubino, naub, layer = -1):
-        elli = QGraphicsEllipseItem()
-        info = QGraphicsItemGroup()
-        Cute.__init__(self, elli, info)
+        Cute.__init__(self, naubino)
+        self.naub = naub
+        self.color = None
+        self.select = None
+        self.deselect = None
+
+        elli = self.elli = QGraphicsEllipseItem()
 
         def mousePressEvent(event):
             if not hasattr(event, "naubino_pointer"): return
@@ -78,6 +77,7 @@ class CuteNaub(Cute):
                 self.naub.select(event.naubino_pointer)
             if event.button() == Qt.RightButton:
                 self.info_show()
+        elli.mousePressEvent = mousePressEvent
 
         def mouseReleaseEvent(event):
             if not hasattr(event, "naubino_pointer"): return
@@ -85,48 +85,42 @@ class CuteNaub(Cute):
                 self.naub.deselect(event.naubino_pointer)
             if event.button() == Qt.RightButton:
                 self.info_hide()
-
-        elli.mousePressEvent = mousePressEvent
         elli.mouseReleaseEvent = mouseReleaseEvent
 
-        self.set_clickable(info, False)
+        info = self.info = QGraphicsItemGroup()
         info.hide()
         info.setZValue(layer+1)
-        self.info = info
 
-        info_bg = QGraphicsRectItem(self.info)
+        info_bg = self.info_bg = QGraphicsRectItem(self.info)
         info_bg.setBrush(QColor("white"))
-        self.info_bg = info_bg
         self.info_text = QGraphicsTextItem("info", self.info)
 
-        self.set_clickable(elli, True)
+        elli.setAcceptHoverEvents(True)
+        elli.setAcceptTouchEvents(True)
         elli.hide()
         elli.setZValue(layer)
         elli.setRect(-15, -15, 30, 30)
         elli.setPen(QPen(Qt.NoPen))
-        self.elli = elli
         
-        self.color = None
-        self.naub = naub
-        self.select = None
-        self.deselect = None
-        self.naubino = naubino
         self.update_object()
         self.naubino.add_cute_naub(self)
+        self.naubino.add_item(elli, info)
 
     def update_object(self):
         naub = self.naub
+        elli = self.elli
+        
         pos = naub.body.position
         
-        self.elli.setPos(pos.x, pos.y)
-        self.elli.show()
+        elli.setPos(pos.x, pos.y)
+        elli.show()
         
         if self.info.isVisible():
             self.update_info()
             
         if naub.color != self.color:
             self.color = naub.color
-            self.elli.setBrush(QBrush(self.color))
+            elli.setBrush(QBrush(self.color))
 
     def update_info(self):
         text = "links: "+ str(len(self.naub.naubs_joints))
@@ -150,6 +144,7 @@ class CuteNaub(Cute):
 
     def remove(self):
         self.naubino.remove_cute_naub(self)
+        self.naubino.remove_item(self.elli, self.info)
 
     def remove_naub(self):
         ani = QPropertyAnimation(self, "scale")
