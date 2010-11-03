@@ -21,9 +21,10 @@ class CuteJoint(Cute):
             else: pen = QPen(self.brush, x)
             self.line.setPen(pen)
     
-    def __init__(self, naubino, joint, layer = -2):
+    def __init__(self, naubino, a, b, layer = -2):
         Cute.__init__(self, naubino)
-        self.joint = joint
+        self.a = a
+        self.b = b
 
         line = self.line = QGraphicsLineItem()
         line.hide()
@@ -39,8 +40,8 @@ class CuteJoint(Cute):
 
     def update_object(self):
         self.line.show()
-        a = self.joint.a.position
-        b = self.joint.b.position
+        a = self.a.pos
+        b = self.b.pos
         self.line.setLine(a.x, a.y, b.x, b.y)
 
     def remove(self):

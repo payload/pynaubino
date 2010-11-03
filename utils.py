@@ -29,3 +29,12 @@ def random_naub_color():
     c = ["red", "green", "blue"]#, "purple", "yellow", "aqua"]
     random.shuffle(c)
     return QColor(c[0])
+
+class Pos:
+    @property
+    def pos(self): return self.__x.position
+    @pos.setter
+    def pos(self, pos): self.__x.position = pos
+
+    def __init__(self, x):
+        self.__x = x

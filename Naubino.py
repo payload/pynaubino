@@ -3,7 +3,7 @@ from Cute import CuteNaub, CuteJoint
 from Space import Space
 from Pointer import Pointer
 from PyQt4.QtCore import *
-from utils import *
+from utils import Pos, random_vec
 from Naub import Naub
 from Menu import NaubinoMenu
 
@@ -108,7 +108,9 @@ class Naubino:
 
     def add_naub_joint(self, joint):
         if joint not in self.objs_cutes:
-            cute = CuteJoint(self, joint.joint)
+            a = Pos(joint.joint.a)
+            b = Pos(joint.joint.b)
+            cute = CuteJoint(self, a, b)
             self.objs_cutes[joint] = cute
 
     def remove_naub_joint(self, joint):
