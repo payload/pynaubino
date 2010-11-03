@@ -11,6 +11,8 @@ from Naub import Naub
 class Button(Cute):
     pressed  = pyqtSignal(QGraphicsSceneMouseEvent)
     released = pyqtSignal(QGraphicsSceneMouseEvent)
+    entered  = pyqtSignal(QGraphicsSceneHoverEvent)
+    leaved   = pyqtSignal(QGraphicsSceneHoverEvent)
 
     @property
     def pos(self):
@@ -31,7 +33,7 @@ class Button(Cute):
             rect = QRectF(-radius, -radius, radius*2, radius*2)
             self.elli.setRect(rect)
 
-    def __init__(self, naubino, layer = 1, rect = False):
+    def __init__(self, naubino, layer = 0, rect = False):
         self.naubino = naubino
         self.group = group = QGraphicsItemGroup()
         Cute.__init__(self, group)
@@ -47,8 +49,16 @@ class Button(Cute):
             if event.button() == Qt.LeftButton:
                 self.released.emit(event)
 
-        group.mousePressEvent = mousePressEvent
+        def hoverEnterEvent(event):
+            self.entered.emit(event)
+
+        def hoverLeaveEvent(event):
+            self.leaved.emit(event)
+
+        group.mousePressEvent   = mousePressEvent
         group.mouseReleaseEvent = mouseReleaseEvent
+        group.hoverEnterEvent   = hoverEnterEvent
+        group.hoverLeaveEvent   = hoverLeaveEvent
 
         group.setZValue(layer)
 
@@ -68,8 +78,9 @@ class Button(Cute):
         naubino.add_cute(self)
 
 class MenuButton(Button):
-    def __init__(self, naubino, radius, fontsize, text, cw, ch, rect = False):
-        Button.__init__(self, naubino, rect = rect)
+    def __init__(self, naubino, radius, fontsize, text, cw, ch,
+            layer = 0, rect = False):
+        Button.__init__(self, naubino, layer = layer, rect = rect)
 
         self.radius = radius
 
@@ -87,13 +98,16 @@ class MenuButton(Button):
         self.text.setPos(pos.x, pos.y)
 
 class PlayButton(MenuButton):
-    def __init__(self, naubino):
-        MenuButton.__init__(self, naubino, 15, 1.8, "▸", 0.43, 0.565)
+    def __init__(self, naubino, layer = 0):
+        MenuButton.__init__(self, naubino, 15, 1.8, "▸", 0.43, 0.565,
+            layer = layer)
 
 class TutorialButton(Button):
-    def __init__(self, naubino):
-        MenuButton.__init__(self, naubino, 15, 1.5, "¿", 0.55, 0.5)
+    def __init__(self, naubino, layer = 0):
+        MenuButton.__init__(self, naubino, 15, 1.5, "¿", 0.55, 0.5,
+            layer = layer)
 
 class HighscoreButton(Button):
-    def __init__(self, naubino):
-        MenuButton.__init__(self, naubino, 17, 1.8, "5", 0.53, 0.5, rect=True)
+    def __init__(self, naubino, layer = 0):
+        MenuButton.__init__(self, naubino, 17, 1.8, "5", 0.53, 0.5,
+            layer = layer, rect=True)

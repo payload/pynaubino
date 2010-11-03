@@ -90,15 +90,32 @@ class Menu(QObject):
 class NaubinoMenu(Menu):
     def __init__(self, naubino):
         Menu.__init__(self, naubino)
-        
-        self.highscore_btn = btn = HighscoreButton(naubino)
-        btn.pos = -270, -170
+        scene = self.naubino.parent
+
+        group = self.group = QGraphicsItemGroup()
+        scene.addItem(group)
+
+        self.highscore_btn = btn = HighscoreButton(naubino, layer = 10)
+        btn.pos = 0, 0
         btn.pressed.connect(self.highscore)
+        btn.entered.connect(self.enter)
+        btn.leaved .connect(self.leave)
+        btn.group.setParent(group)
 
-        self.play_btn = btn = PlayButton(naubino)
-        btn.pos = -225, -160
+        self.play_btn = btn = PlayButton(naubino, layer = 9)
+        btn.pos = 45, 10
         btn.pressed.connect(self.play)
+        btn.group.setParent(group)
 
-        self.tutorial_btn = btn = TutorialButton(naubino)
-        btn.pos = -265, -125
+        self.tutorial_btn = btn = TutorialButton(naubino, layer = 9)
+        btn.pos = 5, 45
         btn.pressed.connect(self.tutorial)
+        btn.group.setParent(group)
+
+        group.setPos(-270, -170)
+
+    def enter(self, event):
+        pass
+
+    def leave(self, event):
+        pass
