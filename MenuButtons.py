@@ -34,49 +34,48 @@ class Button(Cute):
             self.elli.setRect(rect)
 
     def __init__(self, naubino, layer = 0, rect = False):
-        self.naubino = naubino
-        self.group = group = QGraphicsItemGroup()
-        Cute.__init__(self, group)
+        Cute.__init__(self, naubino)
+        self.__radius = 0
 
-        group.setAcceptHoverEvents(True)
-        group.setAcceptTouchEvents(True)
+        group = self.group = QGraphicsItemGroup()
+        
         def mousePressEvent(event):
             if not hasattr(event, "naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.pressed.emit(event)
+        group.mousePressEvent   = mousePressEvent
 
         def mouseReleaseEvent(event):
             if not hasattr(event, "naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.released.emit(event)
+        group.mouseReleaseEvent = mouseReleaseEvent
 
         def hoverEnterEvent(event):
             self.entered.emit(event)
+        group.hoverEnterEvent   = hoverEnterEvent
 
         def hoverLeaveEvent(event):
             self.leaved.emit(event)
-
-        group.mousePressEvent   = mousePressEvent
-        group.mouseReleaseEvent = mouseReleaseEvent
-        group.hoverEnterEvent   = hoverEnterEvent
         group.hoverLeaveEvent   = hoverLeaveEvent
-
+        
         group.setZValue(layer)
+        group.setAcceptHoverEvents(True)
+        group.setAcceptTouchEvents(True)
 
-        self.__radius = 0
-
-        self.elli = elli = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
+        elli = self.elli = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
         elli.setPen(QPen(Qt.NoPen))
         elli.setBrush(QColor("black"))
         elli.setRotation(5)
 
-        self.text = text = QGraphicsTextItem("???", group)
+        text = self.text = QGraphicsTextItem("???", group)
         font = text.font()
         font.setBold(True)
         text.setFont(font)
         text.setDefaultTextColor(QColor("white"))
 
         naubino.add_cute(self)
+        naubino.add_item(group)
 
 class MenuButton(Button):
     def __init__(self, naubino, radius, fontsize, text, cw, ch,
