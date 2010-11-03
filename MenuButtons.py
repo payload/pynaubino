@@ -31,7 +31,7 @@ class Button(Cute):
         if radius != self.__radius:
             self.__radius = radius
             rect = QRectF(-radius, -radius, radius*2, radius*2)
-            self.elli.setRect(rect)
+            self.shape.setRect(rect)
 
     def __init__(self, naubino, layer = 0, rect = False):
         Cute.__init__(self, naubino)
@@ -63,10 +63,10 @@ class Button(Cute):
         group.setAcceptHoverEvents(True)
         group.setAcceptTouchEvents(True)
 
-        elli = self.elli = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
-        elli.setPen(QPen(Qt.NoPen))
-        elli.setBrush(QColor("black"))
-        elli.setRotation(5)
+        shape = self.shape = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
+        shape.setPen(QPen(Qt.NoPen))
+        shape.setBrush(QColor("black"))
+        shape.setRotation(5)
 
         text = self.text = QGraphicsTextItem("???", group)
         font = text.font()
@@ -89,7 +89,7 @@ class MenuButton(Button):
         self.text.setFont(font)
         self.text.setPlainText(text)
 
-        rect = self.elli.boundingRect()
+        rect = self.shape.boundingRect()
         pos = Vec2d(rect.x(), rect.y())
         pos += Vec2d(radius, radius)
         rect = self.text.boundingRect()
