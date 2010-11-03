@@ -5,7 +5,7 @@ from Pointer import Pointer
 from PyQt4.QtCore import *
 from utils import *
 from Naub import Naub
-from Menu import Menu
+from Menu import NaubinoMenu
 
 class Naubino:
     def __init__(self, parent = None):
@@ -35,7 +35,7 @@ class Naubino:
         spammer.timeout.connect(self.spam_naub)
         self.spammer = spammer
 
-        self.menu = Menu(self)
+        self.menu = NaubinoMenu(self)
 
     def add_cute(self, cute):
         self.cutes.append(cute)

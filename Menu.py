@@ -59,19 +59,6 @@ class Menu(QObject):
     def __init__(self, naubino):
         QObject.__init__(self)
         self.naubino = naubino
-        
-        self.highscore_btn = btn = HighscoreButton(naubino)
-        btn.pos = -270, -170
-        btn.pressed.connect(self.highscore)
-
-        self.play_btn = btn = PlayButton(naubino)
-        btn.pos = -225, -160
-        btn.pressed.connect(self.play)
-
-        self.tutorial_btn = btn = TutorialButton(naubino)
-        btn.pos = -265, -125
-        btn.pressed.connect(self.tutorial)
-
         self.__init_state_machine()
         self.state_machine.start()
 
@@ -99,3 +86,19 @@ class Menu(QObject):
         no_play.setInitialState(sf)
         sf.setInitialState(start)
         state_machine.setInitialState(no_play)
+
+class NaubinoMenu(Menu):
+    def __init__(self, naubino):
+        Menu.__init__(self, naubino)
+        
+        self.highscore_btn = btn = HighscoreButton(naubino)
+        btn.pos = -270, -170
+        btn.pressed.connect(self.highscore)
+
+        self.play_btn = btn = PlayButton(naubino)
+        btn.pos = -225, -160
+        btn.pressed.connect(self.play)
+
+        self.tutorial_btn = btn = TutorialButton(naubino)
+        btn.pos = -265, -125
+        btn.pressed.connect(self.tutorial)
