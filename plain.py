@@ -20,14 +20,8 @@ def main():
     view.setScene(scene)
     view.setRenderHints(QPainter.Antialiasing)
 
-    timer = QTimer()
-    timer.setInterval(50)
-    timer.timeout.connect(lambda: naubino.step(1.0 / timer.interval()))
-
     view.show()
     frame.show()
-    timer.start()
-    naubino.play()
     
     sys.exit(app.exec_())
 

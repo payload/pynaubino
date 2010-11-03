@@ -15,25 +15,24 @@ class Naubino:
         self.objs_cutes = {}
         self.naub_center_joints = {}
         self.playing = False
-        
         self.scene = scene
+
+        timer = self.stepper = QTimer()
+        timer.setInterval(50)
+        timer.timeout.connect(lambda: self.step(1.0 / timer.interval()))
+        
         pymunk.init_pymunk()
-        space = Space()
+        space = self.space = Space()
 
-        self.space = space
-
-        pointer = Pointer()
+        pointer = self.pointer = Pointer()
         self.space.add(pointer.body)
-        self.pointer = pointer
 
-        center = pymunk.Body(pymunk.inf, pymunk.inf)
+        center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
-        self.center = center
 
-        spammer = QTimer()
+        spammer = self.spammer = QTimer()
         spammer.setInterval(1000)
         spammer.timeout.connect(self.spam_naub)
-        self.spammer = spammer
 
         self.menu = NaubinoMenu(self)
 
@@ -146,17 +145,16 @@ class Naubino:
         self.add_naubs(a, b)
 
     def step(self, dt):
-        if self.playing:
-            self.space.step(dt)
-            cutes = self.cute_naubs + self.cute_joints
-            for cute in cutes:
-                cute.update_object()
-                #cute.update()
+        self.space.step(dt)
+        cutes = self.cute_naubs + self.cute_joints
+        for cute in cutes:
+            cute.update_object()
+            #cute.update()
 
     def play(self):
         self.spammer.start()
-        self.playing = True
+        self.stepper.start()
 
     def stop(self):
         self.spammer.stop()
-        self.playing = False
+        self.stepper.stop()

@@ -85,7 +85,7 @@ class Menu(QObject):
 
         no_play.setInitialState(sf)
         sf.setInitialState(start)
-        state_machine.setInitialState(no_play)
+        state_machine.setInitialState(play)
 
 class NaubinoMenu(Menu):
     def __init__(self, naubino):
