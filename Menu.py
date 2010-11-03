@@ -94,22 +94,27 @@ class NaubinoMenu(Menu):
         buttons = self.buttons = QGraphicsRectItem()
         naubino.add_item(buttons)
 
-        self.highscore_btn = btn = HighscoreButton(naubino, layer = 10)
+        btn = self.highscore_btn = HighscoreButton(naubino, layer = 10)
         btn.pos = 0, 0
         btn.pressed.connect(self.highscore)
         btn.entered.connect(self.enter)
         btn.leaved .connect(self.leave)
         btn.group.setParentItem(buttons)
 
-        self.play_btn = btn = PlayButton(naubino, layer = 9)
+        btn = self.play_btn = PlayButton(naubino, layer = 9)
         btn.pos = 45, 10
         btn.pressed.connect(self.play)
         btn.group.setParentItem(buttons)
 
-        self.tutorial_btn = btn = TutorialButton(naubino, layer = 9)
+        btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
         btn.pos = 5, 45
         btn.pressed.connect(self.tutorial)
         btn.group.setParentItem(buttons)
+
+        j = CuteJoint(naubino, self.highscore_btn, self.play_btn)
+        j.line.setParentItem(buttons)
+        j = CuteJoint(naubino, self.highscore_btn, self.tutorial_btn)
+        j.line.setParentItem(buttons)
 
         buttons.setPos(-270, -170)
 
