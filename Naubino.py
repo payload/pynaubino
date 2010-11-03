@@ -8,7 +8,7 @@ from Naub import Naub
 from Menu import NaubinoMenu
 
 class Naubino:
-    def __init__(self, parent = None):
+    def __init__(self, scene):
         self.cutes = []
         self.cute_naubs = []
         self.cute_joints = []
@@ -16,7 +16,7 @@ class Naubino:
         self.naub_center_joints = {}
         self.playing = False
         
-        self.parent = parent
+        self.scene = scene
         pymunk.init_pymunk()
         space = Space()
 
@@ -39,11 +39,11 @@ class Naubino:
 
     def add_cute(self, cute):
         self.cutes.append(cute)
-        if self.parent: self.parent.addCute(cute)
+        if self.scene: self.scene.addCute(cute)
 
     def remove_cute(self, cute):
         self.cutes.remove(cute)
-        if self.parent: self.parent.removeCute(cute)
+        if self.scene: self.scene.removeCute(cute)
 
     def add_cute_naub(self, cute):
         if cute not in self.cute_naubs:
