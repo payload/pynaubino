@@ -1,5 +1,4 @@
 import pymunk
-from PyQt4.QtCore import *
 from PyQt4.QtGui import QColor
 import random
 from NaubJoint import NaubJoint
