@@ -3,11 +3,21 @@ from Cute import CuteNaub, CuteJoint
 from Space import Space
 from Pointer import Pointer
 from PyQt4.QtCore import *
+from PyQt4.QtGui import QColor
 from utils import Pos, random_vec
 from Naub import Naub
 from Menu import NaubinoMenu
 
 class Naubino:
+    @property
+    def score(self): return self.__score
+    @score.setter
+    def score(self, score):
+        if self.__score == score: return
+        self.__score = score
+        if not self.menu: return
+        self.menu.score = score
+    
     def __init__(self, scene):
         self.cutes = []
         self.cute_naubs = []
@@ -16,6 +26,7 @@ class Naubino:
         self.naub_center_joints = {}
         self.playing = False
         self.scene = scene
+        self.__score = 0
 
         timer = self.stepper = QTimer()
         timer.setInterval(50)
@@ -137,7 +148,7 @@ class Naubino:
         if len(self.cute_naubs) > 16: return
         pos = random_vec(300, 200)
         naub = Naub(self, pos)
-        #naub.color = random_naub_color()
+        naub.color = self.random_naub_color()
         self.add_naub(naub)
 
     def spam_naub_pair(self):
@@ -149,10 +160,18 @@ class Naubino:
         a.body.apply_impulse(impulse())
         b.body.apply_impulse(impulse())
 
-        a.color = random_naub_color()
-        b.color = random_naub_color()
+        a.color = self.random_naub_color()
+        b.color = self.random_naub_color()
 
         self.add_naubs(a, b)
+
+    # TODO
+    def random_naub_color(self):
+        return QColor("black")
+
+    # TODO
+    def score_cycle(self, cycle):
+        self.score += len(cycle)
 
     def step(self, dt):
         self.space.step(dt)

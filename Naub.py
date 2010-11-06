@@ -109,16 +109,18 @@ class Naub(Naub):
         
         if colors_alike and not naub_near:
             self.merge_naub(naub)
-            # TODO replace this with pop_cycle
-            self.remove_random_reachable_naub()
+            self.pop_cycle()
 
-    # TODO def pop_cycle(self):
+    # TODO
+    def pop_cycle(self):
+        naub = self.random_reachable_naub()
+        self.naubino.score_cycle([naub])
+        naub.remove()
 
-    def remove_random_reachable_naub(self, min_naubs = 6):
+    def random_reachable_naub(self):
         nodes = self.reachable_nodes()
-        if len(nodes) < min_naubs: return
         random.shuffle(nodes)
-        nodes[0].remove()
+        return nodes[0]
 
     def is_naub_near(self, naub):
         if naub in self.naubs_joints: return True

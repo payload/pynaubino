@@ -26,11 +26,6 @@ def random_not_white():
         if not are_colors_alike(color, white):
             return color
 
-def random_naub_color():
-    c = ["red", "green", "blue"]#, "purple", "yellow", "aqua"]
-    random.shuffle(c)
-    return QColor(c[0])
-
 def toVec2d(v):
     if isinstance(v, Vec2d): return v
     else: return Vec2d(v.x(), v.y())

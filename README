@@ -1,0 +1,17 @@
+== Naubino
+
+=== Dependencies
+* Python 3.1 >
+** and every python specific dependency also build with and for python 3
+** try "2to3"
+
+* PyQt4 
+** Qt 4.6 >
+
+* pymunk 1.0.0
+** chipmunk 5.3.2
+
+=== TODO
+* correct naub colors (look in Naubino.spam*)
+* correct physics like joint strengths (Naub.joint_naub, Naubino.add_naub)
+* cycle detection (call remove on cycle naubs, Naubino.score_cycle, Naub.pop_cycle)

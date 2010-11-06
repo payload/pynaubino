@@ -3,6 +3,30 @@ from PyQt4.QtGui import *
 import random
 from utils import *
 
+class HoverArea(QObject):
+    entered  = pyqtSignal(QGraphicsSceneHoverEvent)
+    leaved   = pyqtSignal(QGraphicsSceneHoverEvent)
+
+    def __init__(self, area = None, rect = None, scene = None):
+        QObject.__init__(self)
+        if not area:
+            area = QGraphicsEllipseItem()
+            area.setPen(QPen(Qt.NoPen))
+        if not rect: rect = QRect(-0.5, -0.5, 1, 1)
+        if scene: scene.add_item(area)
+
+        self.area = area
+        area.setRect(rect)
+        area.setAcceptHoverEvents(True)
+
+        def hoverEnterEvent(event):
+            self.entered.emit(event)
+        area.hoverEnterEvent = hoverEnterEvent
+
+        def hoverLeaveEvent(event):
+            self.leaved.emit(event)
+        area.hoverLeaveEvent = hoverLeaveEvent
+
 class Cute(QObject):
     def __init__(self, naubino):
         QObject.__init__(self)
