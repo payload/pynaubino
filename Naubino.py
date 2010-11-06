@@ -36,7 +36,8 @@ class Naubino:
         space = self.space = Space()
 
         pointer = self.pointer = Pointer()
-        self.space.add(pointer.body)
+        space.add(pointer.body)
+        scene.pointer = self.pointer
 
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0

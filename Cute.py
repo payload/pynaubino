@@ -1,7 +1,79 @@
+from Interfaces import *
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from PyQt4.QtGui import QGraphicsScene
 import random
 from utils import *
+
+class Application(Application):
+    def __init__(self):
+        super(Application, self).__init__()
+        from PyQt4.QtGui import QApplication
+        self.__app = QApplication([])
+
+    def exec_(self):
+        self.__app.exec_()
+
+class GraphicsScene(GraphicsScene):
+    def __init__(self):
+        super(GraphicsScene, self).__init__()
+        self.qscene = scene = QGraphicsScene()
+        self.__pointer = None
+        self.__items = []
+
+        scene.mousePressEvent = lambda e: self.mousePressEvent(e)
+        scene.mouseReleaseEvent = lambda e: self.mouseReleaseEvent(e)
+        scene.mouseMoveEvent = lambda e: self.mouseMoveEvent(e)
+
+    def pointer(self): return self.__pointer
+
+    def mousePressEvent(self, event):
+        scene = self.qscene
+        if not self.pointer: return
+        event.naubino_pointer = self.pointer
+        QGraphicsScene.mousePressEvent(scene, event)
+
+    def mouseReleaseEvent(self, event):
+        scene = self.qscene
+        if not self.pointer: return
+        event.naubino_pointer = self.pointer
+        QGraphicsScene.mouseReleaseEvent(scene, event)
+
+    def mouseMoveEvent(self, event):
+        scene = self.qscene
+        if self.pointer:
+            pos = event.scenePos()
+            pos = pos.x(), pos.y()
+            self.pointer.pos = pos
+        QGraphicsScene.mouseMoveEvent(scene, event)
+
+    def add_item(self, *items):
+        for x in items:
+            if x not in self.__items:
+                self.__items.append(x)
+                self.qscene.addItem(x)
+
+    def remove_item(self, *items):
+        for x in items:
+            if x in self.__items:
+                self.__items.remove(x)
+                self.qscene.removeItem(x)
+
+class GraphicsView(GraphicsView):
+    def __init__(self, scene):
+        super(GraphicsView, self).__init__(scene)
+        self.__scene = scene
+        self.__frame = frame = QFrame()
+        self.__view = view = QGraphicsView()
+
+        view.setParent(frame)
+        view.setScene(scene.qscene)
+        view.setGeometry(0, 0, 600, 400)
+        view.setSceneRect(-290, -190, 580, 380)
+        view.setRenderHints(QPainter.Antialiasing)
+        view.show()
+        frame.show()
 
 class HoverArea(QObject):
     entered  = pyqtSignal(QGraphicsSceneHoverEvent)

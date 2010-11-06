@@ -2,26 +2,15 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from Naubino import Naubino
-from GraphicsScene import GraphicsScene
 
 def main():
-    app = QApplication([])
+    #from Cute import Application, GraphicsScene, GraphicsView
+    from Pig import Application, GraphicsScene, GraphicsView
+    app = Application()
 
     scene = GraphicsScene()
-    naubino = Naubino(scene)
-    scene.pointer = naubino.pointer
-
-    frame = QFrame()
-    frame.setGeometry(0, 0, 600, 400)
-
-    view = QGraphicsView(frame)
-    view.setGeometry(0, 0, 600, 400)
-    view.setSceneRect(-290, -190, 580, 380)
-    view.setScene(scene)
-    view.setRenderHints(QPainter.Antialiasing)
-
-    view.show()
-    frame.show()
+    #naubino = Naubino(scene)
+    view = GraphicsView(scene)
     
     sys.exit(app.exec_())
 
