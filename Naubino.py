@@ -1,5 +1,4 @@
 import pymunk
-from Cute import CuteNaub, CuteJoint
 from Space import Space
 from Pointer import Pointer
 from PyQt4.QtCore import *
@@ -15,69 +14,47 @@ class Naubino:
     def score(self, score):
         if self.__score == score: return
         self.__score = score
-        if not self.menu: return
-        self.menu.score = score
+        if not self.score_changed: return
+        self.score_changed(score)
     
-    def __init__(self, scene):
-        self.cutes = []
-        self.cute_naubs = []
-        self.cute_joints = []
-        self.objs_cutes = {}
+    def __init__(self, app = None):
+        self.naubs = []
         self.naub_center_joints = {}
         self.playing = False
-        self.scene = scene
+        self.app = app
+        self.scene = scene = app.scene
         self.__score = 0
+        self.score_changed = None
 
-        timer = self.stepper = QTimer()
-        timer.setInterval(50)
-        timer.timeout.connect(lambda: self.step(1.0 / timer.interval()))
+        interval = 1 / 50.0
+        def callback(): self.step(interval)
+        self.stepper = app.Timer(interval, callback)
         
         pymunk.init_pymunk()
         space = self.space = Space()
 
         pointer = self.pointer = Pointer()
         space.add(pointer.body)
-        scene.pointer = self.pointer
 
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
 
-        spammer = self.spammer = QTimer()
-        spammer.setInterval(1000)
-        spammer.timeout.connect(self.spam_naub)
+        def callback(): self.spam_naub()
+        self.spammer = app.Timer(1, callback)
 
-        self.menu = NaubinoMenu(self)
+        if scene: scene.naubino = self
 
     def add_item(self, *items):
         if self.scene: self.scene.add_item(*items)
 
     def remove_item(self, *items):
         if self.scene: self.scene.remove_item(*items)
-    
-    def add_cute(self, cute):
-        if cute not in self.cutes:
-            self.cutes.append(cute)
-
-    def remove_cute(self, cute):
-        if cute in self.cutes:
-            self.cutes.remove(cute)
-
-    def add_cute_naub(self, cute):
-        if cute not in self.cute_naubs:
-            self.cute_naubs.append(cute)
-            self.add_cute(cute)
-
-    def remove_cute_naub(self, cute):
-        if cute in self.cute_naubs:
-            self.cute_naubs.remove(cute)
-            self.remove_cute(cute)
 
     def add_naub(self, naub):
         naub.naubino = self
 
-        if naub not in self.objs_cutes:
-            cute = CuteNaub(self, naub)
-            self.objs_cutes[naub] = cute
+        if naub not in self.naubs:
+            self.naubs.append(naub)
 
         if naub not in self.naub_center_joints:
             a = naub.body
@@ -90,48 +67,33 @@ class Naubino:
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
+        if self.scene: self.scene.add_naub(naub)
+
     def remove_naub(self, naub):
-        if naub in self.objs_cutes:
-            del self.objs_cutes[naub]
-            # dont remove the cute naub now, it will remind you by calling
-            # remove_cute_naub
+        if self.scene: self.scene.remove_naub(naub)
             
         if naub in self.naub_center_joints:
             joint = self.naub_center_joints[naub]
             del self.naub_center_joints[naub]
             self.space.remove(joint)
 
+        if naub in self.naubs:
+            self.naubs.remove(naub)
+
     def pre_remove_naub(self, naub):
-        if naub in self.objs_cutes:
-            self.objs_cutes[naub].remove_naub()
+        if self.scene: self.scene.pre_remove_naub(naub)
 
     def add_naubs(self, *naubs):
         for naub in naubs: self.add_naub(naub)
 
-    def add_cute_joint(self, cute):
-        if cute not in self.cute_joints:
-            self.cute_joints.append(cute)
-        self.add_cute(cute)
-
-    def remove_cute_joint(self, cute):
-        if cute in self.cute_joints:
-            self.cute_joints.remove(cute)
-        self.remove_cute(cute)
-
     def add_naub_joint(self, joint):
-        if joint not in self.objs_cutes:
-            a = Pos(joint.joint.a)
-            b = Pos(joint.joint.b)
-            cute = CuteJoint(self, a, b)
-            self.objs_cutes[joint] = cute
+        if self.scene: self.scene.add_naub_joint(joint)
 
     def remove_naub_joint(self, joint):
-        if joint in self.objs_cutes:
-           del self.objs_cutes[joint]
+        if self.scene: self.scene.remove_naub_joint(joint)
 
     def pre_remove_naub_joint(self, joint):
-        if joint in self.objs_cutes:
-            self.objs_cutes[joint].remove_joint()
+        if self.scene: self.scene.pre_remove_naub_joint(joint)
 
     def create_naub_pair(self, pos = (0, 0)):
         pos = Vec2d(pos)
@@ -146,14 +108,14 @@ class Naubino:
         return a, b
 
     def spam_naub(self):
-        if len(self.cute_naubs) > 16: return
+        if len(self.naubs) > 16: return
         pos = random_vec(300, 200)
         naub = Naub(self, pos)
         naub.color = self.random_naub_color()
         self.add_naub(naub)
 
     def spam_naub_pair(self):
-        if len(self.cute_naubs) > 16: return
+        if len(self.naubs) > 16: return
         pos = random_vec(300, 200)
         a, b = self.create_naub_pair(pos)
 
@@ -176,10 +138,7 @@ class Naubino:
 
     def step(self, dt):
         self.space.step(dt)
-        cutes = self.cute_naubs + self.cute_joints
-        for cute in cutes:
-            cute.update_object()
-            #cute.update()
+        if self.scene: self.scene.step(dt)
 
     def play(self):
         self.spammer.start()

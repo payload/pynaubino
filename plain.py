@@ -2,6 +2,7 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from Naubino import Naubino
+from Menu import NaubinoMenu
 
 def main():
     #from Cute import Application, GraphicsScene, GraphicsView
@@ -9,8 +10,10 @@ def main():
     app = Application()
 
     scene = GraphicsScene()
-    #naubino = Naubino(scene)
+    app.scene = scene
+    naubino = Naubino(app)
     view = GraphicsView(scene)
+    naubino.play()
     
     sys.exit(app.exec_())
 

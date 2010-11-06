@@ -56,9 +56,10 @@ class Menu(QObject):
     tutorial = pyqtSignal()
     highscore = pyqtSignal()
     
-    def __init__(self, naubino):
+    def __init__(self, scene):
         QObject.__init__(self)
-        self.naubino = naubino
+        self.scene = scene
+        self.naubino = scene.naubino
         self.__init_state_machine()
         self.state_machine.start()
 
@@ -88,9 +89,10 @@ class Menu(QObject):
         state_machine.setInitialState(play)
 
 class NaubinoMenu(Menu):
-    def __init__(self, naubino):
-        Menu.__init__(self, naubino)
+    def __init__(self, scene):
+        Menu.__init__(self, scene)
         self.popped_out = True
+        naubino = self.naubino
 
         buttons = self.buttons = QGraphicsRectItem()
         naubino.add_item(buttons)
@@ -110,9 +112,9 @@ class NaubinoMenu(Menu):
         btn.pressed.connect(self.tutorial)
         btn.group.setParentItem(buttons)
 
-        j = CuteJoint(naubino, self.highscore_btn, self.play_btn)
+        j = CuteJoint(scene, self.highscore_btn, self.play_btn)
         j.line.setParentItem(buttons)
-        j = CuteJoint(naubino, self.highscore_btn, self.tutorial_btn)
+        j = CuteJoint(scene, self.highscore_btn, self.tutorial_btn)
         j.line.setParentItem(buttons)
 
         self.btns = [self.play_btn, self.tutorial_btn]

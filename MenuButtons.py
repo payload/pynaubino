@@ -59,8 +59,7 @@ class Button(Cute):
         text.setFont(font)
         text.setDefaultTextColor(QColor("white"))
 
-        naubino.add_cute(self)
-        naubino.add_item(group)
+        naubino.scene.add_item(group)
 
 class MenuButton(Button):
     def __init__(self, naubino, radius, fontsize, plaintext, cw, ch,
