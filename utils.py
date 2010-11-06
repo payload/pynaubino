@@ -1,7 +1,8 @@
 import random
 from PyQt4.QtCore import *
+import pymunk
 from pymunk import Vec2d
-from PyQt4.QtGui import QColor
+from PyQt4.QtGui import QColor, QGraphicsItem
 
 def random_vec(xv, yv):
     return Vec2d(
@@ -30,11 +31,26 @@ def random_naub_color():
     random.shuffle(c)
     return QColor(c[0])
 
+def toVec2d(v):
+    if isinstance(v, Vec2d): return v
+    else: return Vec2d(v.x(), v.y())
+
 class Pos:
     @property
-    def pos(self): return self.__x.position
+    def pos(self): return self.get_pos()
     @pos.setter
-    def pos(self, pos): self.__x.position = pos
+    def pos(self, pos): self.set_pos(pos)
 
     def __init__(self, x):
-        self.__x = x
+        if   isinstance(x, pymunk.Body):
+            self.get_pos = lambda: x.position
+            self.set_pos = lambda pos: setattr(x, "position", pos)
+        elif isinstance(x, QGraphicsItem):
+            def get_pos():
+                pos = x.pos()
+                return Vec2d(pos.x(), pos.y())
+            self.get_pos = get_pos
+            def set_pos(pos):
+                x.setPos(pos.x, pos.y)
+        else:
+            raise TypeError(type(x))

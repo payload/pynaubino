@@ -87,27 +87,50 @@ class Menu(QObject):
         sf.setInitialState(start)
         state_machine.setInitialState(play)
 
+class HoverArea(QObject):
+    entered  = pyqtSignal(QGraphicsSceneHoverEvent)
+    leaved   = pyqtSignal(QGraphicsSceneHoverEvent)
+    
+    def __init__(self, area = None, rect = None, scene = None):
+        QObject.__init__(self)
+        if not area:
+            area = QGraphicsEllipseItem()
+            area.setPen(QPen(Qt.NoPen))
+        if not rect: rect = QRect(-0.5, -0.5, 1, 1)
+        if scene: scene.add_item(area)
+        
+        self.area = area
+        area.setRect(rect)
+        area.setAcceptHoverEvents(True)
+        
+        def hoverEnterEvent(event):
+            self.entered.emit(event)
+        area.hoverEnterEvent = hoverEnterEvent
+
+        def hoverLeaveEvent(event):
+            self.leaved.emit(event)
+        area.hoverLeaveEvent = hoverLeaveEvent
+
 class NaubinoMenu(Menu):
     def __init__(self, naubino):
         Menu.__init__(self, naubino)
+        self.popped_out = True
 
         buttons = self.buttons = QGraphicsRectItem()
         naubino.add_item(buttons)
 
         btn = self.highscore_btn = HighscoreButton(naubino, layer = 10)
-        btn.pos = 0, 0
+        btn.pos = QPointF(0, 0)
         btn.pressed.connect(self.highscore)
-        btn.entered.connect(self.enter)
-        btn.leaved .connect(self.leave)
         btn.group.setParentItem(buttons)
 
         btn = self.play_btn = PlayButton(naubino, layer = 9)
-        btn.pos = 45, 10
+        btn.pos = btn.popped_out_pos = QPointF(45, 10)
         btn.pressed.connect(self.play)
         btn.group.setParentItem(buttons)
 
         btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
-        btn.pos = 5, 45
+        btn.pos = btn.popped_out_pos = QPointF(5, 45)
         btn.pressed.connect(self.tutorial)
         btn.group.setParentItem(buttons)
 
@@ -116,10 +139,40 @@ class NaubinoMenu(Menu):
         j = CuteJoint(naubino, self.highscore_btn, self.tutorial_btn)
         j.line.setParentItem(buttons)
 
+        self.btns = [self.play_btn, self.tutorial_btn]
+
+        scene = self.naubino.scene
+        btn = self.play_btn
+        pos = btn.pos
+        rect = btn.shape.rect()
+        r = pos.x() + rect.width() * 0.5 + 5
+        rect = QRectF(-r, -r, 2*r, 2*r)
+        hover = self.hover = HoverArea(rect = rect, scene = scene)
+        hover.area.setParentItem(buttons)
+        hover.area.setZValue(100)
+        hover.entered.connect(self.enter)
+        hover.leaved.connect(self.leave)
+
         buttons.setPos(-270, -170)
 
     def enter(self, event):
-        pass
+        if self.popped_out: return
+        self.popped_out = True
+        btns = self.btns
+        for btn in btns:
+            ani = btn.ani = QPropertyAnimation(btn, "pos")
+            ani.setStartValue(btn.pos)
+            ani.setEndValue(btn.popped_out_pos)
+            ani.setDuration(300)
+            ani.start()
 
     def leave(self, event):
-        pass
+        if not self.popped_out: return
+        self.popped_out = False
+        btns = self.btns
+        for btn in btns:
+            ani = btn.ani = QPropertyAnimation(btn, "pos")
+            ani.setStartValue(btn.pos)
+            ani.setEndValue(QPointF(0, 0))
+            ani.setDuration(300)
+            ani.start()

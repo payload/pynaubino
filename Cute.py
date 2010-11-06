@@ -1,6 +1,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import random
+from utils import *
 
 class Cute(QObject):
     def __init__(self, naubino):
@@ -40,8 +41,8 @@ class CuteJoint(Cute):
 
     def update_object(self):
         self.line.show()
-        a = self.a.pos
-        b = self.b.pos
+        a = toVec2d(self.a.pos)
+        b = toVec2d(self.b.pos)
         self.line.setLine(a.x, a.y, b.x, b.y)
 
     def remove(self):
@@ -120,8 +121,8 @@ class CuteNaub(Cute):
             self.update_info()
             
         if naub.color != self.color:
-            self.color = naub.color
-            elli.setBrush(QBrush(self.color))
+            color = self.color = naub.color
+            elli.setBrush(QBrush(color))
 
     def update_info(self):
         text = "links: "+ str(len(self.naub.naubs_joints))
@@ -148,13 +149,12 @@ class CuteNaub(Cute):
         self.naubino.remove_item(self.elli, self.info)
 
     def remove_naub(self):
-        ani = QPropertyAnimation(self, "scale")
+        ani = self.ani = QPropertyAnimation(self, "scale")
         ani.setStartValue(self.scale)
         ani.setEndValue(0)
         ani.setDuration(500)
         ani.finished.connect(self.remove)
         ani.start()
-        self.ani = ani
 
     def select_naub(self, pointer):
         pass

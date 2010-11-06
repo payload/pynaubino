@@ -11,18 +11,11 @@ from Naub import Naub
 class Button(Cute):
     pressed  = pyqtSignal(QGraphicsSceneMouseEvent)
     released = pyqtSignal(QGraphicsSceneMouseEvent)
-    entered  = pyqtSignal(QGraphicsSceneHoverEvent)
-    leaved   = pyqtSignal(QGraphicsSceneHoverEvent)
 
-    @property
-    def pos(self):
-        pos = self.group.pos()
-        pos = pos.x(), pos.y()
-        return Vec2d(pos)
+    @pyqtProperty(QPointF)
+    def pos(self): return self.group.pos()
     @pos.setter
-    def pos(self, pos):
-        pos = Vec2d(pos)
-        self.group.setPos(pos.x, pos.y)
+    def pos(self, pos): self.group.setPos(pos)
 
     @property
     def radius(self): return self.__radius
@@ -50,14 +43,6 @@ class Button(Cute):
             if event.button() == Qt.LeftButton:
                 self.released.emit(event)
         group.mouseReleaseEvent = mouseReleaseEvent
-
-        def hoverEnterEvent(event):
-            self.entered.emit(event)
-        group.hoverEnterEvent   = hoverEnterEvent
-
-        def hoverLeaveEvent(event):
-            self.leaved.emit(event)
-        group.hoverLeaveEvent   = hoverLeaveEvent
         
         group.setZValue(layer)
         group.setAcceptHoverEvents(True)
@@ -78,24 +63,25 @@ class Button(Cute):
         naubino.add_item(group)
 
 class MenuButton(Button):
-    def __init__(self, naubino, radius, fontsize, text, cw, ch,
+    def __init__(self, naubino, radius, fontsize, plaintext, cw, ch,
             layer = 0, rect = False):
         Button.__init__(self, naubino, layer = layer, rect = rect)
 
         self.radius = radius
 
-        font = self.text.font()
+        text = self.text
+        font = text.font()
         font.setPixelSize(self.radius * fontsize)
-        self.text.setFont(font)
-        self.text.setPlainText(text)
+        text.setFont(font)
+        text.setPlainText(plaintext)
 
         rect = self.shape.boundingRect()
-        pos = Vec2d(rect.x(), rect.y())
-        pos += Vec2d(radius, radius)
-        rect = self.text.boundingRect()
+        pos = rect.topLeft()
+        pos += QPointF(radius, radius)
+        rect = text.boundingRect()
         w, h = rect.width(), rect.height()
-        pos -= Vec2d(cw*w, ch*h)
-        self.text.setPos(pos.x, pos.y)
+        pos -= QPointF(cw*w, ch*h)
+        text.setPos(pos)
 
 class PlayButton(MenuButton):
     def __init__(self, naubino, layer = 0):
