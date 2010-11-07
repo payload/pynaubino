@@ -112,7 +112,7 @@ class Naub(Naub):
 
     # TODO
     def pop_cycle(self):
-        naub = self.reachable_naubs()
+        naub = self.random_reachable_naub()
         self.naubino.score_cycle([naub])
         naub.remove()
 
@@ -133,5 +133,5 @@ class Naub(Naub):
         visited.append(self)
         nodes = [self]
         for x in self.naubs_joints:
-            nodes.extend(x.reachable_nodes(visited))
+            nodes.extend(x.reachable_naubs(visited))
         return nodes

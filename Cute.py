@@ -295,7 +295,9 @@ class GraphicsView(GraphicsView):
         self.__frame = frame = QFrame()
         self.__view = view = QGraphicsView()
         self.__naubino = naubino = scene.naubino
-        self.__menu = NaubinoMenu(scene)
+        self.__menu = menu = NaubinoMenu(scene)
+
+        naubino.score_changed = menu.score_changed
 
         view.setParent(frame)
         view.setScene(scene.qscene)

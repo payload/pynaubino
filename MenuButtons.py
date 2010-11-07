@@ -96,3 +96,29 @@ class HighscoreButton(Button):
     def __init__(self, naubino, layer = 0):
         MenuButton.__init__(self, naubino, 17, 1.8, "5", 0.53, 0.5,
             layer = layer, rect=True)
+        self.__score = score = 0
+        self.__shown_score = score
+        self.set_score(score)
+        
+    @property
+    def score(self): return self.__score
+    @score.setter
+    def score(self, score):
+        if self.__score != score:
+            self.__score = score
+            ani = self.ani = QPropertyAnimation(self, "shown_score")
+            ani.setStartValue(self.shown_score)
+            ani.setEndValue(score)
+            ani.setDuration(1000)
+            ani.start()
+            
+    @pyqtProperty(int)
+    def shown_score(self): return self.__shown_score
+    @shown_score.setter
+    def shown_score(self, score):
+        if self.__shown_score != score:
+            self.__shown_score = score
+            self.set_score(score)
+
+    def set_score(self, score):
+        self.text.setPlainText(str(score))

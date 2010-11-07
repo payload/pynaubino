@@ -154,3 +154,7 @@ class NaubinoMenu(Menu):
             ani.setEndValue(QPointF(0, 0))
             ani.setDuration(300)
             ani.start()
+
+    def score_changed(self, score):
+        self.highscore_btn.score = score
+        
