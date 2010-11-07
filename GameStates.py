@@ -1,4 +1,5 @@
-from PyQt4.QtCore import QStateMachine, QState, pyqtSignal
+from PyQt4.QtCore import (QStateMachine, QState, pyqtSignal, pyqtProperty,
+    QPropertyAnimation)
 from PyQt4.QtGui import *
 
 class State(QState):
@@ -15,17 +16,33 @@ class HighscoreState(State):
         print("exit highscore")
 
 class StartState(State):
+    @pyqtProperty(float)
+    def splash_opacity(self): return self.splash.opacity()
+    @splash_opacity.setter
+    def splash_opacity(self, x): self.splash.setOpacity(x)
+    
     def __init__(self, scene, state):
         super(StartState, self).__init__(scene, state)
+        self.ani = None
         pixmap = QPixmap("splash.png")
         self.splash = splash = QGraphicsPixmapItem(pixmap)
+        splash.setOpacity(0)
         splash.setPos(-300, -200)
     
     def onEntry(self, event):
         self.scene.add_item(self.splash)
+        
+        ani = self.ani = QPropertyAnimation(self, "splash_opacity")
+        ani.setEndValue(1)
+        ani.setDuration(1000)
+        ani.start()
 
     def onExit(self, event):
-        self.scene.remove_item(self.splash)
+        ani = self.ani = QPropertyAnimation(self, "splash_opacity")
+        ani.setEndValue(0)
+        ani.setDuration(1000)
+        ani.finished.connect(lambda: self.scene.remove_item(self.splash))
+        ani.start()
 
 class PlayState(State):
     def onEntry(self, event):
