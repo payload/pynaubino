@@ -112,12 +112,12 @@ class Naub(Naub):
 
     # TODO
     def pop_cycle(self):
-        naub = self.random_reachable_naub()
+        naub = self.reachable_naubs()
         self.naubino.score_cycle([naub])
         naub.remove()
 
     def random_reachable_naub(self):
-        nodes = self.reachable_nodes()
+        nodes = self.reachable_naubs()
         random.shuffle(nodes)
         return nodes[0]
 
@@ -127,7 +127,7 @@ class Naub(Naub):
             if naub in n.naubs_joints: return True
         return False
 
-    def reachable_nodes(self, visited = None):    
+    def reachable_naubs(self, visited = None):
         if not visited: visited = []
         elif self in visited: return []
         visited.append(self)
