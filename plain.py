@@ -21,7 +21,6 @@ def main():
     app.scene = scene
     naubino = Naubino(app)
     view = GraphicsView(scene)
-    naubino.play()
     
     sys.exit(app.exec_())
 

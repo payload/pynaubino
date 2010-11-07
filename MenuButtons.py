@@ -15,7 +15,9 @@ class Button(Cute):
     @pyqtProperty(QPointF)
     def pos(self): return self.group.pos()
     @pos.setter
-    def pos(self, pos): self.group.setPos(pos)
+    def pos(self, pos):
+        self.group.setPos(pos)
+        if self.pos_changed: self.pos_changed(pos)
 
     @property
     def radius(self): return self.__radius
@@ -29,6 +31,7 @@ class Button(Cute):
     def __init__(self, naubino, layer = 0, rect = False):
         Cute.__init__(self, naubino)
         self.__radius = 0
+        self.pos_changed = None
 
         group = self.group = QGraphicsItemGroup()
         

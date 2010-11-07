@@ -8,108 +8,47 @@ from PyQt4.QtGui import *
 from utils import *
 from Naub import Naub
 from MenuButtons import *
+from GameStates import GameStateMachine
 
-class State(QState):
-    def __init__(self, naubino, state):
-        QState.__init__(self, state)
-        self.naubino = naubino
+# TODO CuteJoint is missing a feature :D
+# Cute.update_object is only called if scene.step is called
+# which is only the case if naubino.step is called which is wrong
+# cause naubino stops stepping if we call naubino.stop
+class CuteJoint(CuteJoint):
+    def __init__(self, scene, a, b):
+        super(CuteJoint, self).__init__(scene, a, b)
+        callback = lambda x: self.update_object()
+        if hasattr(a, "pos_changed"):
+            self.a.pos_changed = callback
+        if hasattr(b, "pos_changed"):
+            self.b.pos_changed = callback
+        self.update_object()
 
-class HighscoreState(State):
-    def onEntry(self, event):
-        print("enter highscore")
-
-    def onExit(self, event):
-        print("exit highscore")
-
-class StartState(State):
-    def onEntry(self, event):
-        print("enter start")
-
-    def onExit(self, event):
-        print("exit start")
-
-class PlayState(State):
-    def onEntry(self, event):
-        print("enter play")
-        self.naubino.play()
-
-    def onExit(self, event):
-        print("exit play")
-        self.naubino.stop()
-
-class TutorialState(State):
-    def onEntry(self, event):
-        print("enter tutorial")
-
-    def onExit(self, event):
-        print("exit tutorial")
-
-class FailState(State):
-    def onEntry(self, event):
-        print("enter fail")
-
-    def onExit(self, event):
-        print("exit fail")
-
-class Menu(QObject):
-    play = pyqtSignal()
-    tutorial = pyqtSignal()
-    highscore = pyqtSignal()
-    
+class NaubinoMenu:
     def __init__(self, scene):
-        QObject.__init__(self)
         self.scene = scene
-        self.naubino = scene.naubino
-        self.__init_state_machine()
-        self.state_machine.start()
-
-    def __init_state_machine(self):
-        self.state_machine = state_machine = QStateMachine()
-        naubino = self.naubino
-
-        no_play = QState(state_machine)
-        play    = PlayState(naubino, state_machine)
-
-        sf    = QState(no_play)
-        start = StartState(naubino, sf)
-        fail  = FailState(naubino, sf)
-
-        tutorial  = TutorialState(naubino, no_play)
-        highscore = HighscoreState(naubino, no_play)
-
-        no_play.addTransition(self.play, play)
-        play.addTransition(self.highscore, fail)
-        sf.addTransition(self.tutorial, tutorial)
-        sf.addTransition(self.highscore, highscore)
-        tutorial.addTransition(self.highscore, highscore)
-        highscore.addTransition(self.tutorial, tutorial)
-
-        no_play.setInitialState(sf)
-        sf.setInitialState(start)
-        state_machine.setInitialState(play)
-
-class NaubinoMenu(Menu):
-    def __init__(self, scene):
-        Menu.__init__(self, scene)
+        self.naubino = naubino = scene.naubino
         self.popped_out = True
-        naubino = self.naubino
+        self.state_machine = state_machine = GameStateMachine(scene)
+
+        state_machine.start()
 
         buttons = self.buttons = QGraphicsRectItem()
-        naubino.add_item(buttons)
+        scene.add_item(buttons)
 
         btn = self.highscore_btn = HighscoreButton(naubino, layer = 10)
         btn.pos = QPointF(0, 0)
-        btn.pressed.connect(self.highscore)
+        btn.pressed.connect(state_machine.highscore)
         btn.group.setParentItem(buttons)
 
         btn = self.play_btn = PlayButton(naubino, layer = 9)
         btn.pos = btn.popped_out_pos = QPointF(45, 10)
-        btn.pressed.connect(self.play)
+        btn.pressed.connect(state_machine.play)
         btn.group.setParentItem(buttons)
 
         btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
         btn.pos = btn.popped_out_pos = QPointF(5, 45)
-        btn.pressed.connect(self.tutorial)
+        btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
 
         j = CuteJoint(scene, self.highscore_btn, self.play_btn)
