@@ -41,17 +41,21 @@ class State(QState):
         self.scene = scene
         self.naubino = scene.naubino
 
+from Highscore import Highscore
 class HighscoreState(State):
     def __init__(self, scene, state):
         super(HighscoreState, self).__init__(scene, state)
-        #self.highscore = Highscore()
+        self.highscore = Highscore()
     
     def onEntry(self, event):
-        #self.highscore.load()
-        pass
+        score = self.highscore.load_score()
+        print(score)
 
     def onExit(self, event):
-        print("exit highscore")
+        import random
+        name = "bert"+str(random.randint(0, 99))
+        score = random.randint(0, 1000)
+        self.highscore.submit_score(name, score)
 
 class StartState(State):
     def __init__(self, scene, state):

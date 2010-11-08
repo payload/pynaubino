@@ -3,6 +3,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from Naubino import Naubino
 from Menu import NaubinoMenu
+from Highscore import Highscore
 
 def main():
     #TODO use getopts
@@ -21,7 +22,8 @@ def main():
     app.scene = scene
     naubino = Naubino(app)
     view = GraphicsView(scene)
-    
-    sys.exit(app.exec_())
+
+    e = app.exec_()
+    sys.exit(e)
 
 if __name__ == "__main__": main()
