@@ -16,4 +16,6 @@
 * correct physics like joint strengths (Naub.joint_naub, Naubino.add_naub)
 * cycle detection (call remove on cycle naubs, Naubino.score_cycle, Naub.pop_cycle)
 * abstract Qt dependencies away and implement stubs in Pig (QColor, ???)
+* spam naubs on the correct position (look in Naubino.spam*)
+* size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
