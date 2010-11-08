@@ -41,21 +41,32 @@ class State(QState):
         self.scene = scene
         self.naubino = scene.naubino
 
-from Highscore import Highscore
 class HighscoreState(State):
     def __init__(self, scene, state):
         super(HighscoreState, self).__init__(scene, state)
-        self.highscore = Highscore()
+
+        self.layer = layer = QGraphicsRectItem()
+        layer.setVisible(False)
+        layer.setOpacity(0)
+        scene.add_item(layer)
+        self.fader = fader = ItemFader(layer)
+
+        self.table = table = QGraphicsTextItem()
+        table.setPos(-100, -100)
+        table.setParentItem(layer)
     
     def onEntry(self, event):
-        score = self.highscore.load_score()
-        print(score)
+        highscore = self.scene.highscore
+        if not highscore: return
+        score = highscore.load_score()
+        score = [[str(y) for y in x] for x in score]
+        score = ["\t".join(x) for x in score]
+        score = "\n".join(score)
+        self.table.setPlainText(score)
+        self.fader.fade_in()
 
     def onExit(self, event):
-        import random
-        name = "bert"+str(random.randint(0, 99))
-        score = random.randint(0, 1000)
-        self.highscore.submit_score(name, score)
+        self.fader.fade_out()
 
 class StartState(State):
     def __init__(self, scene, state):

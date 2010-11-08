@@ -201,10 +201,15 @@ class GraphicsScene(GraphicsScene):
         self.__objs_cutes = {}
         self.__cute_joints = []
         self.__update_objects = []
+        from Highscore import Highscore
+        self.__highscore = Highscore()
 
         scene.mousePressEvent = lambda e: self.mousePressEvent(e)
         scene.mouseReleaseEvent = lambda e: self.mouseReleaseEvent(e)
         scene.mouseMoveEvent = lambda e: self.mouseMoveEvent(e)
+
+    @property
+    def highscore(self): return self.__highscore
 
     @property
     def naubino(self): return self.__naubino

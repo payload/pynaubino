@@ -3,7 +3,6 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from Naubino import Naubino
 from Menu import NaubinoMenu
-from Highscore import Highscore
 
 def main():
     #TODO use getopts

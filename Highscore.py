@@ -21,6 +21,7 @@ class Highscore:
         score = [x for x in score if len(x) == 2]
         score = [(int(x[0]), x[1]) for x in score]
         score.sort(key=lambda x: x[0])
+        score.reverse()
         return score
 
     def __escape(self, s):
