@@ -62,7 +62,7 @@ class HighscoreState(State):
         score = self.generate_highscore_html(score)
         self.table.setHtml(score)
         self.fader.fade_in()
-
+        
     def onExit(self, event):
         self.fader.fade_out()
 
@@ -79,9 +79,8 @@ class HighscoreState(State):
                 "padding-right:40px"]
             return ";".join(style)
 
-        def name_style():
-            style = ["vertical-align:bottom"]
-            return ";".join(style)
+        style = ["vertical-align:bottom"]
+        name_style = ";".join(style)
         
         html = ""
         html += "<table>"
@@ -91,7 +90,7 @@ class HighscoreState(State):
             html += '<td style="{0}">'.format(score_style(sizes))
             html += str(score)
             html += '</td>'
-            html += '<td style="{0}">'.format(name_style())
+            html += '<td style="{0}">'.format(name_style)
             html += name
             html += '</td>'
             html += '</tr>'
@@ -132,11 +131,28 @@ class TutorialState(State):
         print("exit tutorial")
 
 class FailState(State):
+    def __init__(self, scene, state):
+        super(FailState, self).__init__(scene, state)
+        self.layer = layer = QGraphicsRectItem()
+        layer.setVisible(False)
+        layer.setOpacity(0)
+        layer.setPos(-300, -200)
+        self.fader = ItemFader(layer)
+        scene.add_item(layer)
+
+        pixmap = QPixmap("fail.png")
+        self.splash = splash = QGraphicsPixmapItem()
+        splash.setPixmap(pixmap)
+        splash.setParentItem(layer)
+    
     def onEntry(self, event):
-        print("enter fail")
+        self.fader.fade_in()
+        naubino = self.scene.naubino
+        naubs = naubino.naubs[:]
+        for naub in naubs: naub.remove()
 
     def onExit(self, event):
-        print("exit fail")
+        self.fader.fade_out()
 
 class GameStateMachine(QStateMachine):
     play = pyqtSignal()
