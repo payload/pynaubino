@@ -1,12 +1,14 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 
-class Application(metaclass=ABCMeta):
+class Application():
+    __metaclass__ = ABCMeta
     @abstractmethod
     def exec_(self): pass
     @abstractmethod
     def Timer(self, interval, callback): pass
 
-class GraphicsScene(object, metaclass=ABCMeta):
+class GraphicsScene(object):
+    __metaclass__ = ABCMeta
     naubino = abstractproperty()
     @abstractmethod
     def add_item(self, *item): pass
@@ -31,11 +33,13 @@ class GraphicsScene(object, metaclass=ABCMeta):
     @abstractmethod
     def step(self, dt): pass
 
-class GraphicsView(metaclass=ABCMeta):
+class GraphicsView():
+    __metaclass__ = ABCMeta
     @abstractmethod
-    def __init__(self, scene : GraphicsScene): pass
+    def __init__(self, scene): pass
 
-class Timer(metaclass=ABCMeta):
+class Timer():
+    __metaclass__ = ABCMeta
     @abstractmethod
     def __init__(self, interval, callback): pass
     @abstractmethod

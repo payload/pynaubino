@@ -11,9 +11,9 @@ try:
     from pygame2.sdlext import draw
     from pygame2.sdl import time
 except ImportError:
-    raise ImportError("No pygame2.sdl support")
+    raise ImportError(u"No pygame2.sdl support")
 
-class Pos:
+class Pos(object):
     @property
     def pos(self): return self.get_pos()
     @pos.setter
@@ -22,7 +22,7 @@ class Pos:
     def __init__(self, x):
         if   isinstance(x, pymunk.Body):
             self.get_pos = lambda: x.position
-            self.set_pos = lambda pos: setattr(x, "position", pos)
+            self.set_pos = lambda pos: setattr(x, u"position", pos)
         else:
             raise TypeError(type(x))
 
@@ -52,7 +52,7 @@ class Timer(Timer):
         self.__callback()
         return self.__interval
 
-class LineJoint:
+class LineJoint(object):
     def __init__(self, scene, a, b):
         self.scene = scene
         self.color = pygame2.Color(0, 0, 0)
@@ -73,7 +73,7 @@ class LineJoint:
     def update_object(self):
         pass
 
-class CircleNaub:
+class CircleNaub(object):
     def __init__(self, scene, naub):
         self.scene = scene
         self.naub = naub
@@ -177,7 +177,7 @@ class GraphicsScene(GraphicsScene):
             obj.update_object()
 
 class GraphicsView(GraphicsView):
-    def __init__(self, scene : GraphicsScene):
+    def __init__(self, scene):
         self.scene = scene
         
         video.init()

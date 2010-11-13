@@ -18,5 +18,5 @@ class Space(pymunk.Space):
         if a == None or b == None: return
         a, b = [x.body.naubino_obj for x in [a, b]]
 
-        if hasattr(a, "collide"): a.collide(b, arbiter)
-        if hasattr(b, "collide"): b.collide(a, arbiter)
+        if hasattr(a, u"collide"): a.collide(b, arbiter)
+        if hasattr(b, u"collide"): b.collide(a, arbiter)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pymunk
 from pymunk import Vec2d
 from Cute import Cute, CuteNaub, CuteJoint
@@ -12,12 +13,13 @@ class Button(Cute):
     pressed  = pyqtSignal(QGraphicsSceneMouseEvent)
     released = pyqtSignal(QGraphicsSceneMouseEvent)
 
-    @pyqtProperty(QPointF)
-    def pos(self): return self.group.pos()
-    @pos.setter
-    def pos(self, pos):
+    #@pyqtProperty(QPointF)
+    def get_pos(self): return self.group.pos()
+    #@pos.setter
+    def set_pos(self, pos):
         self.group.setPos(pos)
         if self.pos_changed: self.pos_changed(pos)
+    pos = pyqtProperty(QPointF, get_pos, set_pos)
 
     @property
     def radius(self): return self.__radius
@@ -36,13 +38,13 @@ class Button(Cute):
         group = self.group = QGraphicsItemGroup()
         
         def mousePressEvent(event):
-            if not hasattr(event, "naubino_pointer"): return
+            if not hasattr(event, u"naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.pressed.emit(event)
         group.mousePressEvent   = mousePressEvent
 
         def mouseReleaseEvent(event):
-            if not hasattr(event, "naubino_pointer"): return
+            if not hasattr(event, u"naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.released.emit(event)
         group.mouseReleaseEvent = mouseReleaseEvent
@@ -53,14 +55,14 @@ class Button(Cute):
 
         shape = self.shape = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
         shape.setPen(QPen(Qt.NoPen))
-        shape.setBrush(QColor("black"))
+        shape.setBrush(QColor(u"black"))
         shape.setRotation(5)
 
-        text = self.text = QGraphicsTextItem("???", group)
+        text = self.text = QGraphicsTextItem(u"???", group)
         font = text.font()
         font.setBold(True)
         text.setFont(font)
-        text.setDefaultTextColor(QColor("white"))
+        text.setDefaultTextColor(QColor(u"white"))
 
         naubino.scene.add_item(group)
 
@@ -87,17 +89,18 @@ class MenuButton(Button):
 
 class PlayButton(MenuButton):
     def __init__(self, naubino, layer = 0):
-        MenuButton.__init__(self, naubino, 15, 1.8, "▸", 0.43, 0.565,
+        MenuButton.__init__(self, naubino, 15, 1.8, u"▸", 0.43, 0.565,
             layer = layer)
 
-class TutorialButton(Button):
+class TutorialButton(MenuButton):
     def __init__(self, naubino, layer = 0):
-        MenuButton.__init__(self, naubino, 15, 1.5, "¿", 0.55, 0.5,
+        MenuButton.__init__(self, naubino, 15, 1.5, u"¿", 0.55, 0.5,
             layer = layer)
 
-class HighscoreButton(Button):
+class HighscoreButton(MenuButton):
     def __init__(self, naubino, layer = 0):
-        MenuButton.__init__(self, naubino, 17, 1.8, "5", 0.53, 0.5,
+        p = super(HighscoreButton, self)
+        p.__init__(naubino, 17, 1.8, u"5", 0.53, 0.5,
             layer = layer, rect=True)
         self.__score = score = 0
         self.__shown_score = score
@@ -109,19 +112,20 @@ class HighscoreButton(Button):
     def score(self, score):
         if self.__score != score:
             self.__score = score
-            ani = self.ani = QPropertyAnimation(self, "shown_score")
+            ani = self.ani = QPropertyAnimation(self, u"shown_score")
             ani.setStartValue(self.shown_score)
             ani.setEndValue(score)
             ani.setDuration(1000)
             ani.start()
             
-    @pyqtProperty(int)
-    def shown_score(self): return self.__shown_score
-    @shown_score.setter
-    def shown_score(self, score):
+    #@pyqtProperty(int)
+    def get_shown_score(self): return self.__shown_score
+    #@shown_score.setter
+    def set_shown_score(self, score):
         if self.__shown_score != score:
             self.__shown_score = score
             self.set_score(score)
+    shown_score = pyqtProperty(int, get_shown_score, set_shown_score)
 
     def set_score(self, score):
-        self.text.setPlainText(str(score))
+        self.text.setPlainText(unicode(score))

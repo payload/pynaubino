@@ -12,7 +12,7 @@ class FailState(State):
         self.fader = ItemFader(layer)
         scene.add_item(layer)
 
-        pixmap = QPixmap("fail.png")
+        pixmap = QPixmap(u"fail.png")
         self.splash = splash = QGraphicsPixmapItem()
         splash.setPixmap(pixmap)
         splash.setParentItem(layer)

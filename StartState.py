@@ -9,7 +9,7 @@ class StartState(State):
         self.splash = splash = QGraphicsPixmapItem()
         self.fader = fader = ItemFader(splash)
 
-        pixmap = QPixmap("splash.png")
+        pixmap = QPixmap(u"splash.png")
         splash.setVisible(False)
         splash.setPixmap(pixmap)
         splash.setOpacity(0)

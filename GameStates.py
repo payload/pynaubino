@@ -15,10 +15,10 @@ class PlayState(State):
 
 class TutorialState(State):
     def onEntry(self, event):
-        print("enter tutorial")
+        print u"enter tutorial"
 
     def onExit(self, event):
-        print("exit tutorial")
+        print u"exit tutorial"
 
 class GameStateMachine(QStateMachine):
     play = pyqtSignal()

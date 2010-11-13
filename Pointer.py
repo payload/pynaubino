@@ -1,6 +1,6 @@
 import pymunk
 
-class Pointer:
+class Pointer(object):
     @property
     def pos(self): return self.body.position
     @pos.setter

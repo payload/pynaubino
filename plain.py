@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -11,7 +12,7 @@ def main():
     #  import Cute as Application
     #  app.Foo
     argv = sys.argv
-    if "pig" in argv:
+    if u"pig" in argv:
         from Pig import Application, GraphicsScene, GraphicsView
     else:
         from Cute import Application, GraphicsScene, GraphicsView
@@ -25,4 +26,4 @@ def main():
     e = app.exec_()
     sys.exit(e)
 
-if __name__ == "__main__": main()
+if __name__ == u"__main__": main()

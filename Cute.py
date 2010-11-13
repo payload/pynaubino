@@ -15,15 +15,16 @@ class Cute(QObject):
         pass
 
 class CuteJoint(Cute):
-    @pyqtProperty(float)
-    def pen_width(self): return self.__pen_width
-    @pen_width.setter
-    def pen_width(self, x):
+    #@pyqtProperty(float)
+    def get_pen_width(self): return self.__pen_width
+    #@pen_width.setter
+    def set_pen_width(self, x):
         if self.__pen_width != x:
             self.__pen_width = x
             if x == 0: pen = QPen(Qt.NoPen)
             else: pen = QPen(self.brush, x)
             self.line.setPen(pen)
+    pen_width = pyqtProperty(float, get_pen_width, set_pen_width)
 
     def __init__(self, scene, a, b, layer = -2):
         Cute.__init__(self, scene)
@@ -34,7 +35,7 @@ class CuteJoint(Cute):
         line.hide()
         line.setZValue(layer)
 
-        brush = self.brush = QBrush(QColor("black"))
+        brush = self.brush = QBrush(QColor(u"black"))
         pen_width = self.__pen_width = 4.0
         pen = QPen(brush, pen_width)
         line.setPen(pen)
@@ -53,7 +54,7 @@ class CuteJoint(Cute):
         self.scene.remove_item(self.line)
 
     def remove_joint(self):
-        ani = self.ani = QPropertyAnimation(self, "pen_width")
+        ani = self.ani = QPropertyAnimation(self, u"pen_width")
         ani.setStartValue(self.pen_width)
         ani.setEndValue(0)
         ani.setDuration(500)
@@ -61,10 +62,11 @@ class CuteJoint(Cute):
         ani.start()
 
 class CuteNaub(Cute):
-    @pyqtProperty(float)
-    def scale(self): return self.elli.scale()
-    @scale.setter
-    def scale(self, x): self.elli.setScale(x)
+    #@pyqtProperty(float)
+    def get_scale(self): return self.elli.scale()
+    #@scale.setter
+    def set_scale(self, x): self.elli.setScale(x)
+    scale = pyqtProperty(float, get_scale, set_scale)
 
     def __init__(self, scene, naub, layer = -1):
         Cute.__init__(self, scene)
@@ -76,7 +78,7 @@ class CuteNaub(Cute):
         elli = self.elli = QGraphicsEllipseItem()
 
         def mousePressEvent(event):
-            if not hasattr(event, "naubino_pointer"): return
+            if not hasattr(event, u"naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.naub.select(event.naubino_pointer)
             if event.button() == Qt.RightButton:
@@ -84,7 +86,7 @@ class CuteNaub(Cute):
         elli.mousePressEvent = mousePressEvent
 
         def mouseReleaseEvent(event):
-            if not hasattr(event, "naubino_pointer"): return
+            if not hasattr(event, u"naubino_pointer"): return
             if event.button() == Qt.LeftButton:
                 self.naub.deselect(event.naubino_pointer)
             if event.button() == Qt.RightButton:
@@ -96,8 +98,8 @@ class CuteNaub(Cute):
         info.setZValue(layer+1)
 
         info_bg = self.info_bg = QGraphicsRectItem(self.info)
-        info_bg.setBrush(QColor("white"))
-        self.info_text = QGraphicsTextItem("info", self.info)
+        info_bg.setBrush(QColor(u"white"))
+        self.info_text = QGraphicsTextItem(u"info", self.info)
 
         elli.setAcceptHoverEvents(True)
         elli.setAcceptTouchEvents(True)
@@ -127,7 +129,7 @@ class CuteNaub(Cute):
             elli.setBrush(QBrush(color))
 
     def update_info(self):
-        text = "links: "+ str(len(self.naub.naubs_joints))
+        text = u"links: "+ unicode(len(self.naub.naubs_joints))
         self.info_text.setPlainText(text)
 
         self.info_bg.setRect(self.info_text.boundingRect())
@@ -151,7 +153,7 @@ class CuteNaub(Cute):
         self.scene.remove_item(self.elli, self.info)
 
     def remove_naub(self):
-        ani = self.ani = QPropertyAnimation(self, "scale")
+        ani = self.ani = QPropertyAnimation(self, u"scale")
         ani.setStartValue(self.scale)
         ani.setEndValue(0)
         ani.setDuration(500)

@@ -29,32 +29,32 @@ class HighscoreState(State):
         self.fader.fade_out()
 
     def generate_highscore_html(self, score_table):
-        sizes = ["xx-large", "x-large", "large"]
+        sizes = [u"xx-large", u"x-large", u"large"]
 
         def score_style(sizes):
-            if not sizes: return ""
+            if not sizes: return u""
             size = sizes.pop(0)
 
             style = [
-                "font-size:{0}".format(size),
-                "vertical-align:bottom",
-                "padding-right:40px"]
-            return ";".join(style)
+                u"font-size:{0}".format(size),
+                u"vertical-align:bottom",
+                u"padding-right:40px"]
+            return u";".join(style)
 
-        style = ["vertical-align:bottom"]
-        name_style = ";".join(style)
+        style = [u"vertical-align:bottom"]
+        name_style = u";".join(style)
 
-        html = ""
-        html += "<table>"
+        html = u""
+        html += u"<table>"
         for line in score_table:
             score, name = line
-            html += '<tr>'
-            html += '<td style="{0}">'.format(score_style(sizes))
-            html += str(score)
-            html += '</td>'
-            html += '<td style="{0}">'.format(name_style)
+            html += u'<tr>'
+            html += u'<td style="{0}">'.format(score_style(sizes))
+            html += unicode(score)
+            html += u'</td>'
+            html += u'<td style="{0}">'.format(name_style)
             html += name
-            html += '</td>'
-            html += '</tr>'
-        html += "</table>"
+            html += u'</td>'
+            html += u'</tr>'
+        html += u"</table>"
         return html
