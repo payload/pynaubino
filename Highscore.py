@@ -1,3 +1,5 @@
+from os.path import isfile
+
 class Highscore:
     def __init__(self):
         self.filename = filename = "highscore"
@@ -7,15 +9,19 @@ class Highscore:
         escape = self.__escape
         score = str(score)
         line = escape(score) +","+ escape(name) +"\n"
+        
         file = open(filename, "a")
         file.write(line)
         file.close()
 
     def load_score(self, filename=None):
         if not filename: filename = self.filename
+        if not isfile(filename): return []
+        
         file = open(filename, "r")
         score = file.readlines()
         file.close()
+
         score = [x.strip() for x in score]
         score = [x.split(',') for x in score]
         score = [x for x in score if len(x) == 2]
