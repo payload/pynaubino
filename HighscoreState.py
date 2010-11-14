@@ -14,15 +14,21 @@ class HighscoreState(State):
         self.fader = fader = ItemFader(layer)
 
         self.table = table = QGraphicsTextItem()
-        table.setPos(-100, -100)
+        table.setPos(0, -100)
         table.setParentItem(layer)
 
     def onEntry(self, event):
         highscore = self.scene.highscore
+        table = self.table
         if not highscore: return
         score = highscore.load_score()
         score = self.generate_highscore_html(score)
-        self.table.setHtml(score)
+        table.setHtml(score)
+        table.adjustSize()
+        r = table.boundingRect()
+        w, h = r.width(), r.height()
+        pos = table.pos()
+        table.setPos(-0.5 * w, -0.5 * h)
         self.fader.fade_in()
 
     def onExit(self, event):
