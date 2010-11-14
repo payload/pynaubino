@@ -8,13 +8,15 @@ class FailState(State):
         self.layer = layer = QGraphicsRectItem()
         layer.setVisible(False)
         layer.setOpacity(0)
-        layer.setPos(-300, -200)
         self.fader = ItemFader(layer)
         scene.add_item(layer)
 
         pixmap = QPixmap("fail.png")
         self.splash = splash = QGraphicsPixmapItem()
         splash.setPixmap(pixmap)
+        r = splash.boundingRect()
+        w, h = r.width(), r.height()
+        splash.setPos(-0.5 * w, -0.5 * h)
         splash.setParentItem(layer)
 
     def onEntry(self, event):
