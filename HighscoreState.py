@@ -44,7 +44,7 @@ class HighscoreState(State):
         style = ["vertical-align:bottom"]
         name_style = ";".join(style)
 
-        html = ""
+        html = "<h1>Highscore</h1>"
         html += "<table>"
         for line in score_table:
             score, name = line
