@@ -17,6 +17,7 @@ class Highscore:
     def load_score(self, filename=None):
         if not filename: filename = self.filename
         if not isfile(filename): return []
+        unescape = self.__unescape
         
         file = open(filename, "r")
         score = file.readlines()
@@ -25,6 +26,7 @@ class Highscore:
         score = [x.strip() for x in score]
         score = [x.split(u',') for x in score]
         score = [x for x in score if len(x) == 2]
+        score = [map(unescape, x) for x in score]
         score = [(int(x[0]), x[1]) for x in score]
         score.sort(key=lambda x: x[0])
         score.reverse()
@@ -38,7 +40,7 @@ class Highscore:
         return s
 
     def __unescape(self, s):
-        s = s.replcae(u'\n', u'')
+        s = s.replace(u'\n', u'')
         s = s.replace(u'\t', u'')
         s = s.replace(u'\\\\', u'\\')
         s = s.replace(u'\\COMMA' , u',' )
