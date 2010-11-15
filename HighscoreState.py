@@ -22,6 +22,7 @@ class HighscoreState(State):
         table = self.table
         if not highscore: return
         score = highscore.load_score()
+        score = score[:5]
         score = self.generate_highscore_html(score)
         table.setHtml(score)
         table.adjustSize()
