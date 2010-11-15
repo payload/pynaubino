@@ -13,9 +13,7 @@ class Button(Cute):
     pressed  = pyqtSignal(QGraphicsSceneMouseEvent)
     released = pyqtSignal(QGraphicsSceneMouseEvent)
 
-    #@pyqtProperty(QPointF)
     def get_pos(self): return self.group.pos()
-    #@pos.setter
     def set_pos(self, pos):
         self.group.setPos(pos)
         if self.pos_changed: self.pos_changed(pos)
@@ -118,9 +116,7 @@ class HighscoreButton(MenuButton):
             ani.setDuration(1000)
             ani.start()
             
-    #@pyqtProperty(int)
     def get_shown_score(self): return self.__shown_score
-    #@shown_score.setter
     def set_shown_score(self, score):
         if self.__shown_score != score:
             self.__shown_score = score

@@ -15,9 +15,7 @@ class Cute(QObject):
         pass
 
 class CuteJoint(Cute):
-    #@pyqtProperty(float)
     def get_pen_width(self): return self.__pen_width
-    #@pen_width.setter
     def set_pen_width(self, x):
         if self.__pen_width != x:
             self.__pen_width = x
@@ -62,9 +60,7 @@ class CuteJoint(Cute):
         ani.start()
 
 class CuteNaub(Cute):
-    #@pyqtProperty(float)
     def get_scale(self): return self.elli.scale()
-    #@scale.setter
     def set_scale(self, x): self.elli.setScale(x)
     scale = pyqtProperty(float, get_scale, set_scale)
 

@@ -1,27 +1,27 @@
-from io import open
-import os.path
+from os.path import isfile
 
-class Highscore(object):
+class Highscore:
     def __init__(self):
         self.filename = filename = u"highscore"
 
     def submit_score(self, name, score, filename=None):
         if not filename: filename = self.filename
         escape = self.__escape
-        score = unicode(score)
-        line = escape(score) +u","+ escape(name) +u"\n"
-        file = open(filename, u"a")
+        score = str(score)
+        line = escape(score) +","+ escape(name) +"\n"
+        
+        file = open(filename, "a")
         file.write(line)
         file.close()
 
     def load_score(self, filename=None):
         if not filename: filename = self.filename
-        if os.path.isfile(filename):
-            file = open(filename, u"r")
-            score = file.readlines()
-            file.close()
-        else:
-            score = u""
+        if not isfile(filename): return []
+        
+        file = open(filename, "r")
+        score = file.readlines()
+        file.close()
+
         score = [x.strip() for x in score]
         score = [x.split(u',') for x in score]
         score = [x for x in score if len(x) == 2]

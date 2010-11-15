@@ -1,17 +1,6 @@
 == Naubino
 
-=== Run
-# one of the following, depends
-python plain.py
-python3 plain.py
-python2 plain.py # Ubuntu Lucid Lynx
-
 === Dependencies
-* Python 3.1 >
-** and every python specific dependency also build with and for python 3
-** try "2to3"
-
-# also possible, see Ubuntu Lucid Lynx Build Manual
 * Python 2.6 >
 
 * PyQt4 
@@ -20,25 +9,8 @@ python2 plain.py # Ubuntu Lucid Lynx
 * pymunk 1.0.0
 ** chipmunk 5.3.2
 
-=== Build
-==== Ubuntu Lucid Lynx
-sudo aptitude install git-core python-setuptools python3.1 python-qt4
-
-# choose one:
-# needs python2.7, not included in Ubuntu Lucid Lynx
-#sudo easy_install 3to2 # not testet
-sudo easy_install 3to2_py3k pymunk
-
-git clone git://gitorious.org/cute-naubino/cute-naubino.git
-cd cute-naubino
-
-# choose one:
-# already converted version, maybe outdated
-git checkout py2
-# convert yourself, maybe buggy
-#git checkout -b py2
-#git merge -s theirs master
-#3to2 -w *py
+=== Python 3
+* try 2to3 and think of Python 3 enabling the dependencies
 
 === TODO
 * correct naub colors (look in Naubino.spam*)
@@ -48,3 +20,6 @@ git checkout py2
 * spam naubs on the correct position (look in Naubino.spam*)
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
+
+=== DEV NOTES
+* use pyqtProperty(type, get, set) instead of @pyqtProperty(type)… this is needed for Py2 compatibility
