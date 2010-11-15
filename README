@@ -1,15 +1,16 @@
 == Naubino
 
 === Dependencies
-* Python 3.1 >
-** and every python specific dependency also build with and for python 3
-** try "2to3"
+* Python 2.6 >
 
 * PyQt4 
 ** Qt 4.6 >
 
 * pymunk 1.0.0
 ** chipmunk 5.3.2
+
+=== Python 3
+* try 2to3 and think of Python 3 enabling the dependencies
 
 === TODO
 * correct naub colors (look in Naubino.spam*)
@@ -19,3 +20,6 @@
 * spam naubs on the correct position (look in Naubino.spam*)
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
+
+=== DEV NOTES
+* use pyqtProperty(type, get, set) instead of @pyqtProperty(type)… this is needed for Py2 compatibility

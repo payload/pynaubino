@@ -18,13 +18,13 @@ class CuteJoint(CuteJoint):
     def __init__(self, scene, a, b):
         super(CuteJoint, self).__init__(scene, a, b)
         callback = lambda x: self.update_object()
-        if hasattr(a, "pos_changed"):
+        if hasattr(a, u"pos_changed"):
             self.a.pos_changed = callback
-        if hasattr(b, "pos_changed"):
+        if hasattr(b, u"pos_changed"):
             self.b.pos_changed = callback
         self.update_object()
 
-class NaubinoMenu:
+class NaubinoMenu(object):
     def __init__(self, scene):
         self.scene = scene
         self.naubino = naubino = scene.naubino
@@ -77,7 +77,7 @@ class NaubinoMenu:
         self.popped_out = True
         btns = self.btns
         for btn in btns:
-            ani = btn.ani = QPropertyAnimation(btn, "pos")
+            ani = btn.ani = QPropertyAnimation(btn, u"pos")
             ani.setStartValue(btn.pos)
             ani.setEndValue(btn.popped_out_pos)
             ani.setDuration(300)
@@ -88,7 +88,7 @@ class NaubinoMenu:
         self.popped_out = False
         btns = self.btns
         for btn in btns:
-            ani = btn.ani = QPropertyAnimation(btn, "pos")
+            ani = btn.ani = QPropertyAnimation(btn, u"pos")
             ani.setStartValue(btn.pos)
             ani.setEndValue(QPointF(0, 0))
             ani.setDuration(300)

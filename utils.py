@@ -13,14 +13,14 @@ def are_colors_alike(a, b):
     a = a.getRgbF()
     b = b.getRgbF()
     return all([(max(a[i], b[i]) - min(a[i], b[i])) < 0.25
-        for i in range(3)])
+        for i in xrange(3)])
 
 def random_byte():
     return random.randint(0, 255)
 
 def random_not_white():
     r = random_byte
-    white = QColor("white")
+    white = QColor(u"white")
     while True:
         color = QColor(r(), r(), r())
         if not are_colors_alike(color, white):
@@ -30,7 +30,7 @@ def toVec2d(v):
     if isinstance(v, Vec2d): return v
     else: return Vec2d(v.x(), v.y())
 
-class Pos:
+class Pos(object):
     @property
     def pos(self): return self.get_pos()
     @pos.setter
@@ -39,7 +39,7 @@ class Pos:
     def __init__(self, x):
         if   isinstance(x, pymunk.Body):
             self.get_pos = lambda: x.position
-            self.set_pos = lambda pos: setattr(x, "position", pos)
+            self.set_pos = lambda pos: setattr(x, u"position", pos)
         elif isinstance(x, QGraphicsItem):
             def get_pos():
                 pos = x.pos()

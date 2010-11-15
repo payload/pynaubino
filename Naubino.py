@@ -1,3 +1,4 @@
+from __future__ import division
 import pymunk
 from Space import Space
 from Pointer import Pointer
@@ -7,7 +8,7 @@ from utils import Pos, random_vec
 from Naub import Naub
 from Menu import NaubinoMenu
 
-class Naubino:
+class Naubino(object):
     @property
     def score(self): return self.__score
     @score.setter
@@ -130,7 +131,7 @@ class Naubino:
 
     # TODO
     def random_naub_color(self):
-        return QColor("black")
+        return QColor(u"black")
 
     # TODO
     def score_cycle(self, cycle):

@@ -1,21 +1,20 @@
 from PyQt4.QtCore import QObject, QPropertyAnimation, pyqtProperty
 
 class ItemFader(QObject):
-    @pyqtProperty(float)
-    def opacity(self): return self.item.opacity()
-    @opacity.setter
-    def opacity(self, x): self.item.setOpacity(x)
+    def get_opacity(self): return self.item.opacity()
+    def set_opacity(self, x): self.item.setOpacity(x)
+    opacity = pyqtProperty(float, get_opacity, set_opacity)
 
     def __init__(self, item):
         super(ItemFader, self).__init__()
         self.item = item
 
-        ani = self.fade_in_ani = QPropertyAnimation(self, "opacity")
+        ani = self.fade_in_ani = QPropertyAnimation(self, u"opacity")
         def fade_in_finished():
             pass
         ani.finished.connect(fade_in_finished)
 
-        ani = self.fade_out_ani = QPropertyAnimation(self, "opacity")
+        ani = self.fade_out_ani = QPropertyAnimation(self, u"opacity")
         def fade_out_finished():
             self.item.setVisibile(False)
         ani.finished.connect(fade_out_finished)

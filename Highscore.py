@@ -2,7 +2,7 @@ from os.path import isfile
 
 class Highscore:
     def __init__(self):
-        self.filename = filename = "highscore"
+        self.filename = filename = u"highscore"
 
     def submit_score(self, name, score, filename=None):
         if not filename: filename = self.filename
@@ -23,7 +23,7 @@ class Highscore:
         file.close()
 
         score = [x.strip() for x in score]
-        score = [x.split(',') for x in score]
+        score = [x.split(u',') for x in score]
         score = [x for x in score if len(x) == 2]
         score = [(int(x[0]), x[1]) for x in score]
         score.sort(key=lambda x: x[0])
@@ -31,15 +31,15 @@ class Highscore:
         return score
 
     def __escape(self, s):
-        s = s.replace('\n', '')
-        s = s.replace('\t', '')
-        s = s.replace('\\', '\\\\')
-        s = s.replace(',', '\\COMMA')
+        s = s.replace(u'\n', u'')
+        s = s.replace(u'\t', u'')
+        s = s.replace(u'\\', u'\\\\')
+        s = s.replace(u',', u'\\COMMA')
         return s
 
     def __unescape(self, s):
-        s = s.replcae('\n', '')
-        s = s.replace('\t', '')
-        s = s.replace('\\\\', '\\')
-        s = s.replace('\\COMMA' , ',' )
+        s = s.replcae(u'\n', u'')
+        s = s.replace(u'\t', u'')
+        s = s.replace(u'\\\\', u'\\')
+        s = s.replace(u'\\COMMA' , u',' )
         return s

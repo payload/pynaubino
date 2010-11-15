@@ -4,7 +4,7 @@ import random
 from NaubJoint import NaubJoint
 from utils import *
 
-class Naub: pass
+class Naub(object): pass
 class Naub(Naub):
     @property
     def pos(self): return self.body.position
@@ -19,7 +19,7 @@ class Naub(Naub):
         body.naubino_obj = self
         body.position = pos
         shape = pymunk.Circle(body, radius+2)
-        color = QColor("black")
+        color = QColor(u"black")
         naubino.space.add(body, shape)
 
         self.alive = True

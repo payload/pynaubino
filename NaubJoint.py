@@ -1,6 +1,6 @@
 import pymunk
 
-class NaubJoint:
+class NaubJoint(object):
     def __init__(self, a, b, naubino):
         a = a.body
         b = b.body
