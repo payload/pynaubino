@@ -12,12 +12,11 @@ class Button(Cute):
     pressed  = pyqtSignal(QGraphicsSceneMouseEvent)
     released = pyqtSignal(QGraphicsSceneMouseEvent)
 
-    @pyqtProperty(QPointF)
-    def pos(self): return self.group.pos()
-    @pos.setter
-    def pos(self, pos):
+    def get_pos(self): return self.group.pos()
+    def set_pos(self, pos):
         self.group.setPos(pos)
         if self.pos_changed: self.pos_changed(pos)
+    pos = pyqtProperty(QPointF, get_pos, set_pos)
 
     @property
     def radius(self): return self.__radius
@@ -115,13 +114,12 @@ class HighscoreButton(Button):
             ani.setDuration(1000)
             ani.start()
             
-    @pyqtProperty(int)
-    def shown_score(self): return self.__shown_score
-    @shown_score.setter
-    def shown_score(self, score):
+    def get_shown_score(self): return self.__shown_score
+    def set_shown_score(self, score):
         if self.__shown_score != score:
             self.__shown_score = score
             self.set_score(score)
+    shown_score = pyqtProperty(int, get_shown_score, set_shown_score)
 
     def set_score(self, score):
         self.text.setPlainText(str(score))

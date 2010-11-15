@@ -19,3 +19,6 @@
 * spam naubs on the correct position (look in Naubino.spam*)
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
+
+=== DEV NOTES
+* use pyqtProperty(type, get, set) instead of @pyqtProperty(type)… this is needed for Py2 compatibility

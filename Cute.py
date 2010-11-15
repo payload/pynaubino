@@ -15,15 +15,14 @@ class Cute(QObject):
         pass
 
 class CuteJoint(Cute):
-    @pyqtProperty(float)
-    def pen_width(self): return self.__pen_width
-    @pen_width.setter
-    def pen_width(self, x):
+    def get_pen_width(self): return self.__pen_width
+    def set_pen_width(self, x):
         if self.__pen_width != x:
             self.__pen_width = x
             if x == 0: pen = QPen(Qt.NoPen)
             else: pen = QPen(self.brush, x)
             self.line.setPen(pen)
+    pen_width = pyqtProperty(float, get_pen_width, set_pen_width)
 
     def __init__(self, scene, a, b, layer = -2):
         Cute.__init__(self, scene)
@@ -61,10 +60,9 @@ class CuteJoint(Cute):
         ani.start()
 
 class CuteNaub(Cute):
-    @pyqtProperty(float)
-    def scale(self): return self.elli.scale()
-    @scale.setter
-    def scale(self, x): self.elli.setScale(x)
+    def get_scale(self): return self.elli.scale()
+    def set_scale(self, x): self.elli.setScale(x)
+    scale = pyqtProperty(float, get_scale, set_scale)
 
     def __init__(self, scene, naub, layer = -1):
         Cute.__init__(self, scene)
