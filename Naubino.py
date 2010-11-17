@@ -1,4 +1,3 @@
-from __future__ import division
 import pymunk
 from Space import Space
 from Pointer import Pointer
@@ -8,7 +7,7 @@ from utils import Pos, random_vec
 from Naub import Naub
 from Menu import NaubinoMenu
 
-class Naubino(object):
+class Naubino:
     @property
     def score(self): return self.__score
     @score.setter
@@ -40,8 +39,7 @@ class Naubino(object):
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
 
-        def callback(): self.spam_naub()
-        self.spammer = app.Timer(1, callback)
+        self.spammer = app.Timer(1, self.spam_naub)
 
         if scene: scene.naubino = self
 
@@ -131,7 +129,7 @@ class Naubino(object):
 
     # TODO
     def random_naub_color(self):
-        return QColor(u"black")
+        return QColor("black")
 
     # TODO
     def score_cycle(self, cycle):

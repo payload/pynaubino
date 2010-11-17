@@ -9,12 +9,12 @@ class ItemFader(QObject):
         super(ItemFader, self).__init__()
         self.item = item
 
-        ani = self.fade_in_ani = QPropertyAnimation(self, u"opacity")
+        ani = self.fade_in_ani = QPropertyAnimation(self, "opacity")
         def fade_in_finished():
             pass
         ani.finished.connect(fade_in_finished)
 
-        ani = self.fade_out_ani = QPropertyAnimation(self, u"opacity")
+        ani = self.fade_out_ani = QPropertyAnimation(self, "opacity")
         def fade_out_finished():
             self.item.setVisibile(False)
         ani.finished.connect(fade_out_finished)
@@ -26,6 +26,7 @@ class ItemFader(QObject):
     def fade_out(self, opacity = 0.0, duration = 1.0):
         self.fade(opacity, duration)
 
+    # TODO payload, fade out ani? anybody?
     def fade(self, opacity, duration):
         ani = self.fade_in_ani
         ani.setEndValue(opacity)
