@@ -109,6 +109,8 @@ class Naub(Naub):
         if colors_alike and not naub_near:
             self.merge_naub(naub)
             self.pop_cycle()
+        if colors_alike and naub_near:
+            self.test_cycle(naub)    
 
     # TODO
     def pop_cycle(self):
@@ -116,6 +118,24 @@ class Naub(Naub):
         self.naubino.score_cycle([naub])
         naub.remove()
 
+    def test_cycle(self, naub):
+        joined = []
+        for i in self.naubs_joints:
+            joined.append(i)
+            if len(joined) > 2:
+                if naub in self.naubs_joints:
+                    print "merged"
+                    for k in self.naubs_joints:
+                        k.remove()
+                    for j in naub.naubs_joints:
+                        j.remove()
+                    #self.merge_naub(naub)
+                    self.remove()
+                return
+            return
+        return
+            
+            
     def random_reachable_naub(self):
         nodes = self.reachable_naubs()
         random.shuffle(nodes)
