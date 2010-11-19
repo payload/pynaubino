@@ -5,15 +5,20 @@ class Space(pymunk.Space):
         pymunk.Space.__init__(self)
         self.damping = 0.4
         self.set_default_collision_handler(None, None, self.collide, None)
-        self.__to_remove = set()
+        self.__objs = set()
+
+    def add(self, *objs):
+        myobjs = self.__objs
+        for obj in objs:
+            myobjs.add(obj)
+            pymunk.Space.add(self, obj)
 
     def remove(self, *objs):
-        to_remove = self.__to_remove
+        myobjs = self.__objs
         for obj in objs:
-            if obj in to_remove: continue
-            to_remove.add(obj)
+            if obj not in myobjs: continue
+            myobjs.remove(obj)
             def callback(obj):
-                to_remove.remove(obj)
                 pymunk.Space.remove(self, obj)
             self.add_post_step_callback(callback, obj)
 
