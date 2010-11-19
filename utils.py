@@ -1,13 +1,13 @@
 import random
-from PyQt4.QtCore import *
+#from PyQt4.QtCore import *
 import pymunk
 from pymunk import Vec2d
 from PyQt4.QtGui import QColor, QGraphicsItem
 
-def random_vec(xv, yv):
+def random_vec(x, y):
     return Vec2d(
-        random.uniform(-xv, xv),
-        random.uniform(-yv, yv))
+        random.uniform(-x, x),
+        random.uniform(-y, y))
 
 def are_colors_alike(a, b):
     a = a.getRgbF()
@@ -47,5 +47,6 @@ class Pos(object):
             self.get_pos = get_pos
             def set_pos(pos):
                 x.setPos(pos.x, pos.y)
+            self.set_pos = set_pos
         else:
             raise TypeError(type(x))
