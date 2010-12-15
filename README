@@ -13,7 +13,6 @@
 * try 2to3 and think of Python 3 enabling the dependencies
 
 === TODO
-* correct naub colors (look in Naubino.spam*)
 * correct physics like joint strengths (Naub.joint_naub, Naubino.add_naub)
 * cycle detection (call remove on cycle naubs, Naubino.score_cycle, Naub.pop_cycle)
 * abstract Qt dependencies away and implement stubs in Pig (QColor, ???)
