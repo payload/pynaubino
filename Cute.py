@@ -309,6 +309,7 @@ class GraphicsView(GraphicsView):
         view.setGeometry(0, 0, 600, 400)
         view.setSceneRect(-290, -190, 580, 380)
         view.setRenderHints(QPainter.Antialiasing)
+        view.setViewportUpdateMode(view.FullViewportUpdate)
         view.show()
 
         scene.add_item(arena)
