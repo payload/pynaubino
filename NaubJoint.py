@@ -9,9 +9,9 @@ class NaubJoint(object):
         center = (0,0)
         joint = pymunk.PinJoint(a, b, center, center)
         joint.distance = 40
-        joint.bias_coef
+        joint.bias_coef = 0.2
         joint.max_bias
-        joint.max_force = 2000
+        joint.max_force = 1200
         naubino.space.add(joint)
 
         self.alive = True
