@@ -87,18 +87,18 @@ class MenuButton(Button):
 
 class PlayButton(MenuButton):
     def __init__(self, naubino, layer = 0):
-        MenuButton.__init__(self, naubino, 15, 1.8, u"▸", 0.43, 0.565,
+        MenuButton.__init__(self, naubino, 13, 1.8, u"▸", 0.43, 0.565,
             layer = layer)
 
 class TutorialButton(MenuButton):
     def __init__(self, naubino, layer = 0):
-        MenuButton.__init__(self, naubino, 15, 1.5, u"¿", 0.55, 0.5,
+        MenuButton.__init__(self, naubino, 13, 1.5, u"¿", 0.55, 0.5,
             layer = layer)
 
 class HighscoreButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         p = super(HighscoreButton, self)
-        p.__init__(naubino, 17, 1.8, u"5", 0.53, 0.5,
+        p.__init__(naubino, 15, 1.8, u"5", 0.53, 0.5,
             layer = layer, rect=True)
         self.__score = score = 0
         self.__shown_score = score

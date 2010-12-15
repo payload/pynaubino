@@ -9,6 +9,7 @@ from utils import *
 from Naub import Naub
 from MenuButtons import *
 from GameStates import GameStateMachine
+from math import cos, sin, pi
 
 # TODO CuteJoint is missing a feature :D
 # Cute.update_object is only called if scene.step is called
@@ -41,13 +42,19 @@ class NaubinoMenu(object):
         btn.pressed.connect(state_machine.highscore)
         btn.group.setParentItem(buttons)
 
+        posis = [-0.066 + 0.22*x for x in range(0, 4)]
+        posis = [x*pi for x in posis]
+        posis = [(cos(x), sin(x)) for x in posis]
+        posis = [(x[0]*r, x[1]*r) for x, r in zip(posis, [60, 60, 55, 60])]
+        posis = [QPointF(*x) for x in posis]
+
         btn = self.play_btn = PlayButton(naubino, layer = 9)
-        btn.pos = btn.popped_out_pos = QPointF(45, 10)
+        btn.pos = btn.popped_out_pos = posis[0]
         btn.pressed.connect(state_machine.play)
         btn.group.setParentItem(buttons)
 
         btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
-        btn.pos = btn.popped_out_pos = QPointF(5, 45)
+        btn.pos = btn.popped_out_pos = posis[1]
         btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
 
@@ -70,7 +77,7 @@ class NaubinoMenu(object):
         hover.entered.connect(self.enter)
         hover.leaved.connect(self.leave)
 
-        buttons.setPos(-270, -170)
+        buttons.setPos(-265, -170)
 
     def enter(self, event):
         if self.popped_out: return
