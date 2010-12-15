@@ -13,7 +13,7 @@ class Naub(Naub):
 
     def __init__(self, naubino, pos = (0, 0)):
         mass = 1
-        radius = 15
+        radius = self.radius = 15
         inertia = pymunk.moment_for_circle(mass, 0, radius)
         body = pymunk.Body(mass, inertia)
         body.naubino_obj = self

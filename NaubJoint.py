@@ -6,7 +6,7 @@ class NaubJoint(object):
         b = b.body
         center = (0,0)
         joint = pymunk.PinJoint(a, b, center, center)
-        joint.distance = 50
+        joint.distance = 40
         joint.bias_coef
         joint.max_bias
         joint.max_force = 2000

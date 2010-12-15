@@ -101,7 +101,8 @@ class CuteNaub(Cute):
         elli.setAcceptTouchEvents(True)
         elli.hide()
         elli.setZValue(layer)
-        elli.setRect(-15, -15, 30, 30)
+        r = naub.radius - 2
+        elli.setRect(-r, -r, 2*r, 2*r)
         elli.setPen(QPen(Qt.NoPen))
 
         self.update_object()
