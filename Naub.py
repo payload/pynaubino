@@ -18,7 +18,7 @@ class Naub(Naub):
         body = pymunk.Body(mass, inertia)
         body.naubino_obj = self
         body.position = pos
-        shape = pymunk.Circle(body, radius+2)
+        shape = pymunk.Circle(body, radius)
         color = QColor(u"black")
         naubino.space.add(body, shape)
 
