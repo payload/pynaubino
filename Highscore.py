@@ -8,7 +8,7 @@ class Highscore:
         if not filename: filename = self.filename
         escape = self.__escape
         score = str(score)
-        line = escape(score) +","+ escape(name) +"\n"
+        line = escape(score) +"\t"+ escape(name) +"\n"
         
         file = open(filename, "a")
         file.write(line)
@@ -17,31 +17,26 @@ class Highscore:
     def load_score(self, filename=None):
         if not filename: filename = self.filename
         if not isfile(filename): return []
-        unescape = self.__unescape
+        parse_line = self.__parse_line
         
         file = open(filename, "r")
         score = file.readlines()
         file.close()
 
         score = [x.strip() for x in score]
-        score = [x.split(u',') for x in score]
+        score = [x.split("\t") for x in score]
         score = [x for x in score if len(x) == 2]
-        score = [map(unescape, x) for x in score]
-        score = [(int(x[0]), x[1]) for x in score]
+        score = [parse_line(x) for x in score]
+        score = [x for x in score if x != None]
         score.sort(key=lambda x: x[0])
         score.reverse()
         return score
 
-    def __escape(self, s):
-        s = s.replace(u'\n', u'')
-        s = s.replace(u'\t', u'')
-        s = s.replace(u'\\', u'\\\\')
-        s = s.replace(u',', u'\\COMMA')
-        return s
+    def __parse_line(self, x):
+        try: return (int(x[0]), x[1])
+        except ValueError as e: return None
 
-    def __unescape(self, s):
-        s = s.replace(u'\n', u'')
-        s = s.replace(u'\t', u'')
-        s = s.replace(u'\\\\', u'\\')
-        s = s.replace(u'\\COMMA' , u',' )
+    def __escape(self, s):
+        s = s.replace("\n", " ")
+        s = s.replace("\t", " ")
         return s
