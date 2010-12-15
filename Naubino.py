@@ -8,7 +8,7 @@ from Naub import Naub
 from Menu import NaubinoMenu
 from random import sample
 
-class Naubino:
+class Naubino(object):
     @property
     def score(self): return self.__score
     @score.setter
@@ -146,9 +146,10 @@ class Naubino:
         color = colors[sample(colors, 1)[0]]
         return QColor(*color)
 
-    # TODO
     def score_cycle(self, cycle):
-        self.score += len(cycle)
+        # self.score += len(cycle)
+        # property can't do +=
+        self.score = self.score + len(cycle)
 
     def step(self, dt):
         self.space.step(dt)

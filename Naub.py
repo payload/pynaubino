@@ -27,6 +27,8 @@ class Naub(Naub):
         self.body = body
         self.shape = shape
         self.color = color
+        self.cycle_check = 0
+        self.cycle_number = 0
         self.naubino = naubino
         self.pointer_joints = {}
         self.naubs_joints = {}
@@ -108,38 +110,42 @@ class Naub(Naub):
         
         if colors_alike and not naub_near:
             self.merge_naub(naub)
-            self.pop_cycle()
-        if colors_alike and naub_near:
-            self.test_cycle(naub)    
+            cycle = self.test_cycle()
+            if cycle: self.pop_cycle(cycle)
 
-    # TODO
-    def pop_cycle(self):
-        naub = self.random_reachable_naub()
-        self.naubino.score_cycle([naub])
-        naub.remove()
+    def pop_cycle(self, cycle):
+        self.naubino.score_cycle(cycle)
+        for naub in cycle:
+            naub.remove()
 
-    def test_cycle(self, naub):
-        joined = []
-        for i in self.naubs_joints:
-            joined.append(i)
-            if len(joined) > 2:
-                if naub in self.naubs_joints:
-                    print "merged"
-                    for k in self.naubs_joints:
-                        k.remove()
-                    for j in naub.naubs_joints:
-                        j.remove()
-                    #self.merge_naub(naub)
-                    self.remove()
-                return
-            return
-        return
-            
-            
-    def random_reachable_naub(self):
-        nodes = self.reachable_naubs()
-        random.shuffle(nodes)
-        return nodes[0]
+    def test_cycle(self):
+        naubs = self.reachable_naubs()
+        for naub in naubs:
+            naub.cycle_check = 0
+            naub.cycle_number = 0
+        progress = 1
+        for naub in naubs:
+            if naub.cycle_number == 0:
+                cycle = self.test_cycle_(naub, None, progress, naubs)
+                if cycle: return cycle
+
+    def test_cycle_(self, v, pre, progress, naubs):
+        v.cycle_number = progress;
+        progress += 1;
+        v.cycle_check = 1;
+        post = v.naubs_joints.keys()
+        if pre: post.remove(pre)
+        for w in post:
+            if w.cycle_number == 0:
+                cycle = self.test_cycle_(w, v, progress, naubs)
+                if cycle: return cycle
+            if w.cycle_check == 1:
+                cycle = [naub
+                    for naub in naubs
+                    if (naub.cycle_number >= w.cycle_number
+                    and naub.cycle_check == 1)]
+                if cycle: return cycle
+        v.cycle_check = 2
 
     def is_naub_near(self, naub):
         if naub in self.naubs_joints: return True
