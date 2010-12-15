@@ -38,11 +38,14 @@ class FailState(State):
         g.setFont(font)
         g.setPlainText('Anony Mous')
         self.__relpos(g)
-        g.setTextInteractionFlags(Qt.TextEditable)
+        g.setTextInteractionFlags(Qt.TextEditorInteraction)
         g.setParentItem(layer)
 
         def callback(e):
             key, text = e.key(), e.text()
+            if str(text) in ["\r", "\n"]:
+                self.onExit(None)
+                return
             g = self.name_input
             type(g).keyPressEvent(g, e)
             self.__relpos(g)
@@ -60,6 +63,7 @@ class FailState(State):
         g = self.name_input
         g.setPlainText('Anony Mous')
         self.__relpos(g)
+        g.setFocus()
         
         self.fader.fade_in()
         naubino = self.scene.naubino
