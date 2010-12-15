@@ -8,6 +8,7 @@ class FailState(State):
     def __init__(self, scene, state):
         super(FailState, self).__init__(scene, state)
         self.__score = 0
+        self.is_running = False
         self.layer = layer = QGraphicsRectItem()
         layer.setVisible(False)
         layer.setOpacity(0)
@@ -59,6 +60,8 @@ class FailState(State):
 
     def onEntry(self, event):
         self.__score = self.naubino.score
+
+        self.is_running = True
         
         g = self.name_input
         g.setPlainText('Anony Mous')
@@ -71,6 +74,8 @@ class FailState(State):
         for naub in naubs: naub.remove()
 
     def onExit(self, event):
+        if not self.is_running: return
+        self.is_running = False
         name, score = self.name_input.toPlainText(), self.__score
         self.scene.highscore.submit_score(name, score)
         self.fader.fade_out()
