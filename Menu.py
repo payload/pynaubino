@@ -32,6 +32,8 @@ class NaubinoMenu(object):
         self.popped_out = True
         self.state_machine = state_machine = GameStateMachine(scene)
 
+        naubino.fail = state_machine.fail.emit
+
         state_machine.start()
 
         buttons = self.buttons = QGraphicsRectItem()

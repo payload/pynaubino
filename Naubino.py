@@ -17,17 +17,28 @@ class Naubino(object):
     def score(self, score):
         if self.__score == score: return
         self.__score = score
-        if not self.score_changed: return
-        self.score_changed(score)
+        if not self.score_changed: self.score_changed(score)
+
+    @property
+    def warn(self): return self.__warn
+    @warn.setter
+    def warn(self, warn):
+        if self.__warn == warn: return
+        self.__warn = warn
+        if self.warn_changed: self.warn_changed(warn)
     
     def __init__(self, app = None):
         self.naubs = []
+        self.naubjoints = set()
         self.naub_center_joints = {}
         self.playing = False
         self.app = app
         self.scene = scene = app.scene
         self.__score = 0
         self.score_changed = None
+        self.__warn = False
+        self.warn_changed = None
+        self.fail = None
         
         self.naub_colors = {
             "red":    [229,  53,  23],
@@ -103,9 +114,11 @@ class Naubino(object):
         for naub in naubs: self.add_naub(naub)
 
     def add_naub_joint(self, joint):
+        self.naubjoints.add(joint)
         if self.scene: self.scene.add_naub_joint(joint)
 
     def remove_naub_joint(self, joint):
+        self.naubjoints.discard(joint)
         if self.scene: self.scene.remove_naub_joint(joint)
 
     def pre_remove_naub_joint(self, joint):
@@ -125,13 +138,6 @@ class Naubino(object):
         self.add_naub(b)
         a.join_naub(b)
         return a, b
-
-    def spam_naub(self):
-        if len(self.naubs) > 16: return
-        pos = random_vec(300, 200)
-        naub = Naub(self, pos)
-        naub.color = self.random_naub_color()
-        self.add_naub(naub)
 
     def spam_naub_pair(self):
         pos = self.random_naub_pos()
@@ -169,6 +175,19 @@ class Naubino(object):
     def step(self, dt):
         self.space.step(dt)
         if self.scene: self.scene.step(dt)
+        danger = self.danger()
+        self.warn = False if danger < 30 else True
+        if danger > 40:
+            self.stop()
+            if self.fail: self.fail()
+
+    def danger(self):
+        danger = 0
+        for j in self.naubjoints:
+            if (j.a.pos.get_length() < 160
+            or  j.b.pos.get_length() < 160):
+                danger += 1
+        return danger
 
     def play(self):
         self.spammer.start()

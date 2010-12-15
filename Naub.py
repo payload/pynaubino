@@ -164,3 +164,4 @@ class Naub(Naub):
         for x in self.naubs_joints:
             nodes.extend(x.reachable_naubs(visited))
         return nodes
+        

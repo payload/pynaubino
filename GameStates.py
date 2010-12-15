@@ -24,6 +24,7 @@ class GameStateMachine(QStateMachine):
     play = pyqtSignal()
     tutorial = pyqtSignal()
     highscore = pyqtSignal()
+    fail = pyqtSignal()
     
     def __init__(self, scene):
         from FailState import FailState
@@ -46,6 +47,7 @@ class GameStateMachine(QStateMachine):
 
         no_play.addTransition(self.play, play)
         play.addTransition(self.highscore, fail)
+        play.addTransition(self.fail, fail)
         sf.addTransition(self.tutorial, tutorial)
         sf.addTransition(self.highscore, highscore)
         tutorial.addTransition(self.highscore, highscore)

@@ -2,9 +2,9 @@ from Interfaces import *
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from PyQt4.QtGui import QGraphicsScene
 import random
 from utils import *
+from CuteArena import CuteArena
 
 class Cute(QObject):
     def __init__(self, scene):
@@ -300,7 +300,7 @@ class GraphicsView(GraphicsView):
         self.__view = view = QGraphicsView()
         self.__naubino = naubino = scene.naubino
         self.__menu = menu = NaubinoMenu(scene)
-        self.__arena = arena = QGraphicsEllipseItem()
+        self.__arena = arena = CuteArena(scene)
 
         naubino.score_changed = menu.score_changed
 
@@ -312,12 +312,7 @@ class GraphicsView(GraphicsView):
         view.setViewportUpdateMode(view.FullViewportUpdate)
         view.show()
 
-        scene.add_item(arena)
-        r = 160
-        arena.setRect(-r, -r, 2*r, 2*r)
-        arena.setPen(QPen(QColor(*naubino.colors["grey"]), 3))
-        arena.setZValue(-40)
-        arena.show()
+        naubino.warn_changed = arena.warn_changed
         
         frame.show()
 

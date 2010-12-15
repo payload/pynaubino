@@ -2,6 +2,8 @@ import pymunk
 
 class NaubJoint(object):
     def __init__(self, a, b, naubino):
+        self.a = a
+        self.b = b
         a = a.body
         b = b.body
         center = (0,0)
