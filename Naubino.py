@@ -17,7 +17,7 @@ class Naubino(object):
     def score(self, score):
         if self.__score == score: return
         self.__score = score
-        if not self.score_changed: self.score_changed(score)
+        if self.score_changed: self.score_changed(score)
 
     @property
     def warn(self): return self.__warn
