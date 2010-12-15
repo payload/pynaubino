@@ -1,4 +1,5 @@
 import pymunk
+from pymunk import Vec2d
 from Space import Space
 from Pointer import Pointer
 from PyQt4.QtCore import *
@@ -6,7 +7,8 @@ from PyQt4.QtGui import QColor
 from utils import Pos, random_vec
 from Naub import Naub
 from Menu import NaubinoMenu
-from random import sample
+from random import sample, random
+import math
 
 class Naubino(object):
     @property
@@ -53,7 +55,7 @@ class Naubino(object):
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
 
-        self.spammer = app.Timer(1, self.spam_naub)
+        self.spammer = app.Timer(1, self.spam_naub_pair)
 
         if scene: scene.naubino = self
 
@@ -108,11 +110,14 @@ class Naubino(object):
     def pre_remove_naub_joint(self, joint):
         if self.scene: self.scene.pre_remove_naub_joint(joint)
 
-    def create_naub_pair(self, pos = (0, 0)):
+    def create_naub_pair(self, pos = (0, 0), rot = 0):
         pos = Vec2d(pos)
-        a = Vec2d(-30, 0) + pos
-        b = Vec2d( 30, 0) + pos
-
+        a = Vec2d(-1, 0)
+        b = Vec2d( 1, 0)
+        a.rotate(rot)
+        b.rotate(rot)
+        a += pos
+        b += pos
         a = Naub(self, a)
         b = Naub(self, b)
         self.add_naub(a)
@@ -128,9 +133,9 @@ class Naubino(object):
         self.add_naub(naub)
 
     def spam_naub_pair(self):
-        if len(self.naubs) > 16: return
-        pos = random_vec(300, 200)
-        a, b = self.create_naub_pair(pos)
+        pos = self.random_naub_pos()
+        rot = random() * math.pi * 2
+        a, b = self.create_naub_pair(pos, rot)
 
         impulse = lambda: random_vec(50, 50)
         a.body.apply_impulse(impulse())
@@ -140,6 +145,15 @@ class Naubino(object):
         b.color = self.random_naub_color()
 
         self.add_naubs(a, b)
+
+    def random_naub_pos(self):
+        a = Vec2d(350, 0)
+        b = Vec2d(0, 220)
+        if random() < 0.5:
+            a,b = b,a
+        if random() < 0.5:
+            b = -b
+        return random_vec(a.x, a.y) + b
 
     def random_naub_color(self):
         colors = self.naub_colors
