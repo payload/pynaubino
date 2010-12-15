@@ -300,6 +300,7 @@ class GraphicsView(GraphicsView):
         self.__view = view = QGraphicsView()
         self.__naubino = naubino = scene.naubino
         self.__menu = menu = NaubinoMenu(scene)
+        self.__arena = arena = QGraphicsEllipseItem()
 
         naubino.score_changed = menu.score_changed
 
@@ -309,6 +310,14 @@ class GraphicsView(GraphicsView):
         view.setSceneRect(-290, -190, 580, 380)
         view.setRenderHints(QPainter.Antialiasing)
         view.show()
+
+        scene.add_item(arena)
+        r = 160
+        arena.setRect(-r, -r, 2*r, 2*r)
+        arena.setPen(QPen(QColor(*naubino.colors["grey"]), 3))
+        arena.setZValue(-40)
+        arena.show()
+        
         frame.show()
 
 #######################################################
