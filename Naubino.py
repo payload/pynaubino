@@ -77,8 +77,9 @@ class Naubino(object):
             anchor = 0, 0
             joint = pymunk.PinJoint(a, b, anchor, anchor)
             joint.distance = 0
-            joint.max_bias = 100
-            joint.max_force = 500
+            joint.bias_coef
+            joint.max_bias = 18
+            joint.max_force = 100
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 

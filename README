@@ -13,7 +13,6 @@
 * try 2to3 and think of Python 3 enabling the dependencies
 
 === TODO
-* correct physics like joint strengths (Naub.joint_naub, Naubino.add_naub)
 * abstract Qt dependencies away and implement stubs in Pig (QColor, ???)
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
