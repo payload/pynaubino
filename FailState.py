@@ -45,7 +45,7 @@ class FailState(State):
         def callback(e):
             key, text = e.key(), e.text()
             if str(text) in ["\r", "\n"]:
-                self.onExit(None)
+                self.machine().highscore.emit()
                 return
             g = self.name_input
             type(g).keyPressEvent(g, e)
