@@ -50,22 +50,35 @@ class NaubinoMenu(object):
         posis = [(x[0]*r, x[1]*r) for x, r in zip(posis, [60, 60, 55, 60])]
         posis = [QPointF(*x) for x in posis]
 
+        btns = self.btns = []
+
         btn = self.play_btn = PlayButton(naubino, layer = 9)
         btn.pos = btn.popped_out_pos = posis[0]
         btn.pressed.connect(state_machine.play)
         btn.group.setParentItem(buttons)
+        btns.append(btn)
 
         btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
         btn.pos = btn.popped_out_pos = posis[1]
         btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
+        btns.append(btn)
 
-        j = CuteJoint(scene, self.highscore_btn, self.play_btn)
-        j.line.setParentItem(buttons)
-        j = CuteJoint(scene, self.highscore_btn, self.tutorial_btn)
-        j.line.setParentItem(buttons)
+        btn = self.mute_btn = MuteButton(naubino, layer = 9)
+        btn.pos = btn.popped_out_pos = posis[2]
+        #btn.pressed.connect(state_machine.tutorial)
+        btn.group.setParentItem(buttons)
+        btns.append(btn)
 
-        self.btns = [self.play_btn, self.tutorial_btn]
+        btn = self.settings_btn = SettingsButton(naubino, layer = 9)
+        btn.pos = btn.popped_out_pos = posis[3]
+        #btn.pressed.connect(state_machine.tutorial)
+        btn.group.setParentItem(buttons)
+        btns.append(btn)
+
+        for btn in btns:
+            j = CuteJoint(scene, self.highscore_btn, btn)
+            j.line.setParentItem(buttons)
 
         scene = self.naubino.scene
         btn = self.play_btn

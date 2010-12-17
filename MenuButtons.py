@@ -95,6 +95,16 @@ class TutorialButton(MenuButton):
         MenuButton.__init__(self, naubino, 13, 1.5, u"¿", 0.55, 0.5,
             layer = layer)
 
+class MuteButton(MenuButton):
+    def __init__(self, naubino, layer = 0):
+        MenuButton.__init__(self, naubino, 13, 1.5, u"M", 0.55, 0.5,
+            layer = layer)
+
+class SettingsButton(MenuButton):
+    def __init__(self, naubino, layer = 0):
+        MenuButton.__init__(self, naubino, 13, 1.5, u"S", 0.55, 0.5,
+            layer = layer)
+
 class HighscoreButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         p = super(HighscoreButton, self)
