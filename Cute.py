@@ -306,6 +306,7 @@ class GraphicsView(GraphicsView):
 
         view.setParent(frame)
         view.setScene(scene.qscene)
+        view.setBackgroundBrush(QBrush(QColor("white")))
         view.setGeometry(0, 0, 600, 400)
         view.setSceneRect(-290, -190, 580, 380)
         view.setRenderHints(QPainter.Antialiasing)
