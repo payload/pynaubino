@@ -177,7 +177,10 @@ class Timer(Timer):
         self.__timer.stop()
 
     @property
-    def interval(self): return self.__timer.interval()
+    def interval(self): return self.__timer.interval() / 1000.0
+    @interval.setter
+    def interval(self, interval):
+        self.__timer.setInterval(int(interval * 1000))
 
 class Application(Application):
     def __init__(self):

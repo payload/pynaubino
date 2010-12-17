@@ -67,6 +67,7 @@ class Naubino(object):
         center.position = 0, 0
 
         self.spammer = app.Timer(1, self.spam_naub_pair)
+        self.difficulty = app.Timer(20, self.inc_difficulty)
 
         if scene: scene.naubino = self
 
@@ -188,11 +189,20 @@ class Naubino(object):
             or  j.b.pos.get_length() < 160):
                 danger += 1
         return danger
+        
+    def inc_difficulty(self):
+        self.spammer.interval = self.spammer.interval * 0.8
+
+    def reset_difficulty(self):
+        self.spammer.interval = 1
 
     def play(self):
         self.spammer.start()
         self.stepper.start()
+        self.difficulty.start()
 
     def stop(self):
         self.spammer.stop()
         self.stepper.stop()
+        self.difficulty.stop()
+        self.reset_difficulty()
