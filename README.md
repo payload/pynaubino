@@ -10,6 +10,7 @@
 Poor person.
 
 Install the following:
+
 * http://www.python.org/ftp/python/2.7.1/python-2.7.1.msi
 * http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/PyQt-Py2.7-gpl-4.8.1-1.exe
 * http://code.google.com/p/pymunk/downloads/detail?name=pymunk-1.0.0.win32.exe&can=2&q=
@@ -23,10 +24,10 @@ If it throws an error noting that msvcr71.dll is missing:
 * Python 2.6 > http://python.org/
 
 * PyQt4 http://www.riverbankcomputing.co.uk/software/pyqt/intro
-** Qt 4.6 >
+* * Qt 4.6 >
 
 * pymunk 1.0.0 http://code.google.com/p/pymunk/
-** chipmunk 5.3.2
+* * chipmunk 5.3.2
 
 ## Python 3
 * try 2to3 and think of Python 3 enabling the dependencies
