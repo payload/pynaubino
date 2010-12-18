@@ -28,10 +28,17 @@ class Button(Cute):
             rect = QRectF(-radius, -radius, radius*2, radius*2)
             self.shape.setRect(rect)
 
+    @property
+    def color(self): return self.shape.brush().color()
+    @color.setter
+    def color(self, color):
+        self.shape.setBrush(QBrush(QColor(*self.naubino.colors[color])))
+
     def __init__(self, naubino, layer = 0, rect = False):
         Cute.__init__(self, naubino)
         self.__radius = 0
         self.pos_changed = None
+        self.naubino = naubino
 
         group = self.group = QGraphicsItemGroup()
         
@@ -51,9 +58,10 @@ class Button(Cute):
         group.setAcceptHoverEvents(True)
         group.setAcceptTouchEvents(True)
 
-        shape = self.shape = QGraphicsRectItem(group) if rect else QGraphicsEllipseItem(group)
+        shape = self.shape = (QGraphicsRectItem(group) if rect
+            else QGraphicsEllipseItem(group))
         shape.setPen(QPen(Qt.NoPen))
-        shape.setBrush(QColor(u"black"))
+        shape.setBrush(QColor("black"))
         shape.setRotation(5)
 
         text = self.text = QGraphicsTextItem(u"???", group)
@@ -89,21 +97,25 @@ class PlayButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         MenuButton.__init__(self, naubino, 13, 1.8, u"▸", 0.43, 0.565,
             layer = layer)
+        self.color = "green"
 
 class TutorialButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         MenuButton.__init__(self, naubino, 13, 1.5, u"¿", 0.55, 0.5,
             layer = layer)
+        self.color = "pink"
 
 class MuteButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         MenuButton.__init__(self, naubino, 13, 1.5, u"M", 0.55, 0.5,
             layer = layer)
+        self.color = "purple"
 
 class SettingsButton(MenuButton):
     def __init__(self, naubino, layer = 0):
         MenuButton.__init__(self, naubino, 13, 1.5, u"S", 0.55, 0.5,
             layer = layer)
+        self.color = "blue"
 
 class HighscoreButton(MenuButton):
     def __init__(self, naubino, layer = 0):
@@ -113,6 +125,7 @@ class HighscoreButton(MenuButton):
         self.__score = score = 0
         self.__shown_score = score
         self.set_score(score)
+        self.color = "yellow"
         
     @property
     def score(self): return self.__score

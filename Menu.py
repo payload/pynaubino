@@ -47,7 +47,7 @@ class NaubinoMenu(object):
         posis = [-0.066 + 0.22*x for x in range(0, 4)]
         posis = [x*pi for x in posis]
         posis = [(cos(x), sin(x)) for x in posis]
-        posis = [(x[0]*r, x[1]*r) for x, r in zip(posis, [60, 60, 55, 60])]
+        posis = [(x[0]*r, x[1]*r) for x, r in zip(posis, [50, 50, 45, 50])]
         posis = [QPointF(*x) for x in posis]
 
         btns = self.btns = []
