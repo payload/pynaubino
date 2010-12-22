@@ -1,0 +1,18 @@
+#!/bin/sh
+
+exists() { 
+    command -v $1 > /dev/null && return 0
+    return 1
+}
+
+python_version_2() { local version python2
+    version=`python --version 2>&1`
+    python2="Python 2*"
+    case $version in $python2) return 0
+    esac
+    return 1
+}
+
+exists python2 && python2 ./main.py
+exists python  && python_version_2 && python ./main.py
+
