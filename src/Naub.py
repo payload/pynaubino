@@ -102,6 +102,8 @@ class Naub(Naub):
 
     def collide_naub(self, naub, arbiter):
         if not self.alive or not naub.alive: return
+        
+        if not self.pointer_joints: return
 
         # joker naub behaviour
         if len(self.naubs_joints) == 0 or len(naub.naubs_joints) == 0:
