@@ -30,7 +30,8 @@ class OverlayFader(object):
 class SplashFader(OverlayFader):
     def __init__(self, scene, splash_filename):
         overlay = QGraphicsPixmapItem()
-        pixmap = QPixmap(splash_filename)
+        pixmap = QPixmap()
+        if not pixmap.load(splash_filename): pass # TODO missing file warning?
         overlay.setPixmap(pixmap)
         super(SplashFader, self).__init__(scene, overlay)
         
@@ -46,7 +47,7 @@ class ColorFader(OverlayFader):
 class StartState(State):
     def __init__(self, machine):
         super(StartState, self).__init__(machine)
-        self.splash = SplashFader(self.scene, "splash.png")
+        self.splash = SplashFader(self.scene, "rsc/splash.png")
 
     def enter(self):
         self.splash.fade_in()

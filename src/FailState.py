@@ -16,7 +16,7 @@ class FailState(State):
         self.scene.add_item(layer)
 
         if False:
-            pixmap = QPixmap("fail.png")
+            pixmap = QPixmap("rsc/fail.png")
             self.splash = g = QGraphicsPixmapItem()
             g.setPixmap(pixmap)
             self.__relpos(g)

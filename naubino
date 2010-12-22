@@ -13,6 +13,11 @@ python_version_2() { local version python2
     return 1
 }
 
-exists python2 && python2 ./main.py
-exists python  && python_version_2 && python ./main.py
+start() { local mainpy
+    mainpy="src/main.py"
+    exists python2 && python2 $mainpy
+    exists python  && python_version_2 && python $mainpy
+}
+
+start
 
