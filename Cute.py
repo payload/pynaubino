@@ -304,6 +304,8 @@ class GraphicsView(GraphicsView):
         self.__naubino = naubino = scene.naubino
         self.__menu = menu = NaubinoMenu(scene)
         self.__arena = arena = CuteArena(scene)
+        
+        scene.menu = menu # TODO unclean
 
         naubino.score_changed = menu.score_changed
 

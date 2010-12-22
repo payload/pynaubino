@@ -5,15 +5,15 @@ from PyQt4.QtGui import (QGraphicsRectItem, QPixmap, QGraphicsPixmapItem,
     QGraphicsTextItem, QGraphicsSimpleTextItem)
 
 class FailState(State):
-    def __init__(self, scene, state):
-        super(FailState, self).__init__(scene, state)
+    def __init__(self, machine):
+        super(FailState, self).__init__(machine)
         self.__score = 0
         self.is_running = False
         self.layer = layer = QGraphicsRectItem()
         layer.setVisible(False)
         layer.setOpacity(0)
         self.fader = ItemFader(layer)
-        scene.add_item(layer)
+        self.scene.add_item(layer)
 
         if False:
             pixmap = QPixmap("fail.png")
@@ -45,7 +45,7 @@ class FailState(State):
         def callback(e):
             key, text = e.key(), e.text()
             if str(text) in ["\r", "\n"]:
-                self.machine().highscore.emit()
+                self.machine.highscore()
                 return
             g = self.name_input
             type(g).keyPressEvent(g, e)
@@ -58,7 +58,7 @@ class FailState(State):
         w, h = r.width(), r.height()
         g.setPos(x * w, y * h)
 
-    def onEntry(self, event):
+    def enter(self):
         self.__score = self.naubino.score
 
         self.is_running = True
@@ -73,7 +73,7 @@ class FailState(State):
         naubs = naubino.naubs[:]
         for naub in naubs: naub.remove()
 
-    def onExit(self, event):
+    def leave(self):
         if not self.is_running: return
         self.is_running = False
         name, score = self.name_input.toPlainText(), self.__score

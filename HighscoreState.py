@@ -4,20 +4,20 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 class HighscoreState(State):
-    def __init__(self, scene, state):
-        super(HighscoreState, self).__init__(scene, state)
+    def __init__(self, machine):
+        super(HighscoreState, self).__init__(machine)
 
         self.layer = layer = QGraphicsRectItem()
         layer.setVisible(False)
         layer.setOpacity(0)
-        scene.add_item(layer)
+        self.scene.add_item(layer)
         self.fader = fader = ItemFader(layer)
 
         self.table = table = QGraphicsTextItem()
         table.setPos(0, -100)
         table.setParentItem(layer)
 
-    def onEntry(self, event):
+    def enter(self):
         highscore = self.scene.highscore
         table = self.table
         if not highscore: return
@@ -32,7 +32,7 @@ class HighscoreState(State):
         table.setPos(-0.5 * w, -0.5 * h)
         self.fader.fade_in()
 
-    def onExit(self, event):
+    def leave(self):
         self.fader.fade_out()
 
     def generate_highscore_html(self, score_table):

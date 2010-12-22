@@ -32,7 +32,7 @@ class NaubinoMenu(object):
         self.popped_out = True
         self.state_machine = state_machine = GameStateMachine(scene)
 
-        naubino.fail = state_machine.fail.emit
+        naubino.fail = state_machine.fail
 
         state_machine.start()
 
@@ -94,7 +94,7 @@ class NaubinoMenu(object):
 
         buttons.setPos(-265, -170)
 
-    def enter(self, event):
+    def enter(self):
         if self.popped_out: return
         self.popped_out = True
         btns = self.btns
@@ -105,7 +105,7 @@ class NaubinoMenu(object):
             ani.setDuration(300)
             ani.start()
 
-    def leave(self, event):
+    def leave(self):
         if not self.popped_out: return
         self.popped_out = False
         btns = self.btns
