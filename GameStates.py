@@ -3,6 +3,7 @@ class State(object):
         self.machine = machine
         self.scene   = machine.scene
         self.naubino = machine.naubino
+        self.transitions = {}
         
     def enter(self):
         print self, "enter"
@@ -88,50 +89,25 @@ from FailState import FailState
 #class FailState(State):
 #    pass
 
-class DictP(dict):
+class FunDict(dict):
     def __add__(self, other):
         c = self.copy()
         c.update(other)
         return c
         
     def __sub__(self, other):
+        if not hasattr(other, "__iter__"):
+            other = [other]
         c = self.copy()
         for x in other:
             if x in c:
                 del c[x]
         return c
 
-class GameStateMachine(object):
-    def __init__(self, scene):
-        self.scene = scene
-        self.naubino = scene.naubino
-    
-        self.start_s     = start_s     = StartState(self)
-        self.play_s      = play_s      = PlayState(self)
-        self.tutorial_s  = tutorial_s  = TutorialState(self)
-        self.highscore_s = highscore_s = HighscoreState(self)
-        self.settings_s  = settings_s  = SettingsState(self)
-        self.pause_s     = pause_s     = PauseState(self)
-        self.fail_s      = fail_s      = FailState(self)
+class StateMachine(object):
+    def __init__(self):
+        self.current_states = set()
         
-        self.current_states = set([start_s])
-        start_s.enter()
-            
-        direct = DictP({
-            "play"     : [play_s],
-            "tutorial" : [tutorial_s],
-            "highscore": [highscore_s],
-            "settings" : [settings_s],
-        })
-            
-        start_s    .transitions = direct
-        play_s     .transitions = direct + {"play": [pause_s], "fail": [fail_s]}
-        tutorial_s .transitions = direct - ["tutorial"]
-        highscore_s.transitions = direct - ["highscore"]
-        settings_s .transitions = direct - ["settings"]
-        pause_s    .transitions = direct
-        fail_s     .transitions = {"highscore": [highscore_s]}
-
     def signal(self, signal):
         current_s = self.current_states
         # all states which are triggered
@@ -153,6 +129,37 @@ class GameStateMachine(object):
         current_s.update(after_s)
         for state in triggered_s: state.leave()
         for state in after_s: state.enter()
+
+class GameStateMachine(StateMachine):
+    def __init__(self, scene):
+        self.scene = scene
+        self.naubino = scene.naubino
+    
+        self.start_s     = start_s     = StartState(self)
+        self.play_s      = play_s      = PlayState(self)
+        self.tutorial_s  = tutorial_s  = TutorialState(self)
+        self.highscore_s = highscore_s = HighscoreState(self)
+        self.settings_s  = settings_s  = SettingsState(self)
+        self.pause_s     = pause_s     = PauseState(self)
+        self.fail_s      = fail_s      = FailState(self)
+        
+        self.current_states = set([start_s])
+        start_s.enter()
+            
+        direct = FunDict({
+            "play"     : [play_s],
+            "tutorial" : [tutorial_s],
+            "highscore": [highscore_s],
+            "settings" : [settings_s],
+        })
+            
+        start_s    .transitions = direct
+        play_s     .transitions = direct + {"play": [pause_s], "fail": [fail_s]}
+        tutorial_s .transitions = direct - "tutorial"
+        highscore_s.transitions = direct - "highscore"
+        settings_s .transitions = direct - "settings"
+        pause_s    .transitions = direct
+        fail_s     .transitions = {"highscore": [highscore_s]}
         
     def fail(self): self.signal("fail")
     def play(self): self.signal("play")
