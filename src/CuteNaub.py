@@ -15,6 +15,9 @@ class CuteNaub(Cute):
         self.color = None
         self.select = None
         self.deselect = None
+        self.merge_remove_naub = None
+
+        naub.merge_remove = self.merge_remove
 
         elli = self.elli = QGraphicsEllipseItem()
 
@@ -59,7 +62,6 @@ class CuteNaub(Cute):
         elli = self.elli
 
         pos = naub.body.position
-
         elli.setPos(pos.x, pos.y)
         elli.show()
 
@@ -91,6 +93,7 @@ class CuteNaub(Cute):
         self.info.hide()
 
     def remove(self):
+        self.merge_remove_naub = None
         self.scene.remove_update_object(self)
         self.scene.remove_item(self.elli, self.info)
 
@@ -100,7 +103,20 @@ class CuteNaub(Cute):
         ani.setEndValue(0)
         ani.setDuration(500)
         ani.finished.connect(self.remove)
+        if self.merge_remove_naub:
+            #ani.setDuration(2000)
+            ani.valueChanged.connect(self.touch_merge_remove_naub)
         ani.start()
+
+    def merge_remove(self, naub):
+        self.merge_remove_naub = naub
+        
+    def touch_merge_remove_naub(self):
+        naub = self.merge_remove_naub
+        p0 = self.naub.pos
+        p1 = naub.pos
+        v = p1 + (p0 - p1)*self.scale
+        self.naub.pos = v
 
     def select_naub(self, pointer):
         pass

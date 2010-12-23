@@ -32,6 +32,7 @@ class Naub(Naub):
         self.naubino = naubino
         self.pointer_joints = {}
         self.naubs_joints = {}
+        self.merge_remove = None # callback, see merge
 
         self.naubino.add_naub(self)
 
@@ -93,6 +94,7 @@ class Naub(Naub):
         for n in naubs_joints:
             naub.unjoin_naub(n)
             self.join_naub(n)
+        if naub.merge_remove: naub.merge_remove(self)
         naub.remove()
 
     def collide(self, other, arbiter):
