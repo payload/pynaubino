@@ -66,7 +66,7 @@ class Naubino(object):
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
 
-        self.spammer = app.Timer(1, self.spam_naub_pair)
+        self.spammer = app.Timer(3, self.spam_naub_pair)
         self.difficulty = app.Timer(20, self.inc_difficulty)
 
         if scene: scene.naubino = self
