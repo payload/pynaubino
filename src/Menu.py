@@ -39,7 +39,8 @@ class NaubinoMenu(object):
         buttons = self.buttons = QGraphicsRectItem()
         scene.add_item(buttons)
 
-        btn = self.highscore_btn = HighscoreButton(naubino, layer = 10)
+        self.highscore_btn = btn = HighscoreButton(scene)
+        btn.layer = 10
         btn.pos = QPointF(0, 0)
         btn.pressed.connect(state_machine.highscore)
         btn.group.setParentItem(buttons)
@@ -50,27 +51,31 @@ class NaubinoMenu(object):
         posis = [(x[0]*r, x[1]*r) for x, r in zip(posis, [50, 50, 45, 50])]
         posis = [QPointF(*x) for x in posis]
 
-        btns = self.btns = []
+        self.btns = btns = []
 
-        btn = self.play_btn = PlayButton(naubino, layer = 9)
+        self.play_btn = btn = PlayButton(scene)
+        btn.layer = 9
         btn.pos = btn.popped_out_pos = posis[0]
         btn.pressed.connect(state_machine.play)
         btn.group.setParentItem(buttons)
         btns.append(btn)
 
-        btn = self.tutorial_btn = TutorialButton(naubino, layer = 9)
+        self.tutorial_btn = btn = TutorialButton(scene)
+        btn.layer = 9
         btn.pos = btn.popped_out_pos = posis[1]
         btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
         btns.append(btn)
 
-        btn = self.mute_btn = MuteButton(naubino, layer = 9)
+        self.mute_btn = btn = MuteButton(scene)
+        btn.layer = 9
         btn.pos = btn.popped_out_pos = posis[2]
         #btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
         btns.append(btn)
 
-        btn = self.settings_btn = SettingsButton(naubino, layer = 9)
+        self.settings_btn = btn = SettingsButton(scene)
+        btn.layer = 9
         btn.pos = btn.popped_out_pos = posis[3]
         #btn.pressed.connect(state_machine.tutorial)
         btn.group.setParentItem(buttons)
@@ -80,7 +85,7 @@ class NaubinoMenu(object):
             j = CuteJoint(scene, self.highscore_btn, btn)
             j.line.setParentItem(buttons)
 
-        scene = self.naubino.scene
+        scene = self.scene
         btn = self.play_btn
         pos = btn.pos
         rect = btn.shape.rect()

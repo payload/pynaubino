@@ -8,11 +8,15 @@ from CuteArena import CuteArena
 
 class Cute(QObject):
     def __init__(self, scene):
-        QObject.__init__(self)
+        super(Cute, self).__init__()
         self.scene = scene
+        self.naubino = scene.naubino
 
     def update_object(self):
         pass
+        
+    def qcolor(self, color):
+        return qcolor(color, self.naubino.colors)
 
 class CuteJoint(Cute):
     def get_pen_width(self): return self.__pen_width

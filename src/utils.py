@@ -9,6 +9,13 @@ def random_vec(x, y):
         random.uniform(-x, x),
         random.uniform(-y, y))
 
+def qcolor(color, palette = {}):
+    if hasattr(color, "__iter__"):
+        return QColor(*color)
+    if color in palette:
+        return qcolor(palette[color])
+    return QColor(color)
+
 def are_colors_alike(a, b):
     a = a.getRgbF()
     b = b.getRgbF()
