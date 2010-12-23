@@ -31,6 +31,7 @@ class CuteArena(QObject):
         if warn:
             self.color_ani = ani = QPropertyAnimation(
                 self, "arena_pen_color")
+            ani.setStartValue(self.arena_pen_color)
             ani.setEndValue(QColor(*self.naubino.colors["red"]))
             ani.setDuration(1000)
             ani.start()
@@ -41,6 +42,7 @@ class CuteArena(QObject):
         else:
             self.color_ani = ani = QPropertyAnimation(
                 self, "arena_pen_color")
+            ani.setStartValue(self.arena_pen_color)
             ani.setEndValue(QColor(*self.naubino.colors["grey"]))
             ani.setDuration(1000)
             ani.start()
@@ -48,6 +50,10 @@ class CuteArena(QObject):
             ani = self.width_ani
             ani.setDirection(ani.Backward)
             ani.finished.disconnect()
+            def callback():
+                ani.setDirection(ani.Forward)
+                ani.finished.disconnect()
+            ani.finished.connect(callback)
 
     def get_arena_pen(self):
         return self.__arena.pen()

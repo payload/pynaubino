@@ -177,7 +177,7 @@ class Naubino(object):
         self.space.step(dt)
         if self.scene: self.scene.step(dt)
         danger = self.danger()
-        self.warn = False if danger < 30 else True
+        self.warn = False if danger < 25 else True
         if danger > 40:
             self.stop()
             if self.fail: self.fail()
