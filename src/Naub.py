@@ -63,7 +63,6 @@ class Naub(Naub):
     def deselect(self, pointer):
         pj = self.pointer_joints
         if pointer not in pj: return
-
         self.naubino.space.remove(pj[pointer])
         del pj[pointer]
 

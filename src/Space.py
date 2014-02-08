@@ -18,9 +18,7 @@ class Space(pymunk.Space):
         for obj in objs:
             if obj not in myobjs: continue
             myobjs.remove(obj)
-            def callback(obj):
-                pymunk.Space.remove(self, obj)
-            self.add_post_step_callback(callback, obj)
+            pymunk.Space.remove(self, obj)
 
     def collide(self, space, arbiter, *args, **kwargs):
         if len(arbiter.shapes) != 2: return
