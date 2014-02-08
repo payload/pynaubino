@@ -55,7 +55,6 @@ class Naub(Naub):
         center = (0,0)
         joint = pymunk.PinJoint(a, b, center, center)
         joint.distance = 0
-        joint.bias_coef
         joint.max_bias = 1000
         joint.max_force = 10000 
         self.naubino.space.add(joint)

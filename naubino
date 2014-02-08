@@ -15,8 +15,8 @@ python_version_2() { local version python2
 
 start() { local mainpy
     mainpy="src/main.py"
-    exists python2 && python2 $mainpy
-    exists python  && python_version_2 && python $mainpy
+    ( exists python2 && python2 $mainpy ) || \
+    ( exists python  && python_version_2 && python $mainpy )
 }
 
 start
