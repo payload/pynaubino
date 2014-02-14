@@ -14,6 +14,8 @@ def main():
     argv = sys.argv
     if u"pig" in argv:
         from Pig import Application, GraphicsScene, GraphicsView
+    if u"avg" in argv:
+        from Avg import Application, GraphicsScene, GraphicsView
     else:
         from Cute import Application, GraphicsScene, GraphicsView
 
