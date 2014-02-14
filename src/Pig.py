@@ -2,16 +2,13 @@ from Interfaces import *
 import pymunk
 from pymunk import Vec2d
 
-try:
-    import pygame2
-    from pygame2.sdl import constants
-    from pygame2.sdl import image
-    from pygame2.sdl import event
-    from pygame2.sdl import video
-    from pygame2.sdlext import draw
-    from pygame2.sdl import time
-except ImportError:
-    raise ImportError(u"No pygame2.sdl support")
+import pygame
+from pygame import constants
+from pygame import image
+from pygame import event
+from pygame import display
+from pygame import draw
+from pygame import time
 
 class Pos(object):
     @property
@@ -99,7 +96,7 @@ class Application(Application):
                     okay = False
                 if ev.type == constants.KEYDOWN and ev.key == constants.K_ESCAPE:
                     okay = False
-        video.quit()
+        display.quit()
 
     def Timer(self, interval, callback):
         return Timer(interval, callback)
@@ -180,8 +177,8 @@ class GraphicsView(GraphicsView):
     def __init__(self, scene):
         self.scene = scene
         
-        video.init()
-        screen = self.screen = video.set_mode(600, 400)
+        display.init()
+        screen = self.screen = display.set_mode(600, 400)
         timer = self.timer = Timer(0.02, self.paint)
         timer.start()
 
