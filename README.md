@@ -20,7 +20,7 @@ Run with `naubino avg` or with `naubino` to see all possible front-ends.
  * [ PyQt4 ]( https://www.riverbankcomputing.co.uk/software/pyqt/intro ) (playable)
   * Qt 4.6 >
  * [ pygame ]( https://pygame.org/ ) 1.9 (not playable)
- * [ libavg ]( https://www.libavg.de ) 1.8pre SVN (playable)
+ * [ libavg ]( https://www.libavg.de ) 1.8 (playable)
 
 ## Ubuntu
 
