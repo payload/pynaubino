@@ -54,7 +54,8 @@ class CircleNaub(object):
     def paint(self, surface):
         pos = self.naub.pos + Vec2d(300, 200)
         pos = map(int, pos)
-        return draw.circle(surface, pygame.Color(0, 0, 0), pos, 15)
+        r, g, b, a = self.naub.color.getRgb()
+        return draw.circle(surface, pygame.Color(r, g, b), pos, 15)
 
     def update_object(self):
         pass
