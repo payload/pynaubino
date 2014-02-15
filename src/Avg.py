@@ -1,5 +1,6 @@
 import libavg as avg
 from Interfaces import Application, GraphicsScene, GraphicsView, Timer
+from utils import *
 
 class Application(Application):
     
@@ -30,12 +31,32 @@ class Application(Application):
     
     def add_naub(self, naub):
         color = "000000"
-        CircleNode(
+        node = CircleNode(
             tag         = naub,
             pos         = lambda: (naub.pos.x, naub.pos.y),
             r           = lambda: naub.radius - 2,
             color       = lambda: ("{:02x}"*3).format(*naub.color.getRgb()),
             parent      = self.naub_div)
+        node.subscribe(node.CURSOR_DOWN,   lambda e: self.cursor_down_on_naub(e, node))
+        node.subscribe(node.CURSOR_MOTION, lambda e: self.cursor_motion_on_naub(e, node))
+        node.subscribe(node.CURSOR_UP,     lambda e: self.cursor_up_on_naub(e, node))
+    
+    def cursor_down_on_naub(self, event, node):
+        node.setEventCapture(event.cursorid)
+        naub = node.tag
+        naub.select(self.naubino.pointer)
+    
+    def cursor_motion_on_naub(self, event, node):
+        pos = event.pos
+        pos = self.naub_div.getRelPos(pos)
+        pos = Vec2d(pos)
+        self.naubino.pointer.pos = pos
+    
+    def cursor_up_on_naub(self, event, node):
+        naub = node.tag
+        naub.deselect(self.naubino.pointer)
+        try: node.releaseEventCapture(event.cursorid)
+        except: pass
     
     def remove_naub(self, naub):
         for node in self.naub_div.children():
