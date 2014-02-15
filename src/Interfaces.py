@@ -4,8 +4,6 @@ class Application():
     __metaclass__ = ABCMeta
     @abstractmethod
     def exec_(self): pass
-    @abstractmethod
-    def Timer(self, interval, callback): pass
 
 class GraphicsScene(object):
     __metaclass__ = ABCMeta

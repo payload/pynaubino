@@ -7,24 +7,22 @@ from Menu import NaubinoMenu
 
 def main():
     #TODO use getopts
-    #TODO style change:
-    #  from Cute import Application, Foo →
-    #  import Cute as Application
-    #  app.Foo
     argv = sys.argv
     if u"pig" in argv:
-        from Pig import Application, GraphicsScene, GraphicsView
-    if u"avg" in argv:
-        from Avg import Application, GraphicsScene, GraphicsView
+        print 'pig'
+        from Pig import Application
+    elif u"avg" in argv:
+        print 'avg'
+        from Avg import Application
+    elif u"cute" in argv:
+        print 'cute'
+        from Cute import Application
     else:
-        from Cute import Application, GraphicsScene, GraphicsView
+        print 'cute, pig or avg?'
+        sys.exit(1)
 
-    app = Application()
-    scene = GraphicsScene()
-    app.scene = scene
-    naubino = Naubino(app)
-    view = GraphicsView(scene)
-
+    naubino = Naubino()
+    app = Application(naubino)
     e = app.exec_()
     sys.exit(e)
 

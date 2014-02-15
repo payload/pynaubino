@@ -33,7 +33,6 @@ class Naubino(object):
         self.naub_center_joints = {}
         self.playing = False
         self.app = app
-        self.scene = scene = app.scene
         self.__score = 0
         self.score_changed = None
         self.__warn = False
@@ -52,10 +51,6 @@ class Naubino(object):
             "grey":   [160, 160, 160],
             "white":  [255, 255, 255]}
         self.colors.update(self.naub_colors)    
-
-        interval = 1 / 50.0
-        def callback(): self.step(interval)
-        self.stepper = app.Timer(interval, callback)
         
         space = self.space = Space()
 
@@ -65,16 +60,14 @@ class Naubino(object):
         center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
 
-        self.spammer = app.Timer(3, self.spam_naub_pair)
-        self.difficulty = app.Timer(20, self.inc_difficulty)
-
-        if scene: scene.naubino = self
+        self.spammer = Timer(3, self.spam_naub_pair)
+        self.difficulty = Timer(20, self.inc_difficulty)
 
     def add_item(self, *items):
-        if self.scene: self.scene.add_item(*items)
+        self.app.add_item(*items)
 
     def remove_item(self, *items):
-        if self.scene: self.scene.remove_item(*items)
+        self.app.remove_item(*items)
 
     def add_naub(self, naub):
         naub.naubino = self
@@ -93,10 +86,10 @@ class Naubino(object):
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
-        if self.scene: self.scene.add_naub(naub)
+        self.app.add_naub(naub)
 
     def remove_naub(self, naub):
-        if self.scene: self.scene.remove_naub(naub)
+        self.app.remove_naub(naub)
             
         if naub in self.naub_center_joints:
             joint = self.naub_center_joints[naub]
@@ -107,21 +100,21 @@ class Naubino(object):
             self.naubs.remove(naub)
 
     def pre_remove_naub(self, naub):
-        if self.scene: self.scene.pre_remove_naub(naub)
+        self.app.pre_remove_naub(naub)
 
     def add_naubs(self, *naubs):
         for naub in naubs: self.add_naub(naub)
 
     def add_naub_joint(self, joint):
         self.naubjoints.add(joint)
-        if self.scene: self.scene.add_naub_joint(joint)
+        self.app.add_naub_joint(joint)
 
     def remove_naub_joint(self, joint):
         self.naubjoints.discard(joint)
-        if self.scene: self.scene.remove_naub_joint(joint)
+        self.app.remove_naub_joint(joint)
 
     def pre_remove_naub_joint(self, joint):
-        if self.scene: self.scene.pre_remove_naub_joint(joint)
+        self.app.pre_remove_naub_joint(joint)
 
     def create_naub_pair(self, pos = (0, 0), rot = 0):
         pos = Vec2d(pos)
@@ -173,7 +166,8 @@ class Naubino(object):
 
     def step(self, dt):
         self.space.step(dt)
-        if self.scene: self.scene.step(dt)
+        self.difficulty.step(dt)
+        self.spammer.step(dt)
         danger = self.danger()
         self.warn = False if danger < 25 else True
         if danger > 40:
@@ -196,11 +190,34 @@ class Naubino(object):
 
     def play(self):
         self.spammer.start()
-        self.stepper.start()
         self.difficulty.start()
 
     def stop(self):
         self.spammer.stop()
-        self.stepper.stop()
         self.difficulty.stop()
         self.reset_difficulty()
+
+class Timer(object):
+    
+    def __init__(self, interval, callback):
+        self.interval = interval
+        self.callback = callback
+        self.active   = False
+        self.time     = 0
+        
+    def start(self):
+        self.active = True
+        return self
+    
+    def stop(self):
+        self.active = False
+        return self
+    
+    def step(self, dt):
+        if not self.active:
+            return self
+        self.time += dt
+        if self.time >= self.interval:
+            self.time -= self.interval
+            self.callback()
+        return self

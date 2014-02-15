@@ -23,36 +23,10 @@ class Pos(object):
         else:
             raise TypeError(type(x))
 
-class Timer(Timer):
-    __timers = []
-
-    def __init__(self, interval, callback):
-        super(Timer, self).__init__(interval, callback)
-        self.__interval = int(interval * 1000)
-        self.__callback = callback
-        self.__timer = None
-
-    def start(self):
-        if self.__timer: return
-        if not time.was_init(): time.init()
-        self.__timer = timer = time.add_timer(self.__interval, self.__my_callback)
-        self.__timers.append(timer)
-
-    def stop(self):
-        timer = self.__timer
-        if not __timer: return
-        self.__timers.remove(timer)
-        time.remove_timer(__timer)
-        if not self.__timers: time.quit()
-
-    def __my_callback(self):
-        self.__callback()
-        return self.__interval
-
 class LineJoint(object):
     def __init__(self, scene, a, b):
         self.scene = scene
-        self.color = pygame2.Color(0, 0, 0)
+        self.color = pygame.Color(0, 0, 0)
         self.a = a
         self.b = b
         self.width = 4
@@ -79,40 +53,43 @@ class CircleNaub(object):
     
     def paint(self, surface):
         pos = self.naub.pos + Vec2d(300, 200)
-        return draw.circle(surface, pygame2.Color(0, 0, 0), pos, 15)
+        pos = map(int, pos)
+        return draw.circle(surface, pygame.Color(0, 0, 0), pos, 15)
 
     def update_object(self):
         pass
 
 class Application(Application):
-    def __init__(self):
+    def __init__(self, naubino):
         super(Application, self).__init__()
-
-    def exec_(self):
-        okay = True
-        while okay:
-            for ev in event.get():
-                if ev.type == constants.QUIT:
-                    okay = False
-                if ev.type == constants.KEYDOWN and ev.key == constants.K_ESCAPE:
-                    okay = False
-        display.quit()
-
-    def Timer(self, interval, callback):
-        return Timer(interval, callback)
-
-    def CuteNaub(self, naubino, naub):
-        return CuteNaub(naubino, naub)
-
-    def CuteJoint(self, naubino, a, b):
-        return CuteJoint(naubino, a, b)
- 
-class GraphicsScene(GraphicsScene):
-    def __init__(self):
-        super(GraphicsScene, self).__init__()
+        self.naubino = naubino
+        naubino.app  = self
         self.__update_objects = []
         self.__items = []
         self.__objs_graphics = {}
+        
+        display.init()
+        screen = self.screen = display.set_mode((600, 400))
+        pygame.time.set_timer(pygame.USEREVENT+1, 20)
+
+        screen.fill(pygame.Color(255, 255, 255))
+        display.flip()
+        self.paint()
+
+    def exec_(self):
+        self.naubino.play()
+        okay = True
+        clock = pygame.time.Clock()
+        while okay:
+            for ev in event.get():
+                if False: pass
+                elif ev.type == constants.QUIT:
+                    okay = False
+                elif ev.type == constants.KEYDOWN and ev.key == constants.K_ESCAPE:
+                    okay = False
+            dt = clock.tick(60) / 1000.0
+            self.step(dt)
+        display.quit()
 
     @property
     def items(self): return self.__items
@@ -170,29 +147,19 @@ class GraphicsScene(GraphicsScene):
             self.__update_objects.remove(obj)
 
     def step(self, dt):
+        self.naubino.step(dt)
         for obj in self.__update_objects:
             obj.update_object()
-
-class GraphicsView(GraphicsView):
-    def __init__(self, scene):
-        self.scene = scene
-        
-        display.init()
-        screen = self.screen = display.set_mode(600, 400)
-        timer = self.timer = Timer(0.02, self.paint)
-        timer.start()
-
-        screen.fill(pygame2.Color(255, 255, 255))
-        screen.flip()
         self.paint()
 
     def paint(self):
         screen = self.screen
+        screen.fill(pygame.Color(255, 255, 255))
         
         rects = []
         surface = screen
-        for item in self.scene.items:
+        for item in self.items:
             rect = item.paint(surface)
             rects.append(rect)
         
-        screen.update(rects)
+        display.update() # TODO use rects as parameter?
