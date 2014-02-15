@@ -34,6 +34,9 @@ class GraphicsScene(GraphicsScene):
     
     def __init__(self):
         self.main_div = MainDiv(self)
+        self.joint_div = DivNode(
+            pos    = (320, 240),
+            parent = self.main_div)
         self.naub_div = DivNode(
             pos    = (320, 240),
             parent = self.main_div)
@@ -65,9 +68,18 @@ class GraphicsScene(GraphicsScene):
     
     def pre_remove_naub(self, naub): pass
     
-    def add_naub_joint(self, joint): pass
+    def add_naub_joint(self, joint):
+        LineNode(
+            tag     = joint,
+            pos1    = lambda: (joint.a.pos.x, joint.a.pos.y),
+            pos2    = lambda: (joint.b.pos.x, joint.b.pos.y),
+            strokewidth = lambda: 4,
+            parent  = self.joint_div)
     
-    def remove_naub_joint(self, joint): pass
+    def remove_naub_joint(self, joint):
+        for node in self.joint_div.children():
+            if node.tag == joint:
+                node.unlink()
     
     def pre_remove_naub_joint(self, joint): pass
     
@@ -76,7 +88,7 @@ class GraphicsScene(GraphicsScene):
     def remove_update_object(self, obj): pass
     
     def step(self, dt):
-        for node in self.naub_div.children():
+        for node in self.naub_div.children() + self.joint_div.children():
             node.update()
 
 class GraphicsView(GraphicsView):
@@ -129,3 +141,26 @@ class CircleNode(avg.CircleNode):
         self.pos    = self.pos_()
         self.r      = self.r_()
         self.color  = self.fillcolor = self.color_()
+        
+class LineNode(avg.LineNode):
+    def __init__(self,
+            tag     = None,
+            pos1    = lambda: (0.0, 0.0),
+            pos2    = lambda: (0.0, 0.0),
+            strokewidth = lambda: 1,
+            color   = lambda: "000000",
+            parent  = None, **kwargs):
+        super(LineNode, self).__init__(**kwargs)
+        self.registerInstance(self, parent)
+        self.tag            = tag
+        self.color_         = color
+        self.pos1_          = pos1
+        self.pos2_          = pos2
+        self.strokewidth_   = strokewidth
+        self.update()
+        
+    def update(self):
+        self.pos1           = self.pos1_()
+        self.pos2           = self.pos2_()
+        self.strokewidth    = self.strokewidth_()
+        self.color          = self.color_()
