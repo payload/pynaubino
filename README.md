@@ -1,39 +1,36 @@
-#!/usr/bin/env less
-
 # Naubino
 
-## Ubuntu
+An awesome 2D game with colors, basic physics and cycle tests in an undirected graph.
 
-* apt-get install python-qt4
-* easy_install pymunk
+`pynaubino` is the multi front-end version of Naubino. It exists for fun.
 
-## Windows 32 and 64 bit
+See also [ naubino.js ]( http://naubino.de/ ) for a somewhat polished HTML5 Canvas version of Naubino.
 
-Poor person.
-
-Install the following:
-
-* http://www.python.org/ftp/python/2.7.1/python-2.7.1.msi
-* http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/PyQt-Py2.7-gpl-4.8.1-1.exe
-* http://code.google.com/p/pymunk/downloads/detail?name=pymunk-1.0.0.win32.exe&can=2&q=
-
-If it throws an error noting that msvcr71.dll is missing:
-* search the internet for msvcr71.dll
-* download it
-* move it into C:\Windows\
+Run with `naubino avg` or with `naubino` to see all possible front-ends.
 
 ## Dependencies
 * Python 2.6 > http://python.org/
-
-* PyQt4 http://www.riverbankcomputing.co.uk/software/pyqt/intro
-* * Qt 4.6 >
-
 * pymunk 1.0.0 http://code.google.com/p/pymunk/
-* * chipmunk 5.3.2
+ * chipmunk 5.3.2
 
+* at least one of the following:
+ * [ PyQt4 ]( https://www.riverbankcomputing.co.uk/software/pyqt/intro ) (playable)
+  * Qt 4.6 >
+ * [ pygame ]( https://pygame.org/ ) 1.9 (not playable)
+ * [ libavg ]( https://www.libavg.de ) 1.8pre SVN (playable)
+
+## Ubuntu
+
+* pip install pymunk
+
+* do at least one of the following:
+ * `apt-get install python-qt4` (playable)
+ * `apt-get install python-pygame`
+ * https://www.libavg.de/site/projects/libavg/wiki/UbuntuSourceInstall
+ 
 ## Python 3
-* try 2to3 and think of Python 3 enabling the dependencies
-* it works if you know what you do
+* try 2to3 and think of Python 3 enabling the dependencies if possible
+* it worked once but is not tested in any way right now
 
 ## TODO
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places

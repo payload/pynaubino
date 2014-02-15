@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-from Naubino import Naubino
+
+usage = '''
+Usage: naubino [FRONTEND]
+       naubino avg
+
+FRONTEND can be "cute", "pig" or "avg"'''.strip()
 
 def main():
     #TODO use getopts
@@ -15,9 +20,10 @@ def main():
         print 'cute'
         from Cute import Application
     else:
-        print 'cute, pig or avg?'
+        print usage
         sys.exit(1)
 
+    from Naubino import Naubino
     naubino = Naubino()
     app = Application(naubino)
     e = app.exec_()
