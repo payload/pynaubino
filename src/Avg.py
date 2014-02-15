@@ -3,36 +3,8 @@ from Interfaces import Application, GraphicsScene, GraphicsView, Timer
 
 class Application(Application):
     
-    def __init__(self):
-        self.scene = None
+    def __init__(self, naubino):
         self.app = avg.app.App()
-    
-    def exec_(self):
-        self.app.run(self.scene.main_div)
-    
-    def Timer(self, interval, callback):
-        return Timer(interval, callback)
-
-class MainDiv(avg.app.MainDiv):
-    
-    def __init__(self, scene):
-        super(MainDiv, self).__init__()
-        self.registerInstance(self, None)
-        self.scene = scene
-    
-    def onInit(self):
-        bg = avg.RectNode(
-            #pos         = (0, 0),
-            size        = self.size,
-            fillcolor   = "ffffff",
-            fillopacity = 1,
-            parent      = self)
-        self.reorderChild(bg, 0)
-        self.scene.naubino.play()
-
-class GraphicsScene(GraphicsScene):
-    
-    def __init__(self):
         self.main_div = MainDiv(self)
         self.joint_div = DivNode(
             pos    = (320, 240),
@@ -40,7 +12,11 @@ class GraphicsScene(GraphicsScene):
         self.naub_div = DivNode(
             pos    = (320, 240),
             parent = self.main_div)
-        self.__naubino = None
+        self.naubino = naubino
+        naubino.app = self
+    
+    def exec_(self):
+        self.app.run(self.main_div)
     
     @property
     def naubino(self): return self.__naubino
@@ -88,6 +64,7 @@ class GraphicsScene(GraphicsScene):
     def remove_update_object(self, obj): pass
     
     def step(self, dt):
+        self.naubino.step(dt)
         for node in self.naub_div.children() + self.joint_div.children():
             node.update()
 
@@ -164,3 +141,24 @@ class LineNode(avg.LineNode):
         self.pos2           = self.pos2_()
         self.strokewidth    = self.strokewidth_()
         self.color          = self.color_()
+        
+class MainDiv(avg.app.MainDiv):
+    
+    def __init__(self, app):
+        super(MainDiv, self).__init__()
+        self.registerInstance(self, None)
+        self.app = app
+    
+    def onInit(self):
+        bg = avg.RectNode(
+            #pos         = (0, 0),
+            size        = self.size,
+            fillcolor   = "ffffff",
+            fillopacity = 1,
+            parent      = self)
+        self.reorderChild(bg, 0)
+        self.app.naubino.play()
+        
+    def onFrame(self):
+        dt = avg.player.getFrameDuration()
+        self.app.step(dt / 1000.0)
