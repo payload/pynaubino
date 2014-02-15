@@ -4,7 +4,10 @@ An awesome 2D game with colors, basic physics and cycle tests in an undirected g
 
 `pynaubino` is the multi front-end version of Naubino. It exists for fun.
 
-See also [ naubino.js ]( http://naubino.de/ ) for a somewhat polished HTML5 Canvas version of Naubino.
+See also
+* [ naubino.js ]( http://naubino.de/ ) for a somewhat polished HTML5 Canvas version of Naubino.
+* [ Naubino ]( http://www.mmt.inf.tu-dresden.de/Lehre/Sommersemester_10/PMI/ergebnisse/gruppe2/index.html )
+  for a polished Flash version and also the first public version of the game.
 
 Run with `naubino avg` or with `naubino` to see all possible front-ends.
 
