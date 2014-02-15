@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 from Naubino import Naubino
-from Menu import NaubinoMenu
 
 def main():
     #TODO use getopts
