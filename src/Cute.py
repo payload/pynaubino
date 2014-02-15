@@ -63,43 +63,21 @@ class CuteJoint(Cute):
         ani.finished.connect(self.remove)
         ani.start()
 
-class Timer(Timer):
-    def __init__(self, interval, callback):
-        super(Timer, self).__init__(interval, callback)
-        self.__timer = timer = QTimer()
-        timer.setInterval(int(interval * 1000))
-        timer.timeout.connect(callback)
-
-    def start(self):
-        self.__timer.start()
-
-    def stop(self):
-        self.__timer.stop()
-
-    @property
-    def interval(self): return self.__timer.interval() / 1000.0
-    @interval.setter
-    def interval(self, interval):
-        self.__timer.setInterval(int(interval * 1000))
-
 class Application(Application):
-    def __init__(self):
+    def __init__(self, naubino):
         super(Application, self).__init__()
         from PyQt4.QtGui import QApplication
         self.__app = QApplication([])
+        self.naubino = naubino
+        naubino.app = self
 
-    def exec_(self):
-        self.__app.exec_()
+        self.step_timer = timer = QTimer()
+        timer.setInterval(20)
+        timer.timeout.connect(lambda: self.step(0.02))
+        timer.start()
 
-    def Timer(self, interval, callback):
-        return Timer(interval, callback)
-
-class GraphicsScene(GraphicsScene):
-    def __init__(self):
-        super(GraphicsScene, self).__init__()
         self.qscene = scene = QGraphicsScene()
         self.__items = []
-        self.__naubino = None
         self.__objs_cutes = {}
         self.__cute_joints = []
         self.__update_objects = []
@@ -109,6 +87,11 @@ class GraphicsScene(GraphicsScene):
         scene.mousePressEvent = lambda e: self.mousePressEvent(e)
         scene.mouseReleaseEvent = lambda e: self.mouseReleaseEvent(e)
         scene.mouseMoveEvent = lambda e: self.mouseMoveEvent(e)
+        
+        self.qview = GraphicsView(self)
+
+    def exec_(self):
+        self.__app.exec_()
 
     @property
     def highscore(self): return self.__highscore
@@ -192,6 +175,7 @@ class GraphicsScene(GraphicsScene):
             self.__update_objects.remove(obj)
 
     def step(self, dt):
+        self.naubino.step(dt)
         for obj in self.__update_objects:
             obj.update_object()
 
