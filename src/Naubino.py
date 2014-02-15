@@ -2,9 +2,7 @@ import pymunk
 from pymunk import Vec2d
 from Space import Space
 from Pointer import Pointer
-from PyQt4.QtCore import *
-from PyQt4.QtGui import QColor
-from utils import Pos, random_vec
+from utils import Pos, random_vec, ColorRGB255
 from Naub import Naub
 from Menu import NaubinoMenu
 from random import sample, random
@@ -39,17 +37,19 @@ class Naubino(object):
         self.warn_changed = None
         self.fail = None
         
-        self.naub_colors = {
-            "red":    [229,  53,  23],
-            "pink":   [226,   0, 122],
-            "green":  [151, 190,  13],
-            "blue":   [  0, 139, 208],
-            "purple": [100,  31, 128],
-            "yellow": [255, 204,   0]}
-        self.colors = {
-            "black":  [  0,   0,   0],
-            "grey":   [160, 160, 160],
-            "white":  [255, 255, 255]}
+        self.naub_colors = (
+            ("red",    (229,  53,  23)),
+            ("pink",   (226,   0, 122)),
+            ("green",  (151, 190,  13)),
+            ("blue",   (  0, 139, 208)),
+            ("purple", (100,  31, 128)),
+            ("yellow", (255, 204,   0)))
+        self.colors = (
+            ("black",  (  0,   0,   0)),
+            ("grey",   (160, 160, 160)),
+            ("white",  (255, 255, 255)))
+        self.naub_colors = dict((name, ColorRGB255(*color)) for name, color in self.naub_colors)
+        self.colors      = dict((name, ColorRGB255(*color)) for name, color in self.colors)
         self.colors.update(self.naub_colors)    
         
         space = self.space = Space()
@@ -157,7 +157,7 @@ class Naubino(object):
     def random_naub_color(self):
         colors = self.naub_colors
         color = colors[sample(colors, 1)[0]]
-        return QColor(*color)
+        return color
 
     def score_cycle(self, cycle):
         # self.score += len(cycle)

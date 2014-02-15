@@ -36,7 +36,6 @@ If it throws an error noting that msvcr71.dll is missing:
 * it works if you know what you do
 
 ## TODO
-* abstract Qt dependencies away and implement stubs in Pig (QColor, ???)
 * size of screen handling and placing of objects - rethink, 600x400 is spammed on several places
 * grep -Hn TODO `find . -name '*py'` # ;-)
 

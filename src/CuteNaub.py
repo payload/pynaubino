@@ -68,8 +68,10 @@ class CuteNaub(Cute):
         if self.info.isVisible():
             self.update_info()
 
-        if naub.color != self.color:
-            color = self.color = naub.color
+        naub_color = lambda: color_rgb255(naub.color)
+        self_color = lambda: ColorRGB255(*(self.color.getRgb()[:3]))
+        if not self.color or naub_color() != self_color():
+            color = self.color = QColor(*color_rgb255(naub.color))
             elli.setBrush(QBrush(color))
 
     def update_info(self):

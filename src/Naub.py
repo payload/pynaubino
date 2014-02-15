@@ -1,5 +1,4 @@
 import pymunk
-from PyQt4.QtGui import QColor
 import random
 from NaubJoint import NaubJoint
 from utils import *
@@ -19,14 +18,13 @@ class Naub(Naub):
         body.naubino_obj = self
         body.position = pos
         shape = pymunk.Circle(body, radius)
-        color = QColor(u"black")
+        self.color = ColorRGB255(0, 0, 0)
         naubino.space.add(body, shape)
 
         self.alive = True
         self.cute = None
         self.body = body
         self.shape = shape
-        self.color = color
         self.cycle_check = 0
         self.cycle_number = 0
         self.naubino = naubino

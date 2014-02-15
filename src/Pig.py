@@ -1,6 +1,7 @@
 from Interfaces import *
 import pymunk
 from pymunk import Vec2d
+from utils import *
 
 import pygame
 from pygame import constants
@@ -54,7 +55,7 @@ class CircleNaub(object):
     def paint(self, surface):
         pos = self.naub.pos + Vec2d(300, 200)
         pos = map(int, pos)
-        r, g, b, a = self.naub.color.getRgb()
+        r, g, b = color_rgb255(self.naub.color)
         return draw.circle(surface, pygame.Color(r, g, b), pos, 15)
 
     def update_object(self):

@@ -46,7 +46,7 @@ class Application(Application):
             tag         = naub,
             pos         = lambda: (naub.pos.x, naub.pos.y),
             r           = lambda: naub.radius - 2,
-            color       = lambda: ("{:02x}"*3).format(*naub.color.getRgb()),
+            color       = lambda: ("{:02x}"*3).format(*naub.color),
             parent      = self.naub_div)
         node.subscribe(node.CURSOR_DOWN,   lambda e: self.cursor_down_on_naub(e, node))
         node.subscribe(node.CURSOR_MOTION, lambda e: self.cursor_motion_on_naub(e, node))

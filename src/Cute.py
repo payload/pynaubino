@@ -16,7 +16,7 @@ class Cute(QObject):
         pass
         
     def qcolor(self, color):
-        return qcolor(color, self.naubino.colors)
+        return QColor(*color_rgb255(self.naubino.colors[color]))
 
 class CuteJoint(Cute):
     def get_pen_width(self): return self.__pen_width
