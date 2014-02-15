@@ -13,11 +13,15 @@ python_version_2() { local version python2
     return 1
 }
 
-start() { local mainpy
-    mainpy="src/main.py"
-    ( exists python2 && python2 $mainpy ) || \
-    ( exists python  && python_version_2 && python $mainpy )
+python2_cmd() {
+    ( exists python2 && echo python2 ) || \
+    ( exists python  && python_version_2 && echo python ) || \
+    echo false
 }
 
-start
+start() {
+    `python2_cmd` "src/main.py" $@
+}
+
+start $@
 
