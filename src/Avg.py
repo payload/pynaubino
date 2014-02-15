@@ -13,8 +13,16 @@ class Application(Application):
         self.naub_div = DivNode(
             pos    = (320, 240),
             parent = self.main_div)
+        self.menu_div = DivNode(
+            parent = self.main_div)
+        self.score_node = avg.WordsNode(
+            pos    = (25, 25),
+            text   = u"0",
+            color  = "000000",
+            parent = self.menu_div)
         self.naubino = naubino
         naubino.app = self
+        naubino.score_changed = self.score_changed
     
     def exec_(self):
         self.app.run(self.main_div)
@@ -24,6 +32,9 @@ class Application(Application):
     @naubino.setter
     def naubino(self, naubino):
         self.__naubino = naubino
+    
+    def score_changed(self, score):
+        self.score_node.text = unicode(score)
     
     def add_item(self, *item): pass
     
