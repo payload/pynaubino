@@ -1,0 +1,6 @@
+<avgwindowconfig>
+  <window pos="(0,0)" size="(3840,0)" viewport="((3840,0),(7680,3240))" hasframe="False"
+        displayserver="0"/>
+  <window pos="(0,0)" size="(3840,0)" viewport="((0,0),(3840,3240))" hasframe="False"
+        displayserver="1"/>
+</avgwindowconfig>
