@@ -8,6 +8,7 @@ from random import sample, random
 import math
 
 class Naubino(object):
+
     @property
     def score(self): return self.__score
     @score.setter
@@ -15,6 +16,7 @@ class Naubino(object):
         if self.__score == score: return
         self.__score = score
         self.score_changed(score)
+    def score_changed(self, score): pass
 
     @property
     def warn(self): return self.__warn
@@ -23,34 +25,33 @@ class Naubino(object):
         if self.__warn == warn: return
         self.__warn = warn
         self.warn_changed(warn)
-    
+    def warn_changed(self, warn): pass
+
     def __init__(self, app = None):
-        self.naubs = []
-        self.naubjoints = set()
+        self.naubs              = []
+        self.naubjoints         = set()
         self.naub_center_joints = {}
-        self.playing = False
-        self.app = app
-        self.__score = 0
-        self.score_changed = lambda score: None
-        self.__warn = False
-        self.warn_changed  = lambda warn: None
-        self.fail = None
-        
-        self.naub_colors = (
-            ("red",    (229,  53,  23)),
-            ("pink",   (226,   0, 122)),
-            ("green",  (151, 190,  13)),
-            ("blue",   (  0, 139, 208)),
-            ("purple", (100,  31, 128)),
-            ("yellow", (255, 204,   0)))
-        self.colors = (
-            ("black",  (  0,   0,   0)),
-            ("grey",   (160, 160, 160)),
-            ("white",  (255, 255, 255)))
-        self.naub_colors = dict((name, ColorRGB255(*color)) for name, color in self.naub_colors)
-        self.colors      = dict((name, ColorRGB255(*color)) for name, color in self.colors)
-        self.colors.update(self.naub_colors)    
-        
+        self.playing            = False
+        self.app                = app
+        self.__score            = 0
+        self.__warn             = False
+        self.fail               = None
+
+        self.naub_colors        = dict((name, ColorRGB255(*color)) for
+            name        , color in (
+            ("red"      , (229,  53,  23)),
+            ("pink"     , (226,   0, 122)),
+            ("green"    , (151, 190,  13)),
+            ("blue"     , (  0, 139, 208)),
+            ("purple"   , (100,  31, 128)),
+            ("yellow"   , (255, 204,   0))))
+        self.colors             = dict((name, ColorRGB255(*color)) for
+            name        , color in (
+            ("black"    , (  0,   0,   0)),
+            ("grey"     , (160, 160, 160)),
+            ("white"    , (255, 255, 255))))
+        self.colors.update(self.naub_colors)
+
         space = self.space = Space()
 
         pointer = self.pointer = Pointer()
@@ -89,7 +90,7 @@ class Naubino(object):
 
     def remove_naub(self, naub):
         self.app.remove_naub(naub)
-            
+
         if naub in self.naub_center_joints:
             joint = self.naub_center_joints[naub]
             del self.naub_center_joints[naub]
@@ -180,7 +181,7 @@ class Naubino(object):
             or  j.b.pos.get_length() < 160):
                 danger += 1
         return danger
-        
+
     def inc_difficulty(self):
         self.spammer.interval = self.spammer.interval * 0.8
 
@@ -197,21 +198,21 @@ class Naubino(object):
         self.reset_difficulty()
 
 class Timer(object):
-    
+
     def __init__(self, interval, callback):
         self.interval = interval
         self.callback = callback
         self.active   = False
         self.time     = 0
-        
+
     def start(self):
         self.active = True
         return self
-    
+
     def stop(self):
         self.active = False
         return self
-    
+
     def step(self, dt):
         if not self.active:
             return self
