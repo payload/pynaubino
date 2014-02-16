@@ -45,8 +45,7 @@ class Naubino(object):
         self.__warn             = False
         self.fail               = None
         self.space              = space = Space()
-        self.pointer            = pointer = Pointer()
-        space.add(pointer.body)
+        self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
         self.spammer            = Timer(3, self.spam_naub_pair)
@@ -66,6 +65,16 @@ class Naubino(object):
             ("white"    , (255, 255, 255))))
         self.colors.update(self.naub_colors)
 
+    def create_pointer(self, pos):
+        pointer = Pointer(pos)
+        self.space.add(pointer.body)
+        self.pointers.add(pointer)
+        return pointer
+
+    def remove_pointer(self, pointer):
+        self.pointers.remove(pointer)
+        self.space.remove(pointer.body)
+
     def add_naub(self, naub):
         naub.naubino = self
 
@@ -73,13 +82,14 @@ class Naubino(object):
             self.naubs.append(naub)
 
         if naub not in self.naub_center_joints:
-            a = naub.body
-            b = self.center
-            anchor = 0, 0
-            joint = pymunk.PinJoint(a, b, anchor, anchor)
-            joint.distance = 0
-            joint.max_bias = 18
-            joint.max_force = 100
+            joint = pymunk.DampedSpring(
+                a           = naub.body,
+                b           = self.center,
+                anchr1      = (0, 0),
+                anchr2      = (0, 0),
+                rest_length = 30,
+                stiffness   = 7,
+                damping     = 7)
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
@@ -162,6 +172,8 @@ class Naubino(object):
         self.score = self.score + len(cycle)
 
     def step(self, dt):
+        for pointer in self.pointers:
+            pointer.step(dt)
         self.space.step(dt)
         self.difficulty.step(dt)
         self.spammer.step(dt)

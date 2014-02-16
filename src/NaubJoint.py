@@ -4,18 +4,28 @@ class NaubJoint(object):
     def __init__(self, a, b, naubino):
         self.a = a
         self.b = b
-        a = a.body
-        b = b.body
-        center = (0,0)
-        joint = pymunk.PinJoint(a, b, center, center)
-        joint.distance = 40
-        joint.bias_coef = 0.2
-        joint.max_bias
-        joint.max_force = 1200
-        naubino.space.add(joint)
+
+        len_min = (a.radius + b.radius) * 1.2
+        len_max = (a.radius + b.radius) * 2
+
+        self.spring = pymunk.DampedSpring(
+            a           = a.body,
+            b           = b.body,
+            anchr1      = (0, 0),
+            anchr2      = (0, 0),
+            rest_length = len_min,
+            stiffness   = 10,
+            damping     = 30)
+        self.slide = pymunk.SlideJoint(
+            a           = a.body,
+            b           = b.body,
+            anchr1      = (0, 0),
+            anchr2      = (0, 0),
+            min         = len_min,
+            max         = len_max)
+        naubino.space.add(self.spring, self.slide)
 
         self.alive = True
-        self.joint = joint
         self.naubino = naubino
 
         self.naubino.add_naub_joint(self)
@@ -24,5 +34,5 @@ class NaubJoint(object):
         if self.alive:
             self.alive = False
             self.naubino.pre_remove_naub_joint(self)
-            self.naubino.space.remove(self.joint)
+            self.naubino.space.remove(self.spring, self.slide)
             self.naubino.remove_naub_joint(self)

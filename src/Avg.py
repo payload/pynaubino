@@ -42,26 +42,26 @@ class Application(object):
             r           = lambda: naub.radius - 2,
             color       = lambda: ("{:02x}"*3).format(*naub.color),
             parent      = self.naub_div)
-        node.subscribe(node.CURSOR_DOWN,   lambda e: self.cursor_down_on_naub(e, node))
-        node.subscribe(node.CURSOR_MOTION, lambda e: self.cursor_motion_on_naub(e, node))
-        node.subscribe(node.CURSOR_UP,     lambda e: self.cursor_up_on_naub(e, node))
+        node.subscribe(node.CURSOR_DOWN, lambda e: self.cursor_down_on_naub(e, node))
 
     def cursor_down_on_naub(self, event, node):
-        node.setEventCapture(event.cursorid)
-        naub = node.tag
-        naub.select(self.naubino.pointer)
+        contact = event.contact
+        if not contact: return # XXX contact could be None. I consider this a bug in libavg.
+        pos     = self.naub_div.getRelPos(event.pos)
+        pointer = self.naubino.create_pointer(Vec2d(pos))
+        contact.subscribe(contact.CURSOR_MOTION, lambda e: self.cursor_motion_on_naub(e, node, pointer))
+        contact.subscribe(contact.CURSOR_UP    , lambda e: self.cursor_up_on_naub(e, node, pointer))
+        naub    = node.tag
+        naub.select(pointer)
 
-    def cursor_motion_on_naub(self, event, node):
-        pos = event.pos
-        pos = self.naub_div.getRelPos(pos)
-        pos = Vec2d(pos)
-        self.naubino.pointer.pos = pos
+    def cursor_motion_on_naub(self, event, node, pointer):
+        pos = self.naub_div.getRelPos(event.pos)
+        pointer.pos = Vec2d(pos)
 
-    def cursor_up_on_naub(self, event, node):
+    def cursor_up_on_naub(self, event, node, pointer):
         naub = node.tag
-        naub.deselect(self.naubino.pointer)
-        try: node.releaseEventCapture(event.cursorid)
-        except: pass
+        naub.deselect(pointer)
+        self.naubino.remove_pointer(pointer)
 
     def remove_naub(self, naub):
         for node in self.naub_div.children():
@@ -100,27 +100,29 @@ class DivNode(avg.DivNode):
 
 
 
-class CircleNode(avg.CircleNode):
+class CircleNode(avg.DivNode):
 
     def __init__(self,
             tag     = None,
             color   = lambda: "ffffff",
             pos     = lambda: (0.0, 0.0),
             r       = lambda: 15,
-            parent  = None, **kwargs):
-        super(CircleNode, self).__init__(**kwargs)
+            parent  = None):
+        super(CircleNode, self).__init__()
         self.registerInstance(self, parent)
+        self.circle         = avg.CircleNode(
+            fillopacity     = 1,
+            parent          = self)
         self.tag            = tag
         self.color_         = color
         self.pos_           = pos
         self.r_             = r
-        self.fillopacity    = 1
         self.update()
 
     def update(self):
-        self.pos    = self.pos_()
-        self.r      = self.r_()
-        self.color  = self.fillcolor = self.color_()
+        self.pos            = self.pos_()
+        self.circle.r       = self.r_()
+        self.circle.color   = self.circle.fillcolor = self.color_()
 
 
 

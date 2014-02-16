@@ -1,5 +1,5 @@
 import pymunk
-import random
+import random, math
 from NaubJoint import NaubJoint
 from utils import *
 
@@ -11,13 +11,15 @@ class Naub(Naub):
     def pos(self, x): self.body.position = x
 
     def __init__(self, naubino, pos = (0, 0)):
-        mass = 1
+        mass = 5
         radius = self.radius = 15
-        inertia = pymunk.moment_for_circle(mass, 0, radius)
+        inertia = pymunk.moment_for_circle(mass, radius, radius)
         body = pymunk.Body(mass, inertia)
         body.naubino_obj = self
         body.position = pos
-        shape = pymunk.Circle(body, radius)
+        shape                   = pymunk.Circle(body, radius)
+        shape.friction          = 0.1
+        shape.elasticity        = 0.3
         self.color = ColorRGB255(0, 0, 0)
         naubino.space.add(body, shape)
 
@@ -45,24 +47,19 @@ class Naub(Naub):
 
     def select(self, pointer):
         if not self.alive: return
-        pj = self.pointer_joints
-        if pointer in pj: return
-
-        a = self.body
-        b = pointer.body
-        center = (0,0)
-        joint = pymunk.PinJoint(a, b, center, center)
-        joint.distance = 0
-        joint.max_bias = 1000
-        joint.max_force = 10000 
+        if pointer in self.pointer_joints: return
+        joint               = pymunk.PivotJoint(
+            pointer.body, self.body, (0,0), (0,0))
+        joint.error_bias    = math.pow(0.5, 60)
         self.naubino.space.add(joint)
-        pj[pointer] = joint
+        self.pointer_joints[pointer] = joint
 
     def deselect(self, pointer):
-        pj = self.pointer_joints
-        if pointer not in pj: return
-        self.naubino.space.remove(pj[pointer])
-        del pj[pointer]
+        if not self.alive: return
+        if pointer not in self.pointer_joints: return
+        joint = self.pointer_joints[pointer]
+        self.naubino.space.remove(joint)
+        del self.pointer_joints[pointer]
 
     def join_naub(self, naub, joint = None):
         if not self.alive or not naub.alive: return
@@ -100,17 +97,17 @@ class Naub(Naub):
 
     def collide_naub(self, naub, arbiter):
         if not self.alive or not naub.alive: return
-        
+
         if not self.pointer_joints: return
 
         # joker naub behaviour
         if len(self.naubs_joints) == 0 or len(naub.naubs_joints) == 0:
             self.join_naub(naub)
             return
-            
+
         colors_alike = are_colors_alike(self.color, naub.color)
         naub_near = self.is_naub_near(naub)
-        
+
         if colors_alike and not naub_near:
             self.merge_naub(naub)
             cycle = self.test_cycle()
@@ -164,4 +161,4 @@ class Naub(Naub):
         for x in self.naubs_joints:
             nodes.extend(x.reachable_naubs(visited))
         return nodes
-        
+
