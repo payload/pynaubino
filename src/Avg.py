@@ -39,8 +39,8 @@ class Application(object):
         node = CircleNode(
             tag         = naub,
             pos         = lambda: (naub.pos.x, naub.pos.y),
-            r           = lambda: naub.radius - 2,
-            color       = lambda: color_hex(naub.color),
+            r           = naub.radius - 2,
+            color       = color_hex(naub.color),
             parent      = self.naub_div)
         node.subscribe(node.CURSOR_DOWN, lambda e: self.cursor_down_on_naub(e, node))
 
@@ -66,7 +66,11 @@ class Application(object):
     def remove_naub(self, naub):
         for node in self.naub_div.children():
             if node.tag == naub:
-                node.unlink()
+                unlink = lambda node=node: node.unlink()
+                avg.LinearAnim(
+                    node.circle, "r", 270,
+                    node.circle.r, 1,
+                    stopCallback = unlink).start()
 
     def add_naub_joint(self, joint):
         LineNode(
@@ -79,7 +83,11 @@ class Application(object):
     def remove_naub_joint(self, joint):
         for node in self.joint_div.children():
             if node.tag == joint:
-                node.unlink()
+                unlink = lambda node=node: node.unlink()
+                avg.LinearAnim(
+                    node, "strokewidth", 270,
+                    node.strokewidth, 0,
+                    stopCallback = unlink).start()
 
     def step(self, dt):
         self.naubino.step(dt)
@@ -104,9 +112,9 @@ class CircleNode(avg.DivNode):
 
     def __init__(self,
             tag     = None,
-            color   = lambda: color_hex(Config.background_color()),
+            color   = color_hex(Config.background_color()),
             pos     = lambda: (0.0, 0.0),
-            r       = lambda: 15,
+            r       = 15,
             parent  = None):
         super(CircleNode, self).__init__()
         self.registerInstance(self, parent)
@@ -114,15 +122,13 @@ class CircleNode(avg.DivNode):
             fillopacity     = 1,
             parent          = self)
         self.tag            = tag
-        self.color_         = color
+        self.circle.color   = self.circle.fillcolor = color
         self.pos_           = pos
-        self.r_             = r
+        self.circle.r       = r
         self.update()
 
     def update(self):
         self.pos            = self.pos_()
-        self.circle.r       = self.r_()
-        self.circle.color   = self.circle.fillcolor = self.color_()
 
 
 
