@@ -133,8 +133,8 @@ class Application(Application):
 
     def add_naub_joint(self, joint):
         if joint not in self.__objs_graphics:
-            a = Pos(joint.joint.a)
-            b = Pos(joint.joint.b)
+            a = Pos(joint.a.body)
+            b = Pos(joint.b.body)
             graphic = LineJoint(self, a, b)
             self.__objs_graphics[joint] = graphic
 
