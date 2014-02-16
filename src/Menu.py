@@ -32,7 +32,7 @@ class NaubinoMenu(object):
         self.popped_out = True
         self.state_machine = state_machine = GameStateMachine(scene)
 
-        naubino.fail = state_machine.fail
+        naubino.cb.fail = state_machine.fail
 
         state_machine.start()
 

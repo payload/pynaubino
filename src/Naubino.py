@@ -19,6 +19,7 @@ class Naubino(object):
         def remove_naub_joint   (self, joint    ): pass
         def pre_remove_naub     (self, naub     ): pass
         def pre_remove_naub_joint(self, joint   ): pass
+        def fail                (self           ): pass
 
     @property
     def score(self): return self.__score
@@ -44,7 +45,6 @@ class Naubino(object):
         self.cb                 = Naubino.Callbacks()
         self.__score            = 0
         self.__warn             = False
-        self.fail               = None
         self.space              = space = Space()
         self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
@@ -182,7 +182,7 @@ class Naubino(object):
         self.warn = Config.warn(danger)
         if Config.fail(danger):
             self.stop()
-            if self.fail: self.fail()
+            self.cb.fail()
 
     def danger(self):
         danger = 0
