@@ -1,9 +1,9 @@
-import pymunk
+import pymunk, Config
 
 class Space(pymunk.Space):
     def __init__(self):
         pymunk.Space.__init__(self)
-        self.damping = 0.1
+        self.damping = Config.space_damping()
         self.set_default_collision_handler(None, None, self.collide, None)
 
     def add(self, *objs):

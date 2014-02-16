@@ -1,12 +1,12 @@
-import pymunk
+import pymunk, Config
 
 class NaubJoint(object):
     def __init__(self, a, b, naubino):
         self.a = a
         self.b = b
 
-        len_min = (a.radius + b.radius) * 1.2
-        len_max = (a.radius + b.radius) * 2
+        len_min = Config.naub_joint_len_min(a, b)
+        len_max = Config.naub_joint_len_max(a, b)
 
         self.spring = pymunk.DampedSpring(
             a           = a.body,
@@ -14,8 +14,8 @@ class NaubJoint(object):
             anchr1      = (0, 0),
             anchr2      = (0, 0),
             rest_length = len_min,
-            stiffness   = 10,
-            damping     = 30)
+            stiffness   = Config.naub_joint_stiffness(),
+            damping     = Config.naub_joint_damping())
         self.slide = pymunk.SlideJoint(
             a           = a.body,
             b           = b.body,

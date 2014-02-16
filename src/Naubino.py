@@ -6,6 +6,7 @@ from utils import Pos, random_vec, ColorRGB255
 from Naub import Naub
 from random import sample, random
 import math
+import Config
 
 class Naubino(object):
 
@@ -48,8 +49,8 @@ class Naubino(object):
         self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
         center.position = 0, 0
-        self.spammer            = Timer(3, self.spam_naub_pair)
-        self.difficulty         = Timer(20, self.inc_difficulty)
+        self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_pair)
+        self.difficulty         = Timer(Config.difficulty_interval(), self.inc_difficulty)
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (
             ("red"      , (229,  53,  23)),
@@ -87,9 +88,9 @@ class Naubino(object):
                 b           = self.center,
                 anchr1      = (0, 0),
                 anchr2      = (0, 0),
-                rest_length = 30,
-                stiffness   = 7,
-                damping     = 7)
+                rest_length = Config.naub_center_joint_rest_length(),
+                stiffness   = Config.naub_center_joint_stiffness(),
+                damping     = Config.naub_center_joint_damping())
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
@@ -178,8 +179,8 @@ class Naubino(object):
         self.difficulty.step(dt)
         self.spammer.step(dt)
         danger = self.danger()
-        self.warn = False if danger < 25 else True
-        if danger > 40:
+        self.warn = Config.warn(danger)
+        if Config.fail(danger):
             self.stop()
             if self.fail: self.fail()
 

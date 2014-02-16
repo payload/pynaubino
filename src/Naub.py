@@ -1,7 +1,8 @@
 import pymunk
-import random, math
+import random
 from NaubJoint import NaubJoint
 from utils import *
+import Config
 
 class Naub(object): pass
 class Naub(Naub):
@@ -11,15 +12,15 @@ class Naub(Naub):
     def pos(self, x): self.body.position = x
 
     def __init__(self, naubino, pos = (0, 0)):
-        mass = 5
-        radius = self.radius = 15
+        mass = Config.naub_mass()
+        radius = self.radius = Config.naub_radius()
         inertia = pymunk.moment_for_circle(mass, radius, radius)
         body = pymunk.Body(mass, inertia)
         body.naubino_obj = self
         body.position = pos
         shape                   = pymunk.Circle(body, radius)
-        shape.friction          = 0.1
-        shape.elasticity        = 0.3
+        shape.friction          = Config.naub_friction()
+        shape.elasticity        = Config.naub_elasticity()
         self.color = ColorRGB255(0, 0, 0)
         naubino.space.add(body, shape)
 
@@ -50,7 +51,7 @@ class Naub(Naub):
         if pointer in self.pointer_joints: return
         joint               = pymunk.PivotJoint(
             pointer.body, self.body, (0,0), (0,0))
-        joint.error_bias    = math.pow(0.5, 60)
+        joint.error_bias    = Config.pointer_error_bias()
         self.naubino.space.add(joint)
         self.pointer_joints[pointer] = joint
 
@@ -107,7 +108,7 @@ class Naub(Naub):
 
         colors_alike    = are_colors_alike(self.color, naub.color)
         naub_near       = self.is_naub_near(naub)
-        impulse_good    = arbiter.total_impulse.length >= 1000
+        impulse_good    = Config.impulse_good(arbiter)
 
         if colors_alike and not naub_near and impulse_good:
             self.merge_naub(naub)
