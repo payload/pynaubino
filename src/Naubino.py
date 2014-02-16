@@ -14,7 +14,7 @@ class Naubino(object):
     def score(self, score):
         if self.__score == score: return
         self.__score = score
-        if self.score_changed: self.score_changed(score)
+        self.score_changed(score)
 
     @property
     def warn(self): return self.__warn
@@ -22,7 +22,7 @@ class Naubino(object):
     def warn(self, warn):
         if self.__warn == warn: return
         self.__warn = warn
-        if self.warn_changed: self.warn_changed(warn)
+        self.warn_changed(warn)
     
     def __init__(self, app = None):
         self.naubs = []
@@ -31,9 +31,9 @@ class Naubino(object):
         self.playing = False
         self.app = app
         self.__score = 0
-        self.score_changed = None
+        self.score_changed = lambda score: None
         self.__warn = False
-        self.warn_changed = None
+        self.warn_changed  = lambda warn: None
         self.fail = None
         
         self.naub_colors = (
