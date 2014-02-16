@@ -12,28 +12,28 @@ class Naub(Naub):
     def pos(self, x): self.body.position = x
 
     def __init__(self, naubino, pos = (0, 0)):
-        mass = Config.naub_mass()
-        radius = self.radius = Config.naub_radius()
-        inertia = pymunk.moment_for_circle(mass, radius, radius)
-        body = pymunk.Body(mass, inertia)
-        body.naubino_obj = self
-        body.position = pos
-        shape                   = pymunk.Circle(body, radius)
-        shape.friction          = Config.naub_friction()
-        shape.elasticity        = Config.naub_elasticity()
-        self.color = ColorRGB255(0, 0, 0)
+        mass                = Config.naub_mass()
+        radius              = self.radius = Config.naub_radius()
+        inertia             = pymunk.moment_for_circle(mass, radius, radius)
+        body                = pymunk.Body(mass, inertia)
+        body.naubino_obj    = self
+        body.position       = pos
+        shape               = pymunk.Circle(body, radius)
+        shape.friction      = Config.naub_friction()
+        shape.elasticity    = Config.naub_elasticity()
+        self.color          = ColorRGB255(0, 0, 0)
         naubino.space.add(body, shape)
 
-        self.alive = True
-        self.cute = None
-        self.body = body
-        self.shape = shape
-        self.cycle_check = 0
-        self.cycle_number = 0
-        self.naubino = naubino
+        self.alive          = True
+        self.cute           = None
+        self.body           = body
+        self.shape          = shape
+        self.cycle_check    = 0
+        self.cycle_number   = 0
+        self.naubino        = naubino
         self.pointer_joints = {}
-        self.naubs_joints = {}
-        self.merge_remove = None # callback, see merge
+        self.naubs_joints   = {}
+        self.merge_remove   = None # callback, see merge
 
         self.naubino.add_naub(self)
 
