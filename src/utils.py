@@ -21,7 +21,8 @@ def color_rgb1(color):
         return ColorRGB255(*[x / 255.0 for x in color])
     raise TypeError("must be a Color* type, not "+str(type(color)))
 
-
+def color_hex(color):
+    return ("{:02x}"*3).format(*color_rgb255(color))
 
 def random_vec(x, y):
     return Vec2d(

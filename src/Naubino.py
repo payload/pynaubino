@@ -48,6 +48,7 @@ class Naubino(object):
         self.space              = space = Space()
         self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
+        self.size               = 600, 400
         center.position = 0, 0
         self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_pair)
         self.difficulty         = Timer(Config.difficulty_interval(), self.inc_difficulty)
@@ -154,8 +155,8 @@ class Naubino(object):
         self.add_naubs(a, b)
 
     def random_naub_pos(self):
-        a = Vec2d(350, 0)
-        b = Vec2d(0, 220)
+        a = Vec2d(self.size[0] * 0.6, 0)
+        b = Vec2d(0, self.size[1] * 0.6)
         if random() < 0.5:
             a,b = b,a
         if random() < 0.5:

@@ -1,32 +1,32 @@
 import libavg as avg
 from utils import *
+import Config
 
 
 
 class Application(object):
 
     def __init__(self, naubino):
-        self.app = avg.app.App()
-        self.main_div = MainDiv(self)
-        self.joint_div = DivNode(
-            pos    = (320, 240),
-            parent = self.main_div)
-        self.naub_div = DivNode(
-            pos    = (320, 240),
-            parent = self.main_div)
-        self.menu_div = DivNode(
-            parent = self.main_div)
-        self.score_node = avg.WordsNode(
-            pos    = (25, 25),
-            text   = u"0",
-            color  = "000000",
-            parent = self.menu_div)
+        self.app                        = avg.app.App()
+        self.main_div                   = MainDiv(self)
         self.naubino                    = naubino
         naubino.cb.score_changed        = self.score_changed
         naubino.cb.add_naub             = self.add_naub
         naubino.cb.remove_naub          = self.remove_naub
         naubino.cb.add_naub_joint       = self.add_naub_joint
         naubino.cb.remove_naub_joint    = self.remove_naub_joint
+
+    @property
+    def naub_div(self):
+        return self.main_div.naub_div
+
+    @property
+    def joint_div(self):
+        return self.main_div.joint_div
+
+    @property
+    def score_node(self):
+        return self.main_div.score_node
 
     def exec_(self):
         self.app.run(self.main_div)
@@ -35,12 +35,12 @@ class Application(object):
         self.score_node.text = unicode(score)
 
     def add_naub(self, naub):
-        color = "000000"
+        color = color_hex(Config.foreground_color())
         node = CircleNode(
             tag         = naub,
             pos         = lambda: (naub.pos.x, naub.pos.y),
             r           = lambda: naub.radius - 2,
-            color       = lambda: ("{:02x}"*3).format(*naub.color),
+            color       = lambda: color_hex(naub.color),
             parent      = self.naub_div)
         node.subscribe(node.CURSOR_DOWN, lambda e: self.cursor_down_on_naub(e, node))
 
@@ -104,7 +104,7 @@ class CircleNode(avg.DivNode):
 
     def __init__(self,
             tag     = None,
-            color   = lambda: "ffffff",
+            color   = lambda: color_hex(Config.background_color()),
             pos     = lambda: (0.0, 0.0),
             r       = lambda: 15,
             parent  = None):
@@ -133,7 +133,7 @@ class LineNode(avg.LineNode):
             pos1    = lambda: (0.0, 0.0),
             pos2    = lambda: (0.0, 0.0),
             strokewidth = lambda: 1,
-            color   = lambda: "000000",
+            color   = lambda: color_hex(Config.foreground_color()),
             parent  = None, **kwargs):
         super(LineNode, self).__init__(**kwargs)
         self.registerInstance(self, parent)
@@ -160,13 +160,27 @@ class MainDiv(avg.app.MainDiv):
         self.app = app
 
     def onInit(self):
+        self.app.naubino.size = tuple(self.size)
         bg = avg.RectNode(
             #pos         = (0, 0),
             size        = self.size,
-            fillcolor   = "ffffff",
+            fillcolor   = color_hex(Config.background_color()),
             fillopacity = 1,
             parent      = self)
-        self.reorderChild(bg, 0)
+        center = self.size * 0.5
+        self.joint_div = DivNode(
+            pos    = center,
+            parent = self)
+        self.naub_div = DivNode(
+            pos    = center,
+            parent = self)
+        self.menu_div = DivNode(
+            parent = self)
+        self.score_node = avg.WordsNode(
+            pos    = (25, 25),
+            text   = u"0",
+            color  = color_hex(Config.foreground_color()),
+            parent = self.menu_div)
         self.app.naubino.play()
 
     def onFrame(self):

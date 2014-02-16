@@ -1,3 +1,11 @@
+from utils import *
+
+def background_color():
+    return ColorRGB1(0.0, 0.0, 0.0)
+
+def foreground_color():
+    return ColorRGB1(1.0, 1.0, 1.0)
+
 def impulse_good(arbiter):
     'arbiter : pymunk.Arbiter'
     return arbiter.total_impulse.length >= 1000
