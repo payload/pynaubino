@@ -21,9 +21,12 @@ class Application(object):
             text   = u"0",
             color  = "000000",
             parent = self.menu_div)
-        self.naubino = naubino
-        naubino.app = self
-        naubino.score_changed = self.score_changed
+        self.naubino                    = naubino
+        naubino.cb.score_changed        = self.score_changed
+        naubino.cb.add_naub             = self.add_naub
+        naubino.cb.remove_naub          = self.remove_naub
+        naubino.cb.add_naub_joint       = self.add_naub_joint
+        naubino.cb.remove_naub_joint    = self.remove_naub_joint
 
     def exec_(self):
         self.app.run(self.main_div)
@@ -65,8 +68,6 @@ class Application(object):
             if node.tag == naub:
                 node.unlink()
 
-    def pre_remove_naub(self, naub): pass
-
     def add_naub_joint(self, joint):
         LineNode(
             tag     = joint,
@@ -79,8 +80,6 @@ class Application(object):
         for node in self.joint_div.children():
             if node.tag == joint:
                 node.unlink()
-
-    def pre_remove_naub_joint(self, joint): pass
 
     def step(self, dt):
         self.naubino.step(dt)

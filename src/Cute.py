@@ -69,7 +69,12 @@ class Application(Application):
         from PyQt4.QtGui import QApplication
         self.__app = QApplication([])
         self.naubino = naubino
-        naubino.app = self
+        naubino.cb.add_naub                 = self.add_naub
+        naubino.cb.add_naub_joint           = self.add_naub_joint
+        naubino.cb.remove_naub              = self.remove_naub
+        naubino.cb.remove_naub_joint        = self.remove_naub_joint
+        naubino.cb.pre_remove_naub          = self.pre_remove_naub
+        naubino.cb.pre_remove_naub_joint    = self.pre_remove_naub_joint
 
         self.step_timer = timer = QTimer()
         timer.setInterval(20)
@@ -192,7 +197,7 @@ class GraphicsView(GraphicsView):
         
         scene.menu = menu # TODO unclean
 
-        naubino.score_changed = menu.score_changed
+        naubino.cb.score_changed = menu.score_changed
 
         view.setParent(frame)
         view.setScene(scene.qscene)
@@ -203,7 +208,7 @@ class GraphicsView(GraphicsView):
         view.setViewportUpdateMode(view.FullViewportUpdate)
         view.show()
 
-        naubino.warn_changed = arena.warn_changed
+        naubino.cb.warn_changed = arena.warn_changed
         
         frame.show()
 

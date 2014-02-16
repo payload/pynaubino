@@ -65,7 +65,13 @@ class Application(Application):
     def __init__(self, naubino):
         super(Application, self).__init__()
         self.naubino = naubino
-        naubino.app  = self
+        naubino.cb.add_naub                 = self.add_naub
+        naubino.cb.add_naub_joint           = self.add_naub_joint
+        naubino.cb.remove_naub              = self.remove_naub
+        naubino.cb.remove_naub_joint        = self.remove_naub_joint
+        naubino.cb.pre_remove_naub          = self.pre_remove_naub
+        naubino.cb.pre_remove_naub_joint    = self.pre_remove_naub_joint
+        
         self.__update_objects = []
         self.__items = []
         self.__objs_graphics = {}

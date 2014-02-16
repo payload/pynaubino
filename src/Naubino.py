@@ -9,14 +9,23 @@ import math
 
 class Naubino(object):
 
+    class Callbacks(object):
+        def score_changed       (self, score    ): pass
+        def warn_changed        (self, warn     ): pass
+        def add_naub            (self, naub     ): pass
+        def remove_naub         (self, naub     ): pass
+        def add_naub_joint      (self, joint    ): pass
+        def remove_naub_joint   (self, joint    ): pass
+        def pre_remove_naub     (self, naub     ): pass
+        def pre_remove_naub_joint(self, joint   ): pass
+
     @property
     def score(self): return self.__score
     @score.setter
     def score(self, score):
         if self.__score == score: return
         self.__score = score
-        self.score_changed(score)
-    def score_changed(self, score): pass
+        self.cb.score_changed(score)
 
     @property
     def warn(self): return self.__warn
@@ -24,15 +33,14 @@ class Naubino(object):
     def warn(self, warn):
         if self.__warn == warn: return
         self.__warn = warn
-        self.warn_changed(warn)
-    def warn_changed(self, warn): pass
+        self.cb.warn_changed(warn)
 
-    def __init__(self, app = None):
+    def __init__(self):
         self.naubs              = []
         self.naubjoints         = set()
         self.naub_center_joints = {}
         self.playing            = False
-        self.app                = app
+        self.cb                 = Naubino.Callbacks()
         self.__score            = 0
         self.__warn             = False
         self.fail               = None
@@ -80,10 +88,10 @@ class Naubino(object):
             self.naub_center_joints[naub] = joint
             self.space.add(joint)
 
-        self.app.add_naub(naub)
+        self.cb.add_naub(naub)
 
     def remove_naub(self, naub):
-        self.app.remove_naub(naub)
+        self.cb.remove_naub(naub)
 
         if naub in self.naub_center_joints:
             joint = self.naub_center_joints[naub]
@@ -94,21 +102,21 @@ class Naubino(object):
             self.naubs.remove(naub)
 
     def pre_remove_naub(self, naub):
-        self.app.pre_remove_naub(naub)
+        self.cb.pre_remove_naub(naub)
 
     def add_naubs(self, *naubs):
         for naub in naubs: self.add_naub(naub)
 
     def add_naub_joint(self, joint):
         self.naubjoints.add(joint)
-        self.app.add_naub_joint(joint)
+        self.cb.add_naub_joint(joint)
 
     def remove_naub_joint(self, joint):
         self.naubjoints.discard(joint)
-        self.app.remove_naub_joint(joint)
+        self.cb.remove_naub_joint(joint)
 
     def pre_remove_naub_joint(self, joint):
-        self.app.pre_remove_naub_joint(joint)
+        self.cb.pre_remove_naub_joint(joint)
 
     def create_naub_pair(self, pos = (0, 0), rot = 0):
         pos = Vec2d(pos)
