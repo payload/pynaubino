@@ -166,7 +166,10 @@ class MainDiv(avg.app.MainDiv):
         self.app = app
 
     def onInit(self):
-        self.app.naubino.size = tuple(self.size)
+        naubino             = self.app.naubino
+        naubino.size        = tuple(self.size)
+        naubino.px_per_mm   = avg.player.getPixelsPerMM()
+        print naubino.px_per_mm
         bg = avg.RectNode(
             #pos         = (0, 0),
             size        = self.size,

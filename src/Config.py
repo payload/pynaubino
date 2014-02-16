@@ -13,8 +13,8 @@ def impulse_good(arbiter):
 def naub_mass():
     return 5
 
-def naub_radius():
-    return 15
+def naub_radius(px_per_mm):
+    return 5 * px_per_mm
 
 def naub_friction():
     return 0.1
@@ -31,7 +31,7 @@ def space_damping():
 
 def naub_joint_len_min(a, b):
     'a, b : Naub'
-    return (a.radius + b.radius) * 1.2
+    return (a.radius + b.radius) * 1.6
 
 def naub_joint_len_max(a, b):
     'a, b : Naub'

@@ -49,6 +49,7 @@ class Naubino(object):
         self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
         self.size               = 600, 400
+        self.px_per_mm          = 3.7839
         center.position = 0, 0
         self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_pair)
         self.difficulty         = Timer(Config.difficulty_interval(), self.inc_difficulty)
