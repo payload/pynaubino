@@ -63,12 +63,6 @@ class Naubino(object):
         self.spammer = Timer(3, self.spam_naub_pair)
         self.difficulty = Timer(20, self.inc_difficulty)
 
-    def add_item(self, *items):
-        self.app.add_item(*items)
-
-    def remove_item(self, *items):
-        self.app.remove_item(*items)
-
     def add_naub(self, naub):
         naub.naubino = self
 
