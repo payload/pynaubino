@@ -4,7 +4,6 @@ from Space import Space
 from Pointer import Pointer
 from utils import Pos, random_vec, ColorRGB255
 from Naub import Naub
-from Menu import NaubinoMenu
 from random import sample, random
 import math
 
