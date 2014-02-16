@@ -44,7 +44,13 @@ class Naubino(object):
         self.__score            = 0
         self.__warn             = False
         self.fail               = None
-
+        self.space              = space = Space()
+        self.pointer            = pointer = Pointer()
+        space.add(pointer.body)
+        self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
+        center.position = 0, 0
+        self.spammer            = Timer(3, self.spam_naub_pair)
+        self.difficulty         = Timer(20, self.inc_difficulty)
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (
             ("red"      , (229,  53,  23)),
@@ -59,17 +65,6 @@ class Naubino(object):
             ("grey"     , (160, 160, 160)),
             ("white"    , (255, 255, 255))))
         self.colors.update(self.naub_colors)
-
-        space = self.space = Space()
-
-        pointer = self.pointer = Pointer()
-        space.add(pointer.body)
-
-        center = self.center = pymunk.Body(pymunk.inf, pymunk.inf)
-        center.position = 0, 0
-
-        self.spammer = Timer(3, self.spam_naub_pair)
-        self.difficulty = Timer(20, self.inc_difficulty)
 
     def add_naub(self, naub):
         naub.naubino = self
