@@ -89,7 +89,7 @@ class Naubino(object):
                 a           = naub.body,
                 b           = self.center,
                 anchr1      = (0, 0),
-                anchr2      = (0, 0),
+                anchr2      = (naub.body.position.x, 0),
                 rest_length = Config.naub_center_joint_rest_length(),
                 stiffness   = Config.naub_center_joint_stiffness(),
                 damping     = Config.naub_center_joint_damping())
@@ -156,10 +156,10 @@ class Naubino(object):
         self.add_naubs(a, b)
 
     def random_naub_pos(self):
-        a = Vec2d(self.size[0] * 0.6, 0)
+        a = Vec2d(self.size[0] * 0.45, 0)
         b = Vec2d(0, self.size[1] * 0.6)
-        if random() < 0.5:
-            a,b = b,a
+        #if random() < 0.5:
+        #    a,b = b,a
         if random() < 0.5:
             b = -b
         return random_vec(a.x, a.y) + b
