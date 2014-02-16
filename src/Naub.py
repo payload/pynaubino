@@ -105,10 +105,11 @@ class Naub(Naub):
             self.join_naub(naub)
             return
 
-        colors_alike = are_colors_alike(self.color, naub.color)
-        naub_near = self.is_naub_near(naub)
+        colors_alike    = are_colors_alike(self.color, naub.color)
+        naub_near       = self.is_naub_near(naub)
+        impulse_good    = arbiter.total_impulse.length >= 1000
 
-        if colors_alike and not naub_near:
+        if colors_alike and not naub_near and impulse_good:
             self.merge_naub(naub)
             cycle = self.test_cycle()
             if cycle: self.pop_cycle(cycle)
