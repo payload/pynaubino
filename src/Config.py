@@ -60,8 +60,8 @@ def difficulty_interval():
 
 def warn(danger):
     'danger : int'
-    return danger > 25
+    return False#danger > 25
 
 def fail(danger):
     'danger : int'
-    return danger > 40
+    return False#danger > 40
