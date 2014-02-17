@@ -74,6 +74,7 @@ class Application(object):
         for node in self.naub_div.children():
             if node.tag == naub:
                 unlink = lambda node=node: node.unlink()
+                node.useCircleNode()
                 avg.LinearAnim(
                     node.circle, "r", 270,
                     node.circle.r, 1,
@@ -126,24 +127,30 @@ class CircleNode(avg.DivNode):
             parent  = None):
         super(CircleNode, self).__init__()
         self.registerInstance(self, parent)
+        self.tag            = tag
+        self.pos_           = pos
+        self.r              = r
+        self.fat_finger     = avg.Point2D(fat_finger)
         self.circle         = avg.CircleNode(
             fillopacity     = 1,
+            color           = color_hex(Config.foreground_color()),
+            fillcolor       = color,
+            strokewidth     = 4,
+            r               = r * 0.9,
+            pos             = avg.Point2D(r, r) + self.fat_finger,
             parent          = self)
-        self.tag            = tag
-        self.circle.color   = color_hex(Config.foreground_color())
-        self.circle.fillcolor = color
-        self.circle.strokewidth = 4
-        self.pos_           = pos
-        self.circle.r       = r * 0.9
-        self.fat_finger     = avg.Point2D(fat_finger)
-        self.circle.pos     = avg.Point2D(r, r) + self.fat_finger
+        self.size           = (avg.Point2D(r, r) + self.fat_finger) * 2
+        self.image          = screenshotImageNode(self)
+        self.removeChild(self.circle)
+        self.appendChild(self.image)
         self.update()
 
     def update(self):
-        r                   = self.circle.r
-        center              = avg.Point2D(r, r) + self.fat_finger
-        self.pos            = avg.Point2D(self.pos_()) - center
-        self.size           = center * 2
+        self.pos            = avg.Point2D(self.pos_()) - self.size * 0.5 + self.fat_finger
+
+    def useCircleNode(self):
+        self.removeChild(self.image)
+        self.appendChild(self.circle)
 
 
 
