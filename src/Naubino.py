@@ -51,7 +51,7 @@ class Naubino(object):
         self.size               = 600, 400
         self.px_per_mm          = 3.7839
         center.position = 0, 0
-        self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_pair)
+        self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_bunch)
         self.difficulty         = Timer(Config.difficulty_interval(), self.inc_difficulty)
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (
@@ -141,6 +141,12 @@ class Naubino(object):
         a.join_naub(b)
         return a, b
 
+    def spam_naub_bunch(self):
+        for i in xrange(Config.naubs_per_bunch()):
+            if len(self.naubs) > Config.max_naubs():
+                return
+            self.spam_naub_pair()
+        
     def spam_naub_pair(self):
         pos = self.random_naub_pos()
         rot = random() * math.pi * 2

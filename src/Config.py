@@ -1,10 +1,13 @@
 from utils import *
 
 def background_color():
-    return ColorRGB1(0.0, 0.0, 0.0)
+    return ColorRGB1(1.0, 1.0, 1.0)
 
 def foreground_color():
-    return ColorRGB1(1.0, 1.0, 1.0)
+    return ColorRGB1(0.0, 0.0, 0.0)
+
+def max_naubs():
+    return 80
 
 def impulse_good(arbiter):
     'arbiter : pymunk.Arbiter'
@@ -14,7 +17,7 @@ def naub_mass():
     return 5
 
 def naub_radius(px_per_mm):
-    return 5 * px_per_mm
+    return 30 * px_per_mm
 
 def naub_friction():
     return 0.1
@@ -28,6 +31,9 @@ def pointer_error_bias():
 
 def space_damping():
     return 0.1
+
+def naubs_per_bunch():
+    return 80
 
 def naub_joint_len_min(a, b):
     'a, b : Naub'
@@ -44,10 +50,10 @@ def naub_joint_damping():
     return 30
 
 def naub_center_joint_rest_length():
-    return 30
+    return 100
 
 def naub_center_joint_stiffness():
-    return 7
+    return 1
 
 def naub_center_joint_damping():
     return 7

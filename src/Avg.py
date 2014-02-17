@@ -10,7 +10,7 @@ class Application(object):
         self.app                        = avg.app.App()
         self.main_div                   = MainDiv(self)
         self.naubino                    = naubino
-        naubino.cb.score_changed        = self.score_changed
+        #naubino.cb.score_changed        = self.score_changed
         naubino.cb.add_naub             = self.add_naub
         naubino.cb.remove_naub          = self.remove_naub
         naubino.cb.add_naub_joint       = self.add_naub_joint
@@ -35,6 +35,11 @@ class Application(object):
         self.score_node.text = unicode(score)
 
     def add_naub(self, naub):
+        n_naubs = len(self.naubino.naubs)
+        fps     = 1000 / avg.player.getFrameDuration()
+        text    = "naubs: {}\nfps  : {}".format(n_naubs, fps)
+        self.score_changed(text)
+        
         color   = color_hex(Config.foreground_color())
         mm      = self.naubino.px_per_mm
         node    = CircleNode(
@@ -79,7 +84,7 @@ class Application(object):
             tag     = joint,
             pos1    = lambda: (joint.a.pos.x, joint.a.pos.y),
             pos2    = lambda: (joint.b.pos.x, joint.b.pos.y),
-            strokewidth = lambda: 4,
+            strokewidth = lambda: 30,
             parent  = self.joint_div)
 
     def remove_naub_joint(self, joint):
@@ -125,9 +130,11 @@ class CircleNode(avg.DivNode):
             fillopacity     = 1,
             parent          = self)
         self.tag            = tag
-        self.circle.color   = self.circle.fillcolor = color
+        self.circle.color   = color_hex(Config.foreground_color())
+        self.circle.fillcolor = color
+        self.circle.strokewidth = 4
         self.pos_           = pos
-        self.circle.r       = r
+        self.circle.r       = r * 0.9
         self.fat_finger     = avg.Point2D(fat_finger)
         self.circle.pos     = avg.Point2D(r, r) + self.fat_finger
         self.update()
@@ -146,7 +153,7 @@ class LineNode(avg.LineNode):
             tag     = None,
             pos1    = lambda: (0.0, 0.0),
             pos2    = lambda: (0.0, 0.0),
-            strokewidth = lambda: 1,
+            strokewidth = lambda: 6,
             color   = lambda: color_hex(Config.foreground_color()),
             parent  = None, **kwargs):
         super(LineNode, self).__init__(**kwargs)
@@ -194,7 +201,7 @@ class MainDiv(avg.app.MainDiv):
         self.menu_div = DivNode(
             parent = self)
         self.score_node = avg.WordsNode(
-            pos    = (25, 25),
+            pos    = (6025, 2025),
             text   = u"0",
             color  = color_hex(Config.foreground_color()),
             parent = self.menu_div)
