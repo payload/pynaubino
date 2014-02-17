@@ -35,12 +35,14 @@ class Application(object):
         self.score_node.text = unicode(score)
 
     def add_naub(self, naub):
-        color = color_hex(Config.foreground_color())
-        node = CircleNode(
+        color   = color_hex(Config.foreground_color())
+        mm      = self.naubino.px_per_mm
+        node    = CircleNode(
             tag         = naub,
             pos         = lambda: (naub.pos.x, naub.pos.y),
             r           = naub.radius - 2,
             color       = color_hex(naub.color),
+            fat_finger  = (5*mm, 5*mm),
             parent      = self.naub_div)
         node.subscribe(node.CURSOR_DOWN, lambda e: self.cursor_down_on_naub(e, node))
 
@@ -115,6 +117,7 @@ class CircleNode(avg.DivNode):
             color   = color_hex(Config.background_color()),
             pos     = lambda: (0.0, 0.0),
             r       = 15,
+            fat_finger = (0, 0),
             parent  = None):
         super(CircleNode, self).__init__()
         self.registerInstance(self, parent)
@@ -125,10 +128,15 @@ class CircleNode(avg.DivNode):
         self.circle.color   = self.circle.fillcolor = color
         self.pos_           = pos
         self.circle.r       = r
+        self.fat_finger     = avg.Point2D(fat_finger)
+        self.circle.pos     = avg.Point2D(r, r) + self.fat_finger
         self.update()
 
     def update(self):
-        self.pos            = self.pos_()
+        r                   = self.circle.r
+        center              = avg.Point2D(r, r) + self.fat_finger
+        self.pos            = avg.Point2D(self.pos_()) - center
+        self.size           = center * 2
 
 
 
