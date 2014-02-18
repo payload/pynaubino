@@ -17,7 +17,7 @@ def naub_mass():
     return 5
 
 def naub_radius(px_per_mm):
-    return 30 * px_per_mm
+    return 5 * px_per_mm
 
 def naub_friction():
     return 0.1
@@ -33,7 +33,7 @@ def space_damping():
     return 0.1
 
 def naubs_per_bunch():
-    return 80
+    return 1
 
 def naub_joint_len_min(a, b):
     'a, b : Naub'
@@ -53,13 +53,18 @@ def naub_center_joint_rest_length():
     return 100
 
 def naub_center_joint_stiffness():
-    return 1
+    #return 1
+    return 7
 
 def naub_center_joint_damping():
     return 7
 
+def naub_center_joint_anchor(naub):
+    #return (naub.body.position.x, 0)
+    return (0, 0)
+
 def spammer_interval():
-    return 3
+    return 0.1
 
 def difficulty_interval():
     return 20
