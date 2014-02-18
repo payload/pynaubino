@@ -27,7 +27,7 @@ class NaubinoGame(Widget):
         with self.canvas:
             ClearColor(1, 1, 1, 1)
             ClearBuffers(clear_color = True)
-            Translate(self.size[0] * 0.5, self.size[1] * 0.5)
+            Translate(*self.center)
             Color(0, 0, 0)
             for joint in self.naubino.naubjoints:
                 a = joint.a.pos + [joint.a.radius] * 2
@@ -40,6 +40,24 @@ class NaubinoGame(Widget):
                 Ellipse(
                     pos     = pos,
                     size    = (d, d))
+
+    def on_touch_down(self, touch):
+        pos     = Vec2d(touch.pos) - self.center
+        for naub in self.naubino.naubs:
+            if (naub.pos - pos).length <= naub.radius:
+                pointer = self.naubino.create_pointer(pos)
+                naub.select(pointer)
+                touch.ud.update(
+                    pointer = pointer,
+                    naub    = naub)
+
+    def on_touch_move(self, touch):
+        if 'pointer' in touch.ud:
+            touch.ud['pointer'].pos = Vec2d(touch.pos) - self.center
+
+    def on_touch_up(self, touch):
+        if 'naub' in touch.ud and 'pointer' in touch.ud:
+            touch.ud['naub'].deselect(touch.ud['pointer'])
 
 
 class NaubinoApp(App):
