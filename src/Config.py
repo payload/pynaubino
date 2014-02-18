@@ -7,7 +7,7 @@ def foreground_color():
     return ColorRGB1(0.0, 0.0, 0.0)
 
 def max_naubs():
-    return 80
+    return 8000
 
 def impulse_good(arbiter):
     'arbiter : pymunk.Arbiter'
