@@ -13,7 +13,7 @@ def impulse_good(arbiter, a, b):
     ''' arbiter : pymunk.Arbiter
         a, b    : Naub
     '''
-    return 250 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length
+    return 125 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length
 
 def naub_mass():
     return 0.01
