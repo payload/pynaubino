@@ -1,5 +1,6 @@
 import libavg as avg
 from utils import *
+from utils_avg import *
 import Config
 
 
