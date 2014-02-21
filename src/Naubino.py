@@ -209,6 +209,7 @@ class Naubino(object):
     def play(self):
         self.spammer.start()
         self.difficulty.start()
+        self.spammer.callback()
 
     def stop(self):
         self.spammer.stop()
