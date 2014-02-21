@@ -35,11 +35,9 @@ class NaubinoGame(Widget):
                 Line(points = [a.x , a.y, b.x, b.y], width = 4)
             for naub in self.naubino.naubs:
                 Color(*color_rgb1(naub.color))
-                pos         = naub.pos
-                d           = naub.radius * 2
                 Ellipse(
-                    pos     = pos,
-                    size    = (d, d))
+                    pos     = naub.pos,
+                    size    = [naub.radius * 2] * 2)
 
     def on_touch_down(self, touch):
         pos     = Vec2d(touch.pos) - self.center
