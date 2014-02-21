@@ -21,7 +21,6 @@ class NaubinoGame(Widget):
         self.naubino.play()
 
     def update(self, dt):
-        self.naubino.size = self.size
         self.naubino.step(dt)
         self.canvas.clear()
         with self.canvas:
