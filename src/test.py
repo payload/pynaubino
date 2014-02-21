@@ -16,6 +16,17 @@ class SomeTests(TestCase):
         for la, lb in zip(after, before):
             assert_lt(la, lb)
 
+    def test_contract_stretched_naub_chain(self):
+        naubino = Naubino()
+        for length in xrange(2, 10):
+            naubs   = naubino.create_naub_chain(length)
+            for naub in naubs:
+                naub.pos = naub.pos * 2
+            before  = sum(naub.pos.length for naub in naubs)
+            naubino.step(0.1)
+            after   = sum(naub.pos.length for naub in naubs)
+            assert_lt(after, before)
+
 
 
 if __name__ == '__main__':

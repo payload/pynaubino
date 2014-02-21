@@ -140,6 +140,19 @@ class Naubino(object):
         naub_a.join_naub(naub_b)
         return naub_a, naub_b
 
+    def create_naub_chain(self, n, pos = (0, 0), rot = 0):
+        pos             = Vec2d(pos)
+        naubs           = [Naub(self) for i in xrange(n)]
+        restl           = Config.naub_joint_rest_length
+        restl           = [restl(a, b) for a, b in zip(naubs, naubs[1:])]
+        restl           = tuple(sum(restl[:i]) for i in xrange(len(restl)+1))
+        v               = Vec2d(1, 0).rotated(rot)
+        for i, naub in enumerate(naubs):
+            naub.pos    = v * ((restl[-1] * 0.5) + restl[i]) + pos
+        for a, b in zip(naubs, naubs[1:]):
+            a.join_naub(b)
+        return naubs
+
     def spam_naub_bunch(self):
         for i in xrange(Config.naubs_per_bunch()):
             if len(self.naubs) > Config.max_naubs():
@@ -149,10 +162,10 @@ class Naubino(object):
     def spam_naub_pair(self):
         pos = self.random_naub_pos()
         rot = random() * math.pi * 2
-        a, b = self.create_naub_pair(pos, rot)
-        a.color = self.random_naub_color()
-        b.color = self.random_naub_color()
-        self.add_naubs(a, b)
+        naubs = self.create_naub_chain(2, pos, rot)
+        for naub in naubs:
+            naub.color = self.random_naub_color()
+        return naubs
 
     def random_naub_pos(self):
         a = Vec2d(self.size[0] * 0.45, 0)
