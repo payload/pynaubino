@@ -22,3 +22,7 @@ class Space(pymunk.Space):
 
         if hasattr(a, u"collide"): a.collide(b, arbiter)
         if hasattr(b, u"collide"): b.collide(a, arbiter)
+
+    def step(self, dt):
+        pymunk.Space.step(self, dt * 0.5)
+        pymunk.Space.step(self, dt * 0.5)
