@@ -13,7 +13,7 @@ class Naub(Naub):
 
     def __init__(self, naubino, pos = (0, 0)):
         mass                = Config.naub_mass()
-        radius              = self.radius = Config.naub_radius(naubino.px_per_mm)
+        radius              = Config.naub_radius(naubino.px_per_mm)
         inertia             = pymunk.moment_for_circle(mass, radius, radius)
         body                = pymunk.Body(mass, inertia)
         body.naubino_obj    = self
@@ -21,9 +21,10 @@ class Naub(Naub):
         shape               = pymunk.Circle(body, radius)
         shape.friction      = Config.naub_friction()
         shape.elasticity    = Config.naub_elasticity()
-        self.color          = ColorRGB255(0, 0, 0)
         naubino.space.add(body, shape)
 
+        self.color          = ColorRGB255(0, 0, 0)
+        self.radius         = radius
         self.alive          = True
         self.cute           = None
         self.body           = body
