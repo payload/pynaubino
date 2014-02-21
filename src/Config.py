@@ -9,12 +9,14 @@ def foreground_color():
 def max_naubs():
     return 8000
 
-def impulse_good(arbiter):
-    'arbiter : pymunk.Arbiter'
-    return arbiter.total_impulse.length >= 1000
+def impulse_good(arbiter, a, b):
+    ''' arbiter : pymunk.Arbiter
+        a, b    : Naub
+    '''
+    return 250 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length
 
 def naub_mass():
-    return 5
+    return 0.01
 
 def naub_radius(px_per_mm):
     return 5 * px_per_mm
@@ -43,21 +45,24 @@ def naub_joint_len_max(a, b):
     'a, b : Naub'
     return (a.radius + b.radius) * 2
 
+def naub_joint_rest_length(a, b):
+    'a, b : Naub'
+    return (a.radius + b.radius) * 2
+
 def naub_joint_stiffness():
-    return 10
+    return 2
 
 def naub_joint_damping():
-    return 30
+    return 0.1
 
 def naub_center_joint_rest_length():
-    return 100
+    return 10
 
 def naub_center_joint_stiffness():
-    #return 1
-    return 7
+    return 0.005
 
 def naub_center_joint_damping():
-    return 7
+    return 0
 
 def naub_center_joint_anchor(naub):
     #return (naub.body.position.x, 0)

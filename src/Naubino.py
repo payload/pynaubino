@@ -128,18 +128,17 @@ class Naubino(object):
 
     def create_naub_pair(self, pos = (0, 0), rot = 0):
         pos = Vec2d(pos)
-        a = Vec2d(-1, 0)
-        b = Vec2d( 1, 0)
-        a.rotate(rot)
-        b.rotate(rot)
-        a += pos
-        b += pos
-        a = Naub(self, a)
-        b = Naub(self, b)
-        self.add_naub(a)
-        self.add_naub(b)
-        a.join_naub(b)
-        return a, b
+        naub_a          = Naub(self)
+        naub_b          = Naub(self)
+        rest_length     = Config.naub_joint_rest_length(naub_a, naub_b)
+        v               = Vec2d(rest_length * 0.5, 0)
+        v.rotate(rot)
+        naub_a.pos      = pos - v
+        naub_b.pos      = pos + v
+        self.add_naub(naub_a)
+        self.add_naub(naub_b)
+        naub_a.join_naub(naub_b)
+        return naub_a, naub_b
 
     def spam_naub_bunch(self):
         for i in xrange(Config.naubs_per_bunch()):
@@ -151,14 +150,8 @@ class Naubino(object):
         pos = self.random_naub_pos()
         rot = random() * math.pi * 2
         a, b = self.create_naub_pair(pos, rot)
-
-        impulse = lambda: random_vec(50, 50)
-        a.body.apply_impulse(impulse())
-        b.body.apply_impulse(impulse())
-
         a.color = self.random_naub_color()
         b.color = self.random_naub_color()
-
         self.add_naubs(a, b)
 
     def random_naub_pos(self):
@@ -183,9 +176,9 @@ class Naubino(object):
     def step(self, dt):
         for pointer in self.pointers:
             pointer.step(dt)
-        self.space.step(dt)
         self.difficulty.step(dt)
         self.spammer.step(dt)
+        self.space.step(dt)
         danger = self.danger()
         self.warn = Config.warn(danger)
         if Config.fail(danger):

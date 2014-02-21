@@ -109,7 +109,7 @@ class Naub(Naub):
 
         colors_alike    = are_colors_alike(self.color, naub.color)
         naub_near       = self.is_naub_near(naub)
-        impulse_good    = Config.impulse_good(arbiter)
+        impulse_good    = Config.impulse_good(arbiter, self, naub)
 
         if colors_alike and not naub_near and impulse_good:
             self.merge_naub(naub)
