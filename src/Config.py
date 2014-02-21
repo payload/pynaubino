@@ -64,7 +64,7 @@ def naub_center_joint_anchor(naub):
     return (0, 0)
 
 def spammer_interval():
-    return 0.1
+    return 3
 
 def difficulty_interval():
     return 20
