@@ -146,7 +146,7 @@ class Naubino(object):
             if len(self.naubs) > Config.max_naubs():
                 return
             self.spam_naub_pair()
-        
+
     def spam_naub_pair(self):
         pos = self.random_naub_pos()
         rot = random() * math.pi * 2
@@ -214,6 +214,35 @@ class Naubino(object):
         self.spammer.stop()
         self.difficulty.stop()
         self.reset_difficulty()
+
+    def touch_down(self, pos):
+        pos = Vec2d(pos)
+        for naub in self.naubs:
+            if naub.shape.point_query(pos):
+                pointer = self.create_pointer(pos)
+                naub.select(pointer)
+                return Touch(self, naub, pointer)
+        return None
+
+    def touch_up(self, naub, pointer):
+        naub.deselect(pointer)
+
+
+
+class Touch(object):
+
+    def __init__(self, naubino, naub, pointer):
+        self.naubino        = naubino
+        self.naub           = naub
+        self.pointer        = pointer
+
+    def move(self, pos):
+        self.pointer.pos    = pos
+
+    def up(self):
+        self.naubino.touch_up(self.naub, self.pointer)
+
+
 
 class Timer(object):
 
