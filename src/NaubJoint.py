@@ -1,6 +1,7 @@
 import pymunk, Config
 
 class NaubJoint(object):
+
     def __init__(self, a, b, naubino):
         self.a = a
         self.b = b
@@ -29,6 +30,11 @@ class NaubJoint(object):
         self.naubino = naubino
 
         self.naubino.add_naub_joint(self)
+
+    @property
+    def endpoints(self):
+        spring = self.spring
+        return spring.a.position + spring.anchr1, spring.b.position + spring.anchr2
 
     def remove(self):
         if self.alive:
