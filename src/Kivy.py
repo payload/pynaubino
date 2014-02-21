@@ -28,16 +28,17 @@ class NaubinoGame(Widget):
             ClearColor(1, 1, 1, 1)
             ClearBuffers(clear_color = True)
             Translate(*self.center)
+            Scale(1 -1, 1)
             Color(0, 0, 0)
             for joint in self.naubino.naubjoints:
-                a = joint.a.pos + [joint.a.radius] * 2
-                b = joint.b.pos + [joint.b.radius] * 2
+                a, b = joint.endpoints
                 Line(points = [a.x , a.y, b.x, b.y], width = 4)
             for naub in self.naubino.naubs:
+                bb = naub.shape.bb
                 Color(*color_rgb1(naub.color))
                 Ellipse(
-                    pos     = naub.pos,
-                    size    = [naub.radius * 2] * 2)
+                    pos     = (bb.left, bb.bottom),
+                    size    = (bb.right - bb.left, bb.top - bb.bottom))
 
     def on_touch_down(self, touch):
         pos     = Vec2d(touch.pos) - self.center
