@@ -7,6 +7,16 @@ from kivy.graphics import *
 from Naubino import Naubino
 from utils import *
 
+from kivy.config import Config
+Config.set('graphics', 'fullscreen', 'auto')
+
+import os
+DISPLAY     = os.getenv("DISPLAY")
+WALL_DEVICE = "wall" # look into ~/.kivy/config.ini [input]
+WALL_SIZE   = (7680., 3240.)
+WALL_LEFT   = ":0.1"
+WALL_RIGHT  = ":0.0"
+
 
 
 class NaubinoGame(Widget):
@@ -31,7 +41,7 @@ class NaubinoGame(Widget):
             Color(0, 0, 0)
             for joint in self.naubino.naubjoints:
                 a, b = joint.endpoints
-                Line(points = [a.x , a.y, b.x, b.y], width = 4)
+                Line(points = [a.x , a.y, b.x, b.y], width = joint.a.radius * 0.212)
             for naub in self.naubino.naubs:
                 bb = naub.shape.bb
                 Color(*color_rgb1(naub.color))
@@ -40,20 +50,35 @@ class NaubinoGame(Widget):
                     size    = (bb.right - bb.left, bb.top - bb.bottom))
 
     def on_touch_down(self, touch):
-        pos                 = Vec2d(touch.pos) - self.center
+        pos                 = self.translate_touch_pos(touch)
+        pos                 = Vec2d(pos) - self.center
         touch.ud.update(
             naubino_touch   = self.naubino.touch_down(pos))
 
     def on_touch_move(self, touch):
         naubino_touch       = touch.ud.get('naubino_touch', None)
         if not naubino_touch: return
-        pos                 = Vec2d(touch.pos) - self.center
+        pos                 = self.translate_touch_pos(touch)
+        pos                 = Vec2d(pos) - self.center
         naubino_touch.move(pos)
 
     def on_touch_up(self, touch):
         naubino_touch       = touch.ud.get('naubino_touch', None)
         if not naubino_touch: return
         naubino_touch.up()
+
+    def translate_touch_pos(self, touch):
+        if touch.device == WALL_DEVICE:
+            x = touch.spos[0] * WALL_SIZE[0]
+            y = touch.spos[1] * WALL_SIZE[1]
+            if   WALL_LEFT  == DISPLAY:
+                pass
+            elif WALL_RIGHT == DISPLAY:
+                x -= WALL_SIZE[0] * 0.5
+        else:
+            x = touch.x
+            y = touch.y
+        return (x, y)
 
 
 
