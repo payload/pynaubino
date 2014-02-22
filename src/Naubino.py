@@ -127,18 +127,7 @@ class Naubino(object):
         self.cb.pre_remove_naub_joint(joint)
 
     def create_naub_pair(self, pos = (0, 0), rot = 0):
-        pos = Vec2d(pos)
-        naub_a          = Naub(self)
-        naub_b          = Naub(self)
-        rest_length     = Config.naub_joint_rest_length(naub_a, naub_b)
-        v               = Vec2d(rest_length * 0.5, 0)
-        v.rotate(rot)
-        naub_a.pos      = pos - v
-        naub_b.pos      = pos + v
-        self.add_naub(naub_a)
-        self.add_naub(naub_b)
-        naub_a.join_naub(naub_b)
-        return naub_a, naub_b
+        return self.create_naub_chain(2, pos, rot)
 
     def create_naub_chain(self, n, pos = (0, 0), rot = 0):
         pos             = Vec2d(pos)
@@ -148,7 +137,7 @@ class Naubino(object):
         restl           = tuple(sum(restl[:i]) for i in xrange(len(restl)+1))
         v               = Vec2d(1, 0).rotated(rot)
         for i, naub in enumerate(naubs):
-            naub.pos    = v * ((restl[-1] * 0.5) + restl[i]) + pos
+            naub.pos    = pos + v * (-(restl[-1] * 0.5) + restl[i])
         for a, b in zip(naubs, naubs[1:]):
             a.join_naub(b)
         return naubs
