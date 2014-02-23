@@ -1,4 +1,5 @@
 import pymunk
+from utils import *
 
 class Pointer(object):
 
@@ -6,7 +7,7 @@ class Pointer(object):
         body = pymunk.Body(pymunk.inf, pymunk.inf)
         body.position = pos
         self.body = body
-        self.pos  = pymunk.Vec2d(body.position)
+        self.pos  = Vec2d(*body.position)
 
     def step(self, dt):
         body_pos = self.body.position.interpolate_to(self.pos, 0.25)

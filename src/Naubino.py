@@ -41,11 +41,12 @@ class Naubino(object):
         self.naubs              = []
         self.naubjoints         = set()
         self.naub_center_joints = {}
+        self.body_obj_map       = {}
         self.playing            = False
         self.cb                 = Naubino.Callbacks()
         self.__score            = 0
         self.__warn             = False
-        self.space              = space = Space()
+        self.space              = Space(self)
         self.pointers           = set()
         self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
         self.size               = 600, 400
@@ -130,7 +131,7 @@ class Naubino(object):
         return self.create_naub_chain(2, pos, rot)
 
     def create_naub_chain(self, n, pos = (0, 0), rot = 0):
-        pos             = Vec2d(pos)
+        pos             = Vec2d(*pos)
         naubs           = [Naub(self) for i in xrange(n)]
         restl           = Config.naub_joint_rest_length
         restl           = [restl(a, b) for a, b in zip(naubs, naubs[1:])]
@@ -212,7 +213,7 @@ class Naubino(object):
         self.reset_difficulty()
 
     def touch_down(self, pos):
-        pos = Vec2d(pos)
+        pos = Vec2d(*pos)
         for naub in self.naubs:
             if naub.shape.point_query(pos):
                 pointer = self.create_pointer(pos)

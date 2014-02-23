@@ -27,6 +27,7 @@ class NaubJoint(object):
     @property
     def endpoints(self):
         spring = self.spring
+        print 12, spring.anchr1
         return spring.a.position + spring.anchr1, spring.b.position + spring.anchr2
 
     def remove(self):

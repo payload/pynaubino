@@ -1,8 +1,9 @@
 import pymunk, Config
 
 class Space(pymunk.Space):
-    def __init__(self):
+    def __init__(self, naubino):
         pymunk.Space.__init__(self)
+        self.naubino = naubino
         self.damping = Config.space_damping()
         self.set_default_collision_handler(None, None, self.collide, None)
 
@@ -18,7 +19,7 @@ class Space(pymunk.Space):
         if len(arbiter.shapes) != 2: return
         a, b = arbiter.shapes
         if a == None or b == None: return
-        a, b = [x.body.naubino_obj for x in [a, b]]
+        a, b = [self.naubino.body_obj_map.get(x.body) for x in [a, b]]
 
         if hasattr(a, u"collide"): a.collide(b, arbiter)
         if hasattr(b, u"collide"): b.collide(a, arbiter)

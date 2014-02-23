@@ -46,12 +46,12 @@ class NaubinoGame(Widget):
                 bb = naub.shape.bb
                 Color(*color_rgb1(naub.color))
                 Ellipse(
-                    pos     = (bb.left, bb.bottom),
-                    size    = (bb.right - bb.left, bb.top - bb.bottom))
+                    pos     = (bb.l, bb.b),
+                    size    = (bb.r - bb.l, bb.t - bb.b))
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
-        pos                 = Vec2d(pos) - self.center
+        pos                 = Vec2d(*pos) - self.center
         touch.ud.update(
             naubino_touch   = self.naubino.touch_down(pos))
 
@@ -59,7 +59,7 @@ class NaubinoGame(Widget):
         naubino_touch       = touch.ud.get('naubino_touch', None)
         if not naubino_touch: return
         pos                 = self.translate_touch_pos(touch)
-        pos                 = Vec2d(pos) - self.center
+        pos                 = Vec2d(*pos) - self.center
         naubino_touch.move(pos)
 
     def on_touch_up(self, touch):
@@ -91,7 +91,9 @@ class NaubinoApp(App):
 
 
 
-
-if __name__ == '__main__':
+def main():
     app = NaubinoApp()
     app.run()
+
+if __name__ == '__main__':
+    main()
