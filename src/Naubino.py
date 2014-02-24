@@ -1,8 +1,8 @@
-import pymunk
-from pymunk import Vec2d
+import pymunk_
+from pymunk_ import Vec2d
 from Space import Space
 from Pointer import Pointer
-from utils import Pos, random_vec, ColorRGB255
+from utils import *
 from Naub import Naub
 from random import sample, random
 import math
@@ -48,7 +48,7 @@ class Naubino(object):
         self.__warn             = False
         self.space              = Space(self)
         self.pointers           = set()
-        self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
+        self.center             = center = pymunk_.Body(pymunk_.inf, pymunk_.inf)
         self.size               = 600, 400
         self.px_per_mm          = 3.7839
         center.position = 0, 0
@@ -86,7 +86,7 @@ class Naubino(object):
             self.naubs.append(naub)
 
         if naub not in self.naub_center_joints:
-            joint = pymunk.DampedSpring(
+            joint = pymunk_.DampedSpring(
                 a           = naub.body,
                 b           = self.center,
                 anchr1      = (0, 0),

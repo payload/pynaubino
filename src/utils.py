@@ -1,5 +1,5 @@
-import random, pymunk
-from pymunk import Vec2d
+import random, pymunk_
+from pymunk_ import Vec2d
 
 
 
@@ -49,24 +49,3 @@ def toVec2d(v):
     if isinstance(v, Vec2d): return v
     else: return Vec2d(v.x(), v.y())
 
-class Pos(object):
-    @property
-    def pos(self): return self.get_pos()
-    @pos.setter
-    def pos(self, pos): self.set_pos(pos)
-
-    def __init__(self, x):
-        from PyQt4.QtGui import QGraphicsItem
-        if   isinstance(x, pymunk.Body):
-            self.get_pos = lambda: x.position
-            self.set_pos = lambda pos: setattr(x, u"position", pos)
-        elif isinstance(x, QGraphicsItem):
-            def get_pos():
-                pos = x.pos()
-                return Vec2d(pos.x(), pos.y())
-            self.get_pos = get_pos
-            def set_pos(pos):
-                x.setPos(pos.x, pos.y)
-            self.set_pos = set_pos
-        else:
-            raise TypeError(type(x))

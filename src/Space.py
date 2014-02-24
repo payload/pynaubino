@@ -1,19 +1,19 @@
-import pymunk, Config
+import pymunk_, Config
 
-class Space(pymunk.Space):
+class Space(pymunk_.Space):
     def __init__(self, naubino):
-        pymunk.Space.__init__(self)
+        pymunk_.Space.__init__(self)
         self.naubino = naubino
         self.damping = Config.space_damping()
         self.set_default_collision_handler(None, None, self.collide, None)
 
     def add(self, *objs):
         for obj in objs:
-            pymunk.Space.add(self, obj)
+            pymunk_.Space.add(self, obj)
 
     def remove(self, *objs):
         for obj in objs:
-            pymunk.Space.remove(self, obj)
+            pymunk_.Space.remove(self, obj)
 
     def collide(self, space, arbiter, *args, **kwargs):
         if len(arbiter.shapes) != 2: return
@@ -25,5 +25,5 @@ class Space(pymunk.Space):
         if hasattr(b, u"collide"): b.collide(a, arbiter)
 
     def step(self, dt):
-        pymunk.Space.step(self, dt * 0.5)
-        pymunk.Space.step(self, dt * 0.5)
+        pymunk_.Space.step(self, dt * 0.5)
+        pymunk_.Space.step(self, dt * 0.5)

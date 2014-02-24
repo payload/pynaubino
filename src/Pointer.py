@@ -1,10 +1,10 @@
-import pymunk
+import pymunk_
 from utils import *
 
 class Pointer(object):
 
     def __init__(self, pos):
-        body = pymunk.Body(pymunk.inf, pymunk.inf)
+        body = pymunk_.Body(pymunk_.inf, pymunk_.inf)
         body.position = pos
         self.body = body
         self.pos  = Vec2d(*body.position)

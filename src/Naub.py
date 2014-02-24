@@ -1,4 +1,4 @@
-import pymunk
+import pymunk_
 import random
 from NaubJoint import NaubJoint
 from utils import *
@@ -14,10 +14,10 @@ class Naub(Naub):
     def __init__(self, naubino, pos = (0, 0)):
         mass                = Config.naub_mass()
         radius              = Config.naub_radius(naubino.px_per_mm)
-        inertia             = pymunk.moment_for_circle(mass, radius, radius)
-        body                = pymunk.Body(mass, inertia)
+        inertia             = pymunk_.moment_for_circle(mass, radius, radius)
+        body                = pymunk_.Body(mass, inertia)
         body.position       = pos
-        shape               = pymunk.Circle(body, radius)
+        shape               = pymunk_.Circle(body, radius)
         shape.friction      = Config.naub_friction()
         shape.elasticity    = Config.naub_elasticity()
         naubino.space.add(body, shape)
@@ -49,7 +49,7 @@ class Naub(Naub):
     def select(self, pointer):
         if not self.alive: return
         if pointer in self.pointer_joints: return
-        joint               = pymunk.PivotJoint(
+        joint               = pymunk_.PivotJoint(
             pointer.body, self.body, (0,0), (0,0))
         joint.error_bias    = Config.pointer_error_bias()
         self.naubino.space.add(joint)

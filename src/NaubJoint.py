@@ -1,4 +1,4 @@
-import pymunk, Config
+import pymunk_, Config
 
 class NaubJoint(object):
 
@@ -9,7 +9,7 @@ class NaubJoint(object):
         len_min = Config.naub_joint_len_min(a, b)
         len_max = Config.naub_joint_len_max(a, b)
 
-        self.spring = pymunk.DampedSpring(
+        self.spring = pymunk_.DampedSpring(
             a           = a.body,
             b           = b.body,
             anchr1      = (0, 0),
@@ -27,7 +27,6 @@ class NaubJoint(object):
     @property
     def endpoints(self):
         spring = self.spring
-        print 12, spring.anchr1
         return spring.a.position + spring.anchr1, spring.b.position + spring.anchr2
 
     def remove(self):
