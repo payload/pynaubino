@@ -41,7 +41,6 @@ class Naubino(object):
         self.naubs              = []
         self.naubjoints         = set()
         self.naub_center_joints = {}
-        self.body_obj_map       = {}
         self.playing            = False
         self.cb                 = Naubino.Callbacks()
         self.__score            = 0

@@ -17,6 +17,7 @@ class Naub(Naub):
         inertia             = pymunk_.moment_for_circle(mass, radius, radius)
         body                = pymunk_.Body(mass, inertia)
         body.position       = pos
+        body.data           = self
         shape               = pymunk_.Circle(body, radius)
         shape.friction      = Config.naub_friction()
         shape.elasticity    = Config.naub_elasticity()
