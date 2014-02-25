@@ -19,6 +19,41 @@ WALL_RIGHT  = ":0.0"
 
 
 
+class KivyNaub(object):
+
+    def __init__(self, naub):
+        self.naub       = naub
+        self.color      = Color(*color_rgb1(naub.color))
+        bb              = naub.shape.bb
+        self.ellipse    = Ellipse(
+            pos         = (bb.l, bb.b),
+            size        = (bb.r - bb.l, bb.t - bb.b))
+
+    def update(self):
+        self.color.rgb  = color_rgb1(self.naub.color)
+        bb              = self.naub.shape.bb
+        ellipse         = self.ellipse
+        ellipse.pos     = (bb.l, bb.b)
+        ellipse.size    = (bb.r - bb.l, bb.t - bb.b)
+
+
+
+class KivyNaubJoint(object):
+
+    def __init__(self, joint):
+        self.joint      = joint
+        a, b            = joint.endpoints
+        self.line       = Line(
+            points      = [a.x, a.y, b.x, b.y],
+            width       = joint.a.radius * 0.212)
+
+    def update(self):
+        a, b            = self.joint.endpoints
+        line            = self.line
+        line.points     = [a.x, a.y, b.x, b.y]
+
+
+
 class NaubinoGame(Widget):
 
     def __init__(self, *args, **kwargs):
@@ -26,28 +61,52 @@ class NaubinoGame(Widget):
         self.naubino        = Naubino()
         self.bind(size      = lambda self, size:
             setattr(self.naubino, "size", size))
+        from kivy.core.window import Window
+        Window.clearcolor   = (1, 1, 1, 1)
+        self.naub_joints    = {}
+        self.naubs          = {}
+        with self.canvas:
+            self.translate = Translate(*self.center)
+            Scale(1 -1, 1)
+            Color(0, 0, 0)
+        cb = self.naubino.cb
+        cb.add_naub         = self.add_naub
+        cb.remove_naub      = self.remove_naub
+        cb.add_naub_joint   = self.add_naub_joint
+        cb.remove_naub_joint = self.remove_naub_joint
+
+    def add_naub(self, naub):
+        kivy                = KivyNaub(naub)
+        self.naubs[naub]    = kivy
+        self.canvas.add(kivy.color)
+        self.canvas.add(kivy.ellipse)
+
+    def remove_naub(self, naub):
+        kivy                = self.naubs[naub]
+        del self.naubs[naub]
+        self.canvas.remove(kivy.color)
+        self.canvas.remove(kivy.ellipse)
+
+    def add_naub_joint(self, joint):
+        kivy                = KivyNaubJoint(joint)
+        self.naub_joints[joint] = kivy
+        self.canvas.insert(3, kivy.line)
+
+    def remove_naub_joint(self, joint):
+        kivy                = self.naub_joints[joint]
+        del self.naub_joints[joint]
+        self.canvas.remove(kivy.line)
 
     def start(self):
         self.naubino.play()
 
     def update(self, dt):
+        self.translate.xy = self.center
         self.naubino.step(dt)
-        self.canvas.clear()
-        with self.canvas:
-            ClearColor(1, 1, 1, 1)
-            ClearBuffers(clear_color = True)
-            Translate(*self.center)
-            Scale(1 -1, 1)
-            Color(0, 0, 0)
-            for joint in self.naubino.naubjoints:
-                a, b = joint.endpoints
-                Line(points = [a.x , a.y, b.x, b.y], width = joint.a.radius * 0.212)
-            for naub in self.naubino.naubs:
-                bb = naub.shape.bb
-                Color(*color_rgb1(naub.color))
-                Ellipse(
-                    pos     = (bb.l, bb.b),
-                    size    = (bb.r - bb.l, bb.t - bb.b))
+        for naub in self.naubs.values():
+            naub.update()
+        for joint in self.naub_joints.values():
+            joint.update()
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
