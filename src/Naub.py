@@ -64,10 +64,10 @@ class Naub(Naub):
         del self.pointer_joints[pointer]
 
     def join_naub(self, naub, joint = None):
-        if not self.alive or not naub.alive: return
+        if not self.alive or not naub.alive:
+            return
         if not joint:
             joint = NaubJoint(self, naub, self.naubino)
-            self.naubino.add_naub_joint(joint)
         if naub not in self.naubs_joints:
             self.naubs_joints[naub] = joint
             naub.join_naub(self, joint)
