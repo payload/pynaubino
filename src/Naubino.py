@@ -221,7 +221,8 @@ class Naubino(object):
         return None
 
     def touch_up(self, naub, pointer):
-        naub.deselect(pointer)
+        if naub.alive:
+            naub.deselect(pointer)
 
 
 

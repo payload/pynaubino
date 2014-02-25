@@ -49,3 +49,14 @@ def toVec2d(v):
     if isinstance(v, Vec2d): return v
     else: return Vec2d(v.x(), v.y())
 
+def raise_on_fail_condition():
+    return True
+
+def fail_condition(condition):
+    if not condition:
+        if raise_on_fail_condition():
+            raise RuntimeError("failed pre condition (fail_condition)")
+        else:
+            return True
+    else:
+        return False

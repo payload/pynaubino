@@ -39,17 +39,17 @@ class Naub(Naub):
         self.naubino.add_naub(self)
 
     def remove(self):
-        if self.alive:
-            self.alive = False
-            self.naubino.pre_remove_naub(self)
-            self.naubino.space.remove(*self.pointer_joints.values())
-            self.unjoin_naubs(*self.naubs_joints)
-            self.naubino.space.remove(self.body, self.shape)
-            self.naubino.remove_naub(self)
+        if fail_condition(self.alive): return
+        self.alive = False
+        self.naubino.pre_remove_naub(self)
+        self.naubino.space.remove(*self.pointer_joints.values())
+        self.unjoin_naubs(*self.naubs_joints)
+        self.naubino.space.remove(self.body, self.shape)
+        self.naubino.remove_naub(self)
 
     def select(self, pointer):
-        if not self.alive: return
-        if pointer in self.pointer_joints: return
+        if fail_condition(self.alive): return
+        if fail_condition(pointer not in self.pointer_joints): return
         joint               = pymunk_.PivotJoint(
             pointer.body, self.body, (0,0), (0,0))
         joint.error_bias    = Config.pointer_error_bias()
@@ -57,15 +57,14 @@ class Naub(Naub):
         self.pointer_joints[pointer] = joint
 
     def deselect(self, pointer):
-        if not self.alive: return
-        if pointer not in self.pointer_joints: return
+        if fail_condition(self.alive): return
+        if fail_condition(pointer in self.pointer_joints): return
         joint = self.pointer_joints[pointer]
         self.naubino.space.remove(joint)
         del self.pointer_joints[pointer]
 
     def join_naub(self, naub, joint = None):
-        if not self.alive or not naub.alive:
-            return
+        if fail_condition(self.alive and naub.alive): return
         if not joint:
             joint = NaubJoint(self, naub, self.naubino)
         if naub not in self.naubs_joints:
@@ -73,11 +72,12 @@ class Naub(Naub):
             naub.join_naub(self, joint)
 
     def unjoin_naub(self, naub):
-        if naub not in self.naubs_joints: return
+        if fail_condition(naub in self.naubs_joints): return
         joint = self.naubs_joints[naub]
         joint.remove()
         del self.naubs_joints[naub]
-        naub.unjoin_naub(self)
+        if self in naub.naubs_joints:
+            naub.unjoin_naub(self)
 
     def unjoin_naubs(self, *naubs):
         for naub in naubs: self.unjoin_naub(naub)
