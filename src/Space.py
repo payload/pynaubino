@@ -11,17 +11,11 @@ class Space(pymunk_.Space):
 
     def add(self, *objs):
         for obj in objs:
-            if self.lock:
-                self.todos.append(lambda obj=obj: pymunk_.Space.add(self, obj))
-            else:
-                pymunk_.Space.add(self, obj)
+            pymunk_.Space.add(self, obj)
 
     def remove(self, *objs):
         for obj in objs:
-            if self.lock:
-                self.todos.append(lambda obj=obj: pymunk_.Space.remove(self, obj))
-            else:
-                pymunk_.Space.remove(self, obj)
+            pymunk_.Space.remove(self, obj)
 
     def collide(self, arbiter, *args, **kwargs):
         if len(arbiter.shapes) != 2: return
@@ -29,8 +23,10 @@ class Space(pymunk_.Space):
         if a == None or b == None: return
         a, b = [x.body.data for x in [a, b]]
 
-        if hasattr(a, u"collide"): a.collide(b, arbiter)
-        if hasattr(b, u"collide"): b.collide(a, arbiter)
+        if hasattr(a, u"collide"):
+            self.todos.append(lambda: a.collide(b, arbiter))
+        if hasattr(b, u"collide"):
+            self.todos.append(lambda: b.collide(a, arbiter))
 
     def step(self, dt):
         self.lock = True
