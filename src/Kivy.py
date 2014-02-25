@@ -45,7 +45,10 @@ class KivyNaubJoint(object):
         a, b            = joint.endpoints
         self.line       = Line(
             points      = [a.x, a.y, b.x, b.y],
-            width       = joint.a.radius * 0.212)
+            width       = joint.a.radius * 0.212,
+            cap         = 'none',
+            joint       = 'none',
+            close       = False)
 
     def update(self):
         a, b            = self.joint.endpoints
