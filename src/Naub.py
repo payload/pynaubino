@@ -26,7 +26,7 @@ class Naub(Naub):
         self.color          = ColorRGB255(0, 0, 0)
         self.radius         = radius
         self.alive          = True
-        self.cute           = None
+        self.tag            = None # fill with whatever you like
         self.body           = body
         self.shape          = shape
         self.cycle_check    = 0
@@ -76,7 +76,6 @@ class Naub(Naub):
         if naub not in self.naubs_joints: return
         joint = self.naubs_joints[naub]
         joint.remove()
-        self.naubino.remove_naub_joint(joint)
         del self.naubs_joints[naub]
         naub.unjoin_naub(self)
 

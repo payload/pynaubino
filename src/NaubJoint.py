@@ -21,6 +21,7 @@ class NaubJoint(object):
 
         self.alive = True
         self.naubino = naubino
+        self.tag        = None # fill with whatever you like
 
         self.naubino.add_naub_joint(self)
 

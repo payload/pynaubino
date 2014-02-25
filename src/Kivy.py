@@ -66,8 +66,6 @@ class NaubinoGame(Widget):
             setattr(self.naubino, "size", size))
         from kivy.core.window import Window
         Window.clearcolor   = (1, 1, 1, 1)
-        self.naub_joints    = {}
-        self.naubs          = {}
         with self.canvas:
             self.translate = Translate(*self.center)
             Scale(1 -1, 1)
@@ -79,25 +77,21 @@ class NaubinoGame(Widget):
         cb.remove_naub_joint = self.remove_naub_joint
 
     def add_naub(self, naub):
-        kivy                = KivyNaub(naub)
-        self.naubs[naub]    = kivy
+        kivy = naub.tag = KivyNaub(naub)
         self.canvas.add(kivy.color)
         self.canvas.add(kivy.ellipse)
 
     def remove_naub(self, naub):
-        kivy                = self.naubs[naub]
-        del self.naubs[naub]
+        kivy, naub.tag = naub.tag, None
         self.canvas.remove(kivy.color)
         self.canvas.remove(kivy.ellipse)
 
     def add_naub_joint(self, joint):
-        kivy                = KivyNaubJoint(joint)
-        self.naub_joints[joint] = kivy
+        kivy = joint.tag = KivyNaubJoint(joint)
         self.canvas.insert(3, kivy.line)
 
     def remove_naub_joint(self, joint):
-        kivy                = self.naub_joints[joint]
-        del self.naub_joints[joint]
+        kivy, joint.tag = joint.tag, None
         self.canvas.remove(kivy.line)
 
     def start(self):
@@ -106,10 +100,10 @@ class NaubinoGame(Widget):
     def update(self, dt):
         self.translate.xy = self.center
         self.naubino.step(dt)
-        for naub in self.naubs.values():
-            naub.update()
-        for joint in self.naub_joints.values():
-            joint.update()
+        for naub in self.naubino.naubs:
+            naub.tag.update()
+        for joint in self.naubino.naubjoints:
+            joint.tag.update()
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
