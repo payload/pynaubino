@@ -30,8 +30,7 @@ class Space(pymunk_.Space):
         except AttributeError: pass
 
     def step(self, dt):
-        pymunk_.Space.step(self, dt * 0.5)
-        pymunk_.Space.step(self, dt * 0.5)
+        pymunk_.Space.step(self, dt)
         for todo in self.todos:
             todo()
         self.todos = []
