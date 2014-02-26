@@ -93,9 +93,9 @@ class Naub(Naub):
         naub.remove()
 
     def collide(self, other, arbiter):
-        if not self.alive or not other.alive: return
-        if isinstance(other, Naub):
-            self.collide_naub(other, arbiter)
+        try:
+            other.collide_naub(self, arbiter)
+        except AttributeError: pass
 
     def collide_naub(self, naub, arbiter):
         if not self.alive or not naub.alive: return
