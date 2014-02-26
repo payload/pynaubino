@@ -28,9 +28,14 @@ class KivyNaub(object):
         self.ellipse    = Ellipse(
             pos         = (bb.l, bb.b),
             size        = (bb.r - bb.l, bb.t - bb.b))
+        self.update     = self.update_first
 
-    def update(self):
+    def update_first(self):
         self.color.rgb  = color_rgb1(self.naub.color)
+        self.update_always()
+        self.update = self.update_always
+
+    def update_always(self):
         bb              = self.naub.shape.bb
         ellipse         = self.ellipse
         ellipse.pos     = (bb.l, bb.b)
