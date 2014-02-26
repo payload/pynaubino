@@ -171,7 +171,8 @@ class NaubinoGame(Widget):
         naubs       = naub.reachable_naubs()
         for naub in naubs:
             kivy    = naub.tag
-            kivy.unhighlight()
+            try: kivy.unhighlight()
+            except: pass
 
 
 
