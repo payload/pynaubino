@@ -4,7 +4,6 @@ class Space(pymunk_.Space):
     def __init__(self, naubino):
         pymunk_.Space.__init__(self)
         self.naubino = naubino
-        self.lock    = False
         self.damping = Config.space_damping()
         self.todos   = []
         self.set_default_collision_handler(None, None, self.collide, None)
@@ -31,10 +30,8 @@ class Space(pymunk_.Space):
         except AttributeError: pass
 
     def step(self, dt):
-        self.lock = True
         pymunk_.Space.step(self, dt * 0.5)
         pymunk_.Space.step(self, dt * 0.5)
-        self.lock = False
         for todo in self.todos:
             todo()
         self.todos = []
