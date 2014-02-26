@@ -18,15 +18,17 @@ class Space(pymunk_.Space):
             pymunk_.Space.remove(self, obj)
 
     def collide(self, arbiter, *args, **kwargs):
-        if len(arbiter.shapes) != 2: return
-        a, b = arbiter.shapes
-        if a == None or b == None: return
-        a, b = [x.body.data for x in [a, b]]
-
-        if hasattr(a, u"collide"):
-            self.todos.append(lambda: a.collide(b, arbiter))
-        if hasattr(b, u"collide"):
-            self.todos.append(lambda: b.collide(a, arbiter))
+        a, b = [x.body.data for x in arbiter.shapes]
+        # try except is faster than hasattr,
+        # especially because hasattr is implemented via try except (hearsay)
+        try:
+            collide = a.collide
+            self.todos.append(lambda: collide(b, arbiter))
+        except AttributeError: pass
+        try:
+            collide = b.collide
+            self.todos.append(lambda: collide(a, arbiter))
+        except AttributeError: pass
 
     def step(self, dt):
         self.lock = True
