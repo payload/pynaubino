@@ -39,8 +39,10 @@ class KivyNaub(object):
     def update_always(self):
         bb              = self.naub.shape.bb
         ellipse         = self.ellipse
-        ellipse.pos     = (bb.l, bb.b)
-        ellipse.size    = (bb.r - bb.l, bb.t - bb.b)
+        off             = 2
+        off2            = off*2
+        ellipse.pos     = (bb.l + off, bb.b + off)
+        ellipse.size    = (bb.r - bb.l - off2, bb.t - bb.b - off2)
 
     def highlight(self):
         if self.highlighted == 0:
