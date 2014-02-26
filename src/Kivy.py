@@ -29,6 +29,7 @@ class KivyNaub(object):
             pos         = (bb.l, bb.b),
             size        = (bb.r - bb.l, bb.t - bb.b))
         self.update     = self.update_first
+        self.highlighted = 0
 
     def update_first(self):
         self.color.rgb  = color_rgb1(self.naub.color)
@@ -40,6 +41,16 @@ class KivyNaub(object):
         ellipse         = self.ellipse
         ellipse.pos     = (bb.l, bb.b)
         ellipse.size    = (bb.r - bb.l, bb.t - bb.b)
+
+    def highlight(self):
+        if self.highlighted == 0:
+            self.color.v    = self.color.v * 1.2
+        self.highlighted += 1
+
+    def unhighlight(self):
+        if self.highlighted == 1:
+            self.color.v    = self.color.v / 1.2
+        self.highlighted = max(0, self.highlighted - 1)
 
 
 
@@ -113,8 +124,12 @@ class NaubinoGame(Widget):
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
         pos                 = Vec2d(*pos) - self.center
+        naubino_touch       = self.naubino.touch_down(pos)
+        if not naubino_touch: return
+        naub                = naubino_touch.naub
+        self.highlight_reachable_naubs(naub)
         touch.ud.update(
-            naubino_touch   = self.naubino.touch_down(pos))
+            naubino_touch   = naubino_touch)
 
     def on_touch_move(self, touch):
         naubino_touch       = touch.ud.get('naubino_touch', None)
@@ -124,7 +139,10 @@ class NaubinoGame(Widget):
         naubino_touch.move(pos)
 
     def on_touch_up(self, touch):
-        naubino_touch       = touch.ud.get('naubino_touch', None)
+        try: naubino_touch       = touch.ud['naubino_touch']
+        except: return
+        naub                = naubino_touch.naub
+        self.unhighlight_reachable_naubs(naub)
         if not naubino_touch: return
         naubino_touch.up()
 
@@ -140,6 +158,18 @@ class NaubinoGame(Widget):
             x = touch.x
             y = touch.y
         return (x, y)
+
+    def highlight_reachable_naubs(self, naub):
+        naubs       = naub.reachable_naubs()
+        for naub in naubs:
+            kivy    = naub.tag
+            kivy.highlight()
+
+    def unhighlight_reachable_naubs(self, naub):
+        naubs       = naub.reachable_naubs()
+        for naub in naubs:
+            kivy    = naub.tag
+            kivy.unhighlight()
 
 
 
