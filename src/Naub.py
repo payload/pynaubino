@@ -50,8 +50,9 @@ class Naub(Naub):
     def select(self, pointer):
         if fail_condition(self.alive): return
         if fail_condition(pointer not in self.pointer_joints): return
+        anchor              = pointer.pos - self.body.position
         joint               = pymunk_.PivotJoint(
-            pointer.body, self.body, (0,0), (0,0))
+            pointer.body, self.body, (0,0), anchor)
         joint.error_bias    = Config.pointer_error_bias()
         self.naubino.space.add(joint)
         self.pointer_joints[pointer] = joint
