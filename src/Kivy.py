@@ -19,15 +19,14 @@ WALL_RIGHT  = ":0.0"
 
 
 
-class KivyNaub(object):
+class KivyNaub(Widget):
 
     def __init__(self, naub):
+        super(KivyNaub, self).__init__()
         self.naub       = naub
-        self.color      = Color(*color_rgb1(naub.color))
-        bb              = naub.shape.bb
-        self.ellipse    = Ellipse(
-            pos         = (bb.l, bb.b),
-            size        = (bb.r - bb.l, bb.t - bb.b))
+        with self.canvas:
+            self.color      = Color()
+            self.shape      = Ellipse()
         self.update     = self.update_first
         self.highlighted = 0
 
@@ -37,12 +36,14 @@ class KivyNaub(object):
         self.update = self.update_always
 
     def update_always(self):
-        bb              = self.naub.shape.bb
-        ellipse         = self.ellipse
-        off             = 2
-        off2            = off*2
-        ellipse.pos     = (bb.l + off, bb.b + off)
-        ellipse.size    = (bb.r - bb.l - off2, bb.t - bb.b - off2)
+        shape, naub         = self.shape, self.naub
+        bb                  = naub.shape.bb
+        off                 = 2
+        off2                = off*2
+        pos                 = (bb.l + off, bb.b + off)
+        size                = (bb.r - bb.l - off2, bb.t - bb.b - off2)
+        shape.pos           = pos
+        shape.size          = size
 
     def highlight(self):
         if self.highlighted == 0:
@@ -56,17 +57,19 @@ class KivyNaub(object):
 
 
 
-class KivyNaubJoint(object):
+class KivyNaubJoint(Widget):
 
     def __init__(self, joint):
+        super(KivyNaubJoint, self).__init__()
         self.joint      = joint
         a, b            = joint.endpoints
-        self.line       = Line(
-            points      = [a.x, a.y, b.x, b.y],
-            width       = joint.a.radius * 0.212,
-            cap         = 'none',
-            joint       = 'none',
-            close       = False)
+        with self.canvas:
+            self.line = Line(
+                points      = [a.x, a.y, b.x, b.y],
+                width       = joint.a.radius * 0.212,
+                cap         = 'none',
+                joint       = 'none',
+                close       = False)
 
     def update(self):
         a, b            = self.joint.endpoints
@@ -85,9 +88,12 @@ class NaubinoGame(Widget):
         from kivy.core.window import Window
         Window.clearcolor   = (1, 1, 1, 1)
         with self.canvas:
-            self.translate = Translate(*self.center)
+            self.translate      = Translate(*self.center)
             Scale(1 -1, 1)
-            Color(0, 0, 0)
+            self.joins = Widget()
+            with self.joins.canvas:
+                Color(0, 0, 0)
+            self.naubs = Widget()
         cb = self.naubino.cb
         cb.add_naub         = self.add_naub
         cb.remove_naub      = self.remove_naub
@@ -96,21 +102,19 @@ class NaubinoGame(Widget):
 
     def add_naub(self, naub):
         kivy = naub.tag = KivyNaub(naub)
-        self.canvas.add(kivy.color)
-        self.canvas.add(kivy.ellipse)
+        self.naubs.add_widget(kivy)
 
     def remove_naub(self, naub):
         kivy, naub.tag = naub.tag, None
-        self.canvas.remove(kivy.color)
-        self.canvas.remove(kivy.ellipse)
+        self.naubs.remove_widget(kivy)
 
     def add_naub_joint(self, joint):
         kivy = joint.tag = KivyNaubJoint(joint)
-        self.canvas.insert(3, kivy.line)
+        self.joins.add_widget(kivy)
 
     def remove_naub_joint(self, joint):
         kivy, joint.tag = joint.tag, None
-        self.canvas.remove(kivy.line)
+        self.joins.remove_widget(kivy)
 
     def start(self):
         self.naubino.play()
