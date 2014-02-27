@@ -60,3 +60,11 @@ def fail_condition(condition):
             return True
     else:
         return False
+
+def gather(gatherer = list):
+    def _gather(generate):
+        def wrapper(*args, **kwargs):
+            return gatherer(generate(*args, **kwargs))
+        wrapper.generate = generate
+        return wrapper
+    return _gather
