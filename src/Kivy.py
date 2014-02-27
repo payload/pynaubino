@@ -90,8 +90,8 @@ class NaubinoGame(Widget):
         with self.canvas:
             self.translate      = Translate(*self.center)
             Scale(1 -1, 1)
-            self.joins = Widget()
-            with self.joins.canvas:
+            self.joints = Widget()
+            with self.joints.canvas:
                 Color(0, 0, 0)
             self.naubs = Widget()
         cb = self.naubino.cb
@@ -110,11 +110,11 @@ class NaubinoGame(Widget):
 
     def add_naub_joint(self, joint):
         kivy = joint.tag = KivyNaubJoint(joint)
-        self.joins.add_widget(kivy)
+        self.joints.add_widget(kivy)
 
     def remove_naub_joint(self, joint):
         kivy, joint.tag = joint.tag, None
-        self.joins.remove_widget(kivy)
+        self.joints.remove_widget(kivy)
 
     def start(self):
         self.naubino.play()
