@@ -6,6 +6,7 @@ from kivy.clock import Clock
 from kivy.graphics import *
 from Naubino import Naubino
 from utils import *
+import anims
 
 from kivy.config import Config
 Config.set('graphics', 'fullscreen', 'auto')
@@ -47,12 +48,18 @@ class KivyNaub(Widget):
 
     def highlight(self):
         if self.highlighted == 0:
-            self.color.v    = self.color.v * 1.2
+            v       = self.color.v
+            self.anim = anims.cycle(
+                v           = (v * 0.8, v * 1.2),
+                duration    = 0.1,
+                anim_end    = dict(v = v))
+            self.anim.start(self.color)
         self.highlighted += 1
 
     def unhighlight(self):
         if self.highlighted == 1:
-            self.color.v    = self.color.v / 1.2
+            self.anim.stop(self.color)
+            self.anim.cancel(self.color)
         self.highlighted = max(0, self.highlighted - 1)
 
 
