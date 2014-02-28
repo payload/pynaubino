@@ -1,5 +1,5 @@
-import random, pymunk_
-from pymunk_ import Vec2d
+import random, pymunk
+from pymunk import Vec2d
 
 
 
@@ -74,3 +74,11 @@ def try_many(*funcs):
         try: return func()
         except: pass
     raise RuntimeError("all cases failes (try_many)")
+
+def get(obj, paths):
+    return [_get_path(obj, path) for path in paths.split()]
+
+def _get_path(obj, path):
+    for key in path.split('.'):
+        obj = getattr(obj, key)
+    return obj

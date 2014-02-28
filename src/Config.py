@@ -10,7 +10,7 @@ def max_naubs():
     return 8000
 
 def impulse_good(arbiter, a, b):
-    ''' arbiter : pymunk_.Arbiter
+    ''' arbiter : pymunk.Arbiter
         a, b    : Naub
     '''
     return 125 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length

@@ -38,11 +38,11 @@ class KivyNaub(Widget):
 
     def update_always(self):
         shape, naub         = self.shape, self.naub
-        bb                  = naub.shape.bb
         off                 = 2
         off2                = off*2
-        pos                 = (bb.l + off, bb.b + off)
-        size                = (bb.r - bb.l - off2, bb.t - bb.b - off2)
+        left, top, right, bottom = get(naub.shape.bb, 'left top right bottom')
+        pos                 = (left + off, bottom + off)
+        size                = (right - left - off2, top - bottom - off2)
         shape.pos           = pos
         shape.size          = size
 

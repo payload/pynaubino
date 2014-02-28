@@ -1,8 +1,8 @@
-import pymunk_, Config
+import pymunk, Config
 
-class Space(pymunk_.Space):
+class Space(pymunk.Space):
     def __init__(self, naubino):
-        pymunk_.Space.__init__(self)
+        pymunk.Space.__init__(self)
         self.naubino = naubino
         self.damping = Config.space_damping()
         self.todos   = []
@@ -10,13 +10,13 @@ class Space(pymunk_.Space):
 
     def add(self, *objs):
         for obj in objs:
-            pymunk_.Space.add(self, obj)
+            pymunk.Space.add(self, obj)
 
     def remove(self, *objs):
         for obj in objs:
-            pymunk_.Space.remove(self, obj)
+            pymunk.Space.remove(self, obj)
 
-    def collide(self, arbiter, *args, **kwargs):
+    def collide(self, _, arbiter, *args, **kwargs):
         a, b = [x.body.data for x in arbiter.shapes]
         # try except is faster than hasattr,
         # especially because hasattr is implemented via try except (hearsay)
@@ -30,7 +30,7 @@ class Space(pymunk_.Space):
         except AttributeError: pass
 
     def step(self, dt):
-        pymunk_.Space.step(self, dt)
+        pymunk.Space.step(self, dt)
         for todo in self.todos:
             todo()
         self.todos = []
