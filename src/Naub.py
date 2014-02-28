@@ -114,12 +114,7 @@ class Naub(Naub):
         if colors_alike and not naub_near and impulse_good:
             self.merge_naub(naub)
             cycle = self.test_cycle()
-            if cycle: self.pop_cycle(cycle)
-
-    def pop_cycle(self, cycle):
-        self.naubino.score_cycle(cycle)
-        for naub in cycle:
-            naub.remove()
+            if cycle: self.naubino.pop_cycle(cycle)
 
     def test_cycle(self):
         naubs = self.reachable_naubs()

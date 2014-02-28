@@ -224,6 +224,11 @@ class Naubino(object):
         if naub.alive:
             naub.deselect(pointer)
 
+    def pop_cycle(self, cycle):
+        self.score_cycle(cycle)
+        for naub in cycle:
+            naub.remove()
+
 
 
 class Touch(object):
