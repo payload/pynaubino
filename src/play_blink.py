@@ -14,7 +14,7 @@ class MyApp(App):
             Ellipse(
                 pos     = (100, 100),
                 size    = (100, 100))
-        anim = anims.cycle(v = (0.2, 0.8), duration = 0.1)
+        anim = anims.cycle(v = (0.2, 0.8), duration = 0.1, anim_end = dict(v = self.color.v))
         anim.start(self.color)
         anims.Clock.schedule_once(lambda *_: anim.stop(self.color), 3)
         return dot
