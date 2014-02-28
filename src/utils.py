@@ -68,3 +68,9 @@ def gather(gatherer = list):
         wrapper.generate = generate
         return wrapper
     return _gather
+
+def try_many(*funcs):
+    for func in funcs:
+        try: return func()
+        except: pass
+    raise RuntimeError("all cases failes (try_many)")
