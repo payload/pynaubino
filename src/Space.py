@@ -48,12 +48,12 @@ class Space(pymunk.Space):
         # especially because hasattr is implemented via try except (hearsay)
         try:
             collide = a.collide
-            self.todos.append(lambda: collide(b, arbiter))
-        except AttributeError: pass
+            self.todos.append(lambda collide=collide: collide(b, arbiter))
+        except: pass
         try:
             collide = b.collide
-            self.todos.append(lambda: collide(a, arbiter))
-        except AttributeError: pass
+            self.todos.append(lambda collide=collide: collide(a, arbiter))
+        except: pass
 
     def step(self, dt):
         pymunk.Space.step(self, dt)
