@@ -51,8 +51,14 @@ class Naub(Naub):
         if fail_condition(self.alive): return
         if fail_condition(pointer not in self.pointer_joints): return
         anchor              = pointer.pos - self.body.position
-        joint               = pymunk.PivotJoint(
-            pointer.body, self.body, (0,0), anchor)
+        joint               = pymunk.DampedSpring(
+            a               = pointer.body,
+            b               = self.body,
+            anchr1          = (0,0),
+            anchr2          = anchor,
+            rest_length     = 2,
+            stiffness       = 8,
+            damping         = 0.1)
         joint.error_bias    = Config.pointer_error_bias()
         self.naubino.space.add(joint)
         self.pointer_joints[pointer] = joint
