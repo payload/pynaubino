@@ -47,12 +47,9 @@ class Naubino(object):
         self.__warn             = False
         self.space              = Space(self)
         self.pointers           = set()
-        self.center             = center = pymunk.Body(pymunk.inf, pymunk.inf)
         self.size               = 600, 400
         self.px_per_mm          = 3.7839
-        center.position = 0, 0
-        self.spammer            = Timer(Config.spammer_interval(), self.spam_naub_bunch)
-        self.difficulty         = Timer(Config.difficulty_interval(), self.inc_difficulty)
+        self.mode               = ArenaMode(self)
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (
             ("red"      , (229,  53,  23)),
@@ -84,28 +81,15 @@ class Naubino(object):
         if naub not in self.naubs:
             self.naubs.append(naub)
 
-        if naub not in self.naub_center_joints:
-            joint = pymunk.DampedSpring(
-                a           = naub.body,
-                b           = self.center,
-                anchr1      = (0, 0),
-                anchr2      = Config.naub_center_joint_anchor(naub),
-                rest_length = Config.naub_center_joint_rest_length(),
-                stiffness   = Config.naub_center_joint_stiffness(),
-                damping     = Config.naub_center_joint_damping())
-            self.naub_center_joints[naub] = joint
-            self.space.add(joint)
+        self.mode.add_naub(naub)
 
         self.cb.add_naub(naub)
 
     def remove_naub(self, naub):
         self.cb.remove_naub(naub)
-
-        if naub in self.naub_center_joints:
-            joint = self.naub_center_joints[naub]
-            del self.naub_center_joints[naub]
-            self.space.remove(joint)
-
+        
+        self.mode.remove_naub(naub)
+        
         if naub in self.naubs:
             self.naubs.remove(naub)
 
@@ -142,29 +126,6 @@ class Naubino(object):
             a.join_naub(b)
         return naubs
 
-    def spam_naub_bunch(self):
-        for i in xrange(Config.naubs_per_bunch()):
-            if len(self.naubs) > Config.max_naubs():
-                return
-            self.spam_naub_pair()
-
-    def spam_naub_pair(self):
-        pos = self.random_naub_pos()
-        rot = random() * math.pi * 2
-        naubs = self.create_naub_chain(2, pos, rot)
-        for naub in naubs:
-            naub.color = self.random_naub_color()
-        return naubs
-
-    def random_naub_pos(self):
-        a = Vec2d(self.size[0] * 0.45, 0)
-        b = Vec2d(0, self.size[1] * 0.6)
-        if random() < 0.5:
-            a,b = b,a
-        if random() < 0.5:
-            b = -b
-        return random_vec(a.x, a.y) + b
-
     def random_naub_color(self):
         colors = self.naub_colors
         color = colors[sample(colors, 1)[0]]
@@ -178,8 +139,7 @@ class Naubino(object):
     def step(self, dt):
         for pointer in self.pointers:
             pointer.step(dt)
-        self.difficulty.step(dt)
-        self.spammer.step(dt)
+        self.mode.step(dt)
         self.space.step(dt)
         danger = self.danger()
         self.warn = Config.warn(danger)
@@ -195,21 +155,11 @@ class Naubino(object):
                 danger += 1
         return danger
 
-    def inc_difficulty(self):
-        self.spammer.interval = self.spammer.interval * 0.8
-
-    def reset_difficulty(self):
-        self.spammer.interval = 1
-
     def play(self):
-        self.spammer.start()
-        self.difficulty.start()
-        self.spammer.callback()
+        self.mode.play()
 
     def stop(self):
-        self.spammer.stop()
-        self.difficulty.stop()
-        self.reset_difficulty()
+        self.mode.stop()
 
     def touch_down(self, pos):
         pos = Vec2d(*pos)
@@ -270,3 +220,70 @@ class Timer(object):
             self.time -= self.interval
             self.callback()
         return self
+
+
+
+class ArenaMode(object):
+
+    def __init__(self, naubino):
+        spammer_interval        = Config.spammer_interval()
+        self.spammer            = Timer(spammer_interval, self.spam_naub_bunch)
+        self.naub_center_joints = {}
+        self.naubino            = naubino
+        self.center             = pymunk.Body(pymunk.inf, pymunk.inf)
+
+    def play(self):
+        self.spammer.start()
+        self.spam_naub_pair()
+
+    def stop(self):
+        self.spammer.stop()
+
+    def step(self, dt):
+        self.spammer.step(dt)
+
+    @property
+    def size(self):
+        return self.naubino.size
+
+    def spam_naub_bunch(self):
+        naubs_n     = Config.naubs_per_bunch()
+        naubs_max   = Config.max_naubs()
+        for i in xrange(naubs_n):
+            if len(self.naubino.naubs) > naubs_max:
+                return
+            self.spam_naub_pair()
+
+    def spam_naub_pair(self):
+        pos         = self.random_naub_pos()
+        rot         = random() * math.pi * 2
+        naubs       = self.naubino.create_naub_chain(2, pos, rot)
+        for naub in naubs:
+            naub.color = self.naubino.random_naub_color()
+        return naubs
+
+    def random_naub_pos(self):
+        a = Vec2d(self.size[0] * 0.5 - 100, 0)
+        b = Vec2d(0, self.size[1] * 0.5 + 100)
+        if random() < 0.5:
+            a,b = b,a
+        if random() < 0.5:
+            b   = -b
+        return random_vec(a.x, a.y) + b
+
+    def add_naub(self, naub):
+        joint = pymunk.DampedSpring(
+            a           = naub.body,
+            b           = self.center,
+            anchr1      = (0, 0),
+            anchr2      = Config.naub_center_joint_anchor(naub),
+            rest_length = Config.naub_center_joint_rest_length(),
+            stiffness   = Config.naub_center_joint_stiffness(),
+            damping     = Config.naub_center_joint_damping())
+        self.naub_center_joints[naub] = joint
+        self.naubino.space.add(joint)
+
+    def remove_naub(self, naub):
+        joint = self.naub_center_joints[naub]
+        del self.naub_center_joints[naub]
+        self.naubino.space.remove(joint)
