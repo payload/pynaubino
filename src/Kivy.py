@@ -92,8 +92,6 @@ class NaubinoGame(Widget):
         self.naubino        = Naubino()
         self.bind(size      = lambda self, size:
             setattr(self.naubino, "size", size))
-        from kivy.core.window import Window
-        Window.clearcolor   = (1, 1, 1, 1)
         with self.canvas:
             self.translate      = Translate(*self.center)
             Scale(1 -1, 1)
@@ -187,12 +185,77 @@ class NaubinoGame(Widget):
 
 
 
-class NaubinoApp(App):
-    def build(self):
+from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen, ScreenManager
+
+class MenuScreen(Screen):
+
+    def __init__(self, **kwargs):
+        super(MenuScreen, self).__init__(**kwargs)
+
+class ArenaModeScreen(Screen):
+
+    def on_enter(self):
         game = NaubinoGame()
+        from Naubino import ArenaMode
+        game.naubino.mode = ArenaMode(game.naubino)
         game.start()
         Clock.schedule_interval(game.update, 1.0/60.0)
-        return game
+        self.add_widget(game)
+
+class FlybyModeScreen(Screen):
+
+    def on_enter(self):
+        game = NaubinoGame()
+        from Naubino import FlybyMode
+        game.naubino.mode = FlybyMode(game.naubino)
+        game.start()
+        Clock.schedule_interval(game.update, 1.0/60.0)
+        self.add_widget(game)
+
+
+Builder.load_string("""
+<MenuScreen>:
+    name:           "menu"
+    AnchorLayout:
+        anchor_x:       "center"
+        anchor_y:       "center"
+        BoxLayout:
+            orientation:    "vertical"
+            size_hint:  (0.1, 0.5)
+            Label:
+                text:       "Naubino"
+                color:      (0, 0, 0, 1)
+            Button:
+                text:       "Arena Mode"
+                on_press:   root.manager.current = "arena"
+            Button:
+                text:       "Flyby Mode"
+                on_press:   root.manager.current = "flyby"
+            Button:
+                text:       "Quit"
+                on_press:   root.quit()
+""")
+
+
+
+class NaubinoApp(App):
+    def build(self):
+
+        from kivy.core.window import Window
+        Window.clearcolor   = (1, 1, 1, 1)
+
+        menu_screen         = MenuScreen()
+        arena_screen        = ArenaModeScreen(name = "arena")
+        flyby_screen        = FlybyModeScreen(name = "flyby")
+
+        sm                  = ScreenManager()
+        sm.add_widget(menu_screen)
+        sm.add_widget(arena_screen)
+        sm.add_widget(flyby_screen)
+
+        return sm
+
 
 
 
