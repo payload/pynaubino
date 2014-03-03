@@ -13,13 +13,13 @@ def impulse_good(arbiter, a, b):
     ''' arbiter : pymunk.Arbiter
         a, b    : Naub
     '''
-    return 125 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length
+    return 12 * (a.body.mass + b.body.mass) < arbiter.total_impulse.length
 
 def naub_mass():
     return 0.01
 
-def naub_radius(px_per_mm):
-    return 5 * px_per_mm
+def naub_radius():
+    return 5
 
 def naub_friction():
     return 0.1

@@ -4,12 +4,13 @@ from kivy.properties import NumericProperty, ReferenceListProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.graphics import *
+from kivy.metrics import mm
 from Naubino import Naubino
 from utils import *
 import anims
 
 from kivy.config import Config
-Config.set('graphics', 'fullscreen', 'auto')
+#Config.set('graphics', 'fullscreen', 'auto')
 
 import os
 DISPLAY     = os.getenv("DISPLAY")
@@ -38,9 +39,10 @@ class KivyNaub(Widget):
 
     def update_always(self):
         shape, naub         = self.shape, self.naub
-        off                 = 2
+        off                 = 0.4
         off2                = off*2
-        left, top, right, bottom = get(naub.shape.bb, 'left top right bottom')
+        bb                  = get(naub.shape.bb, 'left top right bottom')
+        left, top, right, bottom = bb
         pos                 = (left + off, bottom + off)
         size                = (right - left - off2, top - bottom - off2)
         shape.pos           = pos
@@ -91,10 +93,10 @@ class NaubinoGame(Widget):
         super(NaubinoGame, self).__init__(*args, **kwargs)
         self.naubino        = Naubino()
         self.bind(size      = lambda self, size:
-            setattr(self.naubino, "size", size))
+            setattr(self.naubino, "size", Vector(size) / mm(1)))
         with self.canvas:
             self.translate      = Translate(*self.center)
-            Scale(1 -1, 1)
+            Scale(mm(1), mm(-1), 1)
             self.joints = Widget()
             with self.joints.canvas:
                 Color(0, 0, 0)
@@ -134,7 +136,6 @@ class NaubinoGame(Widget):
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
-        pos                 = Vec2d(*pos) - self.center
         naubino_touch       = self.naubino.touch_down(pos)
         if not naubino_touch: return
         naub                = naubino_touch.naub
@@ -146,7 +147,6 @@ class NaubinoGame(Widget):
         naubino_touch       = touch.ud.get('naubino_touch', None)
         if not naubino_touch: return
         pos                 = self.translate_touch_pos(touch)
-        pos                 = Vec2d(*pos) - self.center
         naubino_touch.move(pos)
 
     def on_touch_up(self, touch):
@@ -168,6 +168,10 @@ class NaubinoGame(Widget):
         else:
             x = touch.x
             y = touch.y
+        cx, cy  = self.center
+        mm1     = 1 / mm(1)
+        x       = (x - cx) *  mm1
+        y       = (y - cy) * -mm1
         return (x, y)
 
     def highlight_reachable_naubs(self, naub):

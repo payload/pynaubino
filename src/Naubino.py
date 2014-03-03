@@ -46,8 +46,7 @@ class Naubino(object):
         self.__warn             = False
         self.space              = Space(self)
         self.pointers           = set()
-        self.size               = 600, 400
-        self.px_per_mm          = 3.7839
+        self.size               = 0, 0
         self.mode               = ArenaMode(self)
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (
@@ -262,8 +261,8 @@ class ArenaMode(object):
         return naubs
 
     def random_naub_pos(self):
-        a = Vec2d(self.size[0] * 0.5 - 100, 0)
-        b = Vec2d(0, self.size[1] * 0.5 + 100)
+        a = Vec2d(self.size[0] * 0.5 - 30, 0)
+        b = Vec2d(0, self.size[1] * 0.5 + 30)
         if random() < 0.5:
             a,b = b,a
         if random() < 0.5:
@@ -348,7 +347,7 @@ class FlybyCenter(object):
         space       = naubino.space
         body        = pymunk.Body(None, None)
         body.data   = self
-        radius      = 5 * naubino.px_per_mm
+        radius      = 5
         shape       = pymunk.Circle(body, radius)
         space.add(shape)
         self.body   = body
