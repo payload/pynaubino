@@ -40,7 +40,6 @@ class Naubino(object):
     def __init__(self):
         self.naubs              = []
         self.naubjoints         = set()
-        self.naub_center_joints = {}
         self.playing            = False
         self.cb                 = Naubino.Callbacks()
         self.__score            = 0
