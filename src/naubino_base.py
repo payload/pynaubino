@@ -46,7 +46,7 @@ class Naubino(object):
         self.__warn             = False
         self.space              = Space(self)
         self.pointers           = set()
-        self.size               = 0, 0
+        self.size               = Vec2d(0, 0)
         self.mode               = None
         self.naub_colors        = dict((name, ColorRGB255(*color)) for
             name        , color in (

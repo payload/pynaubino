@@ -82,3 +82,11 @@ def _get_path(obj, path):
     for key in path.split('.'):
         obj = getattr(obj, key)
     return obj
+
+def print_heap():
+    import guppy
+    print guppy.hpy().heap()
+
+def print_pretty_dict(**kwargs):
+    for key, value in kwargs.items():
+        print "{:20} {}".format(key, value)
