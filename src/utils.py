@@ -90,3 +90,16 @@ def print_heap():
 def print_pretty_dict(**kwargs):
     for key, value in kwargs.items():
         print "{:20} {}".format(key, value)
+
+class Dicty(dict):
+
+    def __getattr__(self, name):
+        return self.__getitem__(name)
+    
+    def __setattr__(self, name, value):
+        self.__setitem__(name, value)
+
+class Falsy(Dicty):
+
+    def __nonzero__(self):
+        return False

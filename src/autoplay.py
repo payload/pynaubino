@@ -14,19 +14,26 @@ class Hunter(object):
     def step(self):
         touch, naub_a, naub_b = get(self, "touch naub_a naub_b")
         if not touch:
-            return False
-        if not (naub_a.alive and naub_a.good_merge_naub(naub_b)):
+            return Falsy(reason = "not touch")
+        if not naub_a.alive:
             touch.up()
-            return False
+            return Falsy(reason = "not naub_a.alive")
+        if not naub_a.good_merge_naub(naub_b):
+            touch.up()
+            return Falsy(reason = "not naub_a.good_merge_naub(naub_b)")
         a, b = naub_a.pos, naub_b.pos
         touch.move(a + self.force*(b - a).normalized())
         return True
+
+    @property
+    def difference(self):
+        return self.naub_b.pos - self.naub_a.pos
 
 class AutoplayMode(ArenaMode):
 
     def __init__(self, naubino):
         self.super.__init__(naubino)
-        spammer_interval        = 0.2
+        spammer_interval        = 0.1
         self.spammer            = Timer(spammer_interval, self.spam_naub_bunch)
         self.hunters            = []
 
