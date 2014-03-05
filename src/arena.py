@@ -12,7 +12,7 @@ class ArenaMode(object):
 
     def play(self):
         self.spammer.start()
-        self.spam_naub_pair()
+        self.spam_initial_naubs()
 
     def stop(self):
         self.spammer.stop()
@@ -23,6 +23,25 @@ class ArenaMode(object):
     @property
     def size(self):
         return self.naubino.size
+
+    def spam_initial_naubs(self):
+        naubino     = self.naubino
+        off         = 20
+        pos_1       = (   0, -off)
+        pos_2       = (-off,  off)
+        pos_3       = ( off,  off)
+        rot_1       = 0.00 * math.pi
+        rot_2       = 0.25 * math.pi
+        rot_3       = 0.75 * math.pi
+        a,b         = naubino.create_naub_pair(pos_1, rot_1)
+        c,d         = naubino.create_naub_pair(pos_2, rot_2)
+        e,f         = naubino.create_naub_pair(pos_3, rot_3)
+        import random
+        colors      = random.sample(naubino.naub_colors.values(), 3)
+        print colors
+        a.color     = c.color       = colors[0]
+        d.color     = f.color       = colors[1]
+        e.color     = b.color       = colors[2]
 
     def spam_naub_bunch(self):
         naubs_n     = Config.naubs_per_bunch()
@@ -36,9 +55,12 @@ class ArenaMode(object):
         pos         = self.random_naub_pos()
         rot         = random() * math.pi * 2
         naubs       = self.naubino.create_naub_chain(2, pos, rot)
+        self.color_naubs_randomly(naubs)
+        return naubs
+
+    def color_naubs_randomly(self, naubs):
         for naub in naubs:
             naub.color = self.naubino.random_naub_color()
-        return naubs
 
     def random_naub_pos(self):
         a = Vec2d(self.size[0] * 0.5 - 30, 0)
