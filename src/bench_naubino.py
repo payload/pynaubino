@@ -1,4 +1,4 @@
-import naubino_base, naubino_mode
+import naubino_base, naubino_mode, ipdb
 from utils import *
 
 def main():
@@ -8,11 +8,11 @@ def main():
     for i in range(100):
         spam(naubino)
         step(naubino)
-        print
-        print_pretty_dict(
-            space   = naubino.score,
-            naubs   = len(naubino.naubs),
-            bodies  = len(naubino.space.bodies))
+        report(naubino)
+    for i in range(100):
+        step(naubino)
+    report(naubino)
+    ipdb.set_trace()
 
 def spam(naubino):
     mode = naubino.mode
@@ -22,6 +22,13 @@ def spam(naubino):
 def step(naubino):
     for i in xrange(60):
         naubino.step(0.0166)
+
+def report(naubino):
+    print
+    print_pretty_dict(
+        score   = naubino.score,
+        naubs   = len(naubino.naubs),
+        bodies  = len(naubino.space.bodies))
 
 if __name__ == '__main__':
     main()
