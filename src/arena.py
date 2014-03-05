@@ -1,4 +1,4 @@
-from Naubino import *
+from naubino_base import *
 
 class ArenaMode(object):
 
