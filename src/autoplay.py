@@ -9,6 +9,7 @@ class Hunter(object):
         self.naub_a     = naub_a
         self.naub_b     = naub_b
         self.touch      = naubino.touch_down(naub_a.pos)
+        self.force      = random.uniform(8, 12)
 
     def step(self):
         touch, naub_a, naub_b = get(self, "touch naub_a naub_b")
@@ -18,7 +19,7 @@ class Hunter(object):
             touch.up()
             return False
         a, b = naub_a.pos, naub_b.pos
-        touch.move(a + 10*(b - a).normalized())
+        touch.move(a + self.force*(b - a).normalized())
         return True
 
 class AutoplayMode(ArenaMode):
