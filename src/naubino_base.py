@@ -79,14 +79,14 @@ class Naubino(object):
         if naub not in self.naubs:
             self.naubs.append(naub)
 
-        self.mode.add_naub(naub)
+        if self.mode: self.mode.add_naub(naub)
 
         self.cb.add_naub(naub)
 
     def remove_naub(self, naub):
         self.cb.remove_naub(naub)
 
-        self.mode.remove_naub(naub)
+        if self.mode: self.mode.remove_naub(naub)
 
         if naub in self.naubs:
             self.naubs.remove(naub)
@@ -137,7 +137,7 @@ class Naubino(object):
     def step(self, dt):
         for pointer in self.pointers:
             pointer.step(dt)
-        self.mode.step(dt)
+        if self.mode: self.mode.step(dt)
         self.space.step(dt)
         danger = self.danger()
         self.warn = Config.warn(danger)
