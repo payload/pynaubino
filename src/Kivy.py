@@ -70,10 +70,12 @@ Builder.load_string("""
 
 
 class NaubinoApp(App):
+
     def build(self):
 
         from kivy.core.window import Window
         Window.clearcolor   = (1, 1, 1, 1)
+        Window.on_key_up = self.on_key_up
 
         menu_screen         = MenuScreen()
         arena_screen        = ArenaModeScreen(name = "arena")
@@ -85,6 +87,15 @@ class NaubinoApp(App):
         sm.add_widget(flyby_screen)
 
         return sm
+
+    def on_key_up(self, key,
+            scancode    = None,
+            codepoint   = None,
+            modifier    = None,
+            **kwargs):
+        if key == 104:
+            import guppy
+            print guppy.hpy().heap()
 
 
 
