@@ -171,6 +171,7 @@ class Naubino(object):
     def touch_up(self, naub, pointer):
         if naub.alive:
             naub.deselect(pointer)
+        self.remove_pointer(pointer)
 
     def pop_cycle(self, cycle):
         self.score_cycle(cycle)
