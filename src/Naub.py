@@ -4,8 +4,9 @@ from NaubJoint import NaubJoint
 from utils import *
 import Config
 
-class Naub(object): pass
-class Naub(Naub):
+
+
+class Naub(object):
     @property
     def pos(self): return self.body.position
     @pos.setter
