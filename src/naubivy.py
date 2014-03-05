@@ -30,7 +30,7 @@ class Game(Widget):
         super(Game, self).__init__(*args, **kwargs)
         self.naubino        = naubino
         self.bind(size      = lambda self, size:
-            setattr(self.naubino, "size", Vector(size) / mm(1)))
+            setattr(self.naubino, "size", Vec2d(size) / mm(1)))
         with self.canvas:
             self.translate      = Translate(*self.center)
             Scale(mm(1), mm(-1), 1)

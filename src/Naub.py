@@ -122,6 +122,12 @@ class Naub(Naub):
             cycle = self.test_cycle()
             if cycle: self.naubino.pop_cycle(cycle)
 
+    def good_merge_naub(self, naub):
+        joker           = len(self.naubs_joints) == 0 or len(naub.naubs_joints) == 0
+        colors_alike    = are_colors_alike(self.color, naub.color)
+        naub_near       = self.is_naub_near(naub)
+        return naub.alive and (joker or (colors_alike and not naub_near))
+
     def test_cycle(self):
         naubs = self.reachable_naubs()
         for naub in naubs:

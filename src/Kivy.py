@@ -9,7 +9,7 @@ from utils import *
 import anims
 
 from kivy.config import Config
-#Config.set('graphics', 'fullscreen', 'auto')
+Config.set('graphics', 'fullscreen', 'auto')
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
@@ -43,6 +43,18 @@ class FlybyModeScreen(Screen):
         self.add_widget(game)
         game.start()
 
+class AutoplayModeScreen(Screen):
+
+    def on_enter(self):
+        naubino     = naubino_base.Naubino()
+        mode        = naubino_mode.Autoplay(naubino)
+        game        = naubivy.Game(naubino)
+        game_mode   = naubivy.Arena(naubino, mode, game)
+        Clock.schedule_interval(game.update, 1.0/60.0)
+        self.add_widget(game)
+        game.start()
+
+
 
 Builder.load_string("""
 <MenuScreen>:
@@ -63,6 +75,9 @@ Builder.load_string("""
                 text:       "Flyby Mode"
                 on_press:   root.manager.current = "flyby"
             Button:
+                text:       "Autoplay Mode"
+                on_press:   root.manager.current = "autoplay"
+            Button:
                 text:       "Quit"
                 on_press:   root.quit()
 """)
@@ -80,11 +95,13 @@ class NaubinoApp(App):
         menu_screen         = MenuScreen()
         arena_screen        = ArenaModeScreen(name = "arena")
         flyby_screen        = FlybyModeScreen(name = "flyby")
+        autoplay_screen     = AutoplayModeScreen(name = "autoplay")
 
         sm                  = ScreenManager()
         sm.add_widget(menu_screen)
         sm.add_widget(arena_screen)
         sm.add_widget(flyby_screen)
+        sm.add_widget(autoplay_screen)
 
         return sm
 
