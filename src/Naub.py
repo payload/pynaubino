@@ -40,7 +40,8 @@ class Naub(Naub):
 
     def remove(self):
         if fail_condition(self.alive): return
-        self.alive = False
+        self.alive      = False
+        self.body.data  = None
         self.naubino.pre_remove_naub(self)
         self.naubino.space.remove(*self.pointer_joints.values())
         self.unjoin_naubs(*self.naubs_joints)
