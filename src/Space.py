@@ -57,6 +57,6 @@ class Space(pymunk.Space):
 
     def step(self, dt):
         pymunk.Space.step(self, dt)
-        for todo in self.todos:
-            todo()
-        self.todos = []
+        todos = self.todos
+        while todos:
+            todos.pop()()
