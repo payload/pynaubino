@@ -76,12 +76,14 @@ def try_many(*funcs):
     raise RuntimeError("all cases failes (try_many)")
 
 def get(obj, paths):
-    return [_get_path(obj, path) for path in paths.split()]
+    return [get1(obj, path) for path in paths.split()]
 
-def _get_path(obj, path):
+def get1(obj, path):
     for key in path.split('.'):
         obj = getattr(obj, key)
     return obj
+
+
 
 def print_heap():
     import guppy
@@ -95,7 +97,7 @@ class Dicty(dict):
 
     def __getattr__(self, name):
         return self.__getitem__(name)
-    
+
     def __setattr__(self, name, value):
         self.__setitem__(name, value)
 
