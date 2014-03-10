@@ -65,7 +65,7 @@ def gather(gatherer = list):
     def _gather(generate):
         def wrapper(*args, **kwargs):
             return gatherer(generate(*args, **kwargs))
-        wrapper.generate = generate
+        wrapper.generate = wrapper.iter = generate
         return wrapper
     return _gather
 
