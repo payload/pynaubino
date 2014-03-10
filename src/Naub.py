@@ -12,7 +12,10 @@ class Naub(object):
     @pos.setter
     def pos(self, x): self.body.position = x
 
-    def __init__(self, naubino, pos = (0, 0)):
+    def __init__(self,
+            naubino = None,
+            pos     = (0, 0),
+            name    = None):
         mass                = Config.naub_mass()
         radius              = Config.naub_radius()
         inertia             = pymunk.moment_for_circle(mass, radius, radius)
@@ -22,7 +25,6 @@ class Naub(object):
         shape               = pymunk.Circle(body, radius)
         shape.friction      = Config.naub_friction()
         shape.elasticity    = Config.naub_elasticity()
-        naubino.space.add(body, shape)
 
         self.color          = ColorRGB255(0, 0, 0)
         self.radius         = radius
@@ -32,12 +34,29 @@ class Naub(object):
         self.shape          = shape
         self.cycle_check    = 0
         self.cycle_number   = 0
-        self.naubino        = naubino
         self.pointer_joints = {}
         self.naubs_joints   = {}
         self.merge_remove   = None # callback, see merge
+        self.__naubino      = None
+        self.name           = name or id(self)
+        self.naubino        = naubino
 
-        self.naubino.add_naub(self)
+    @property
+    def naubino(self):
+        return self.__naubino
+
+    @naubino.setter
+    def naubino(self, naubino):
+        if self.__naubino == naubino:
+            return
+        assert not self.__naubino
+        self.__naubino = naubino
+        if naubino:
+            naubino.space.add(self.body, self.shape)
+            naubino.add_naub(self)
+
+    def __repr__(self):
+        return "<Naub {}>".format(repr(self.name))
 
     def remove(self):
         if fail_condition(self.alive): return

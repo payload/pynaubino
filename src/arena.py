@@ -26,22 +26,16 @@ class ArenaMode(object):
 
     def spam_initial_naubs(self):
         naubino     = self.naubino
-        off         = 20
-        pos_1       = (   0, -off)
-        pos_2       = (-off,  off)
-        pos_3       = ( off,  off)
-        rot_1       = 0.00 * math.pi
-        rot_2       = 0.25 * math.pi
-        rot_3       = 0.75 * math.pi
-        a,b         = naubino.create_naub_pair(pos_1, rot_1)
-        c,d         = naubino.create_naub_pair(pos_2, rot_2)
-        e,f         = naubino.create_naub_pair(pos_3, rot_3)
-        import random
-        colors      = random.sample(naubino.naub_colors.values(), 3)
-        print colors
-        a.color     = c.color       = colors[0]
-        d.color     = f.color       = colors[1]
-        e.color     = b.color       = colors[2]
+        import naub_spec, random
+        spec        = naub_spec.spec("a-b b-c c-a")
+        palette     = list(naubino.naub_colors.values())
+        random.shuffle(palette)
+        spec.colorize(palette)
+        spec.position_on_circle(radius = 20)
+        for naub in spec.naubs:
+            naub.naubino    = naubino
+        for join in spec.joins:
+            join.naubino    = naubino
 
     def spam_naub_bunch(self):
         naubs_n     = Config.naubs_per_bunch()

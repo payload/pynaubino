@@ -2,7 +2,7 @@ import pymunk, Config
 
 class NaubJoint(object):
 
-    def __init__(self, a, b, naubino):
+    def __init__(self, a, b, naubino = None):
         self.a = a
         self.b = b
 
@@ -17,13 +17,23 @@ class NaubJoint(object):
             rest_length = Config.naub_joint_rest_length(a, b),
             stiffness   = Config.naub_joint_stiffness(),
             damping     = Config.naub_joint_damping())
-        naubino.space.add(self.spring)
 
         self.alive = True
-        self.naubino = naubino
         self.tag        = None # fill with whatever you like
+        self.__naubino  = None
+        self.naubino    = naubino
 
-        self.naubino.add_naub_joint(self)
+    @property
+    def naubino(self):
+        return self.__naubino
+
+    @naubino.setter
+    def naubino(self, naubino):
+        assert not self.__naubino
+        self.__naubino = naubino
+        if naubino:
+            naubino.space.add(self.spring)
+            naubino.add_naub_joint(self)
 
     @property
     def endpoints(self):
