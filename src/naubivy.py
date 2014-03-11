@@ -129,7 +129,8 @@ class KivyNaub(Widget):
 
     def __init__(self, naub):
         super(KivyNaub, self).__init__()
-        self.naub       = naub
+        self.naub           = naub
+        self.__half_size    = (0, 0)
         with self.canvas:
             self.color      = Color()
             self.shape      = Ellipse()
@@ -137,19 +138,24 @@ class KivyNaub(Widget):
             color   = self.set_color,
             pos     = self.set_pos,
             radius  = self.set_radius)
-        naub.property("pos").dispatch(naub)
         naub.property("color").dispatch(naub)
         naub.property("radius").dispatch(naub)
-        self.highlighted = 0
+        naub.property("pos").dispatch(naub)
+        self.highlighted    = 0
 
     def set_color(self, naub, color):
         self.color.rgb  = color_rgb1(self.naub.color)
 
     def set_radius(self, naub, radius):
-        self.shape.size = [(radius - 0.4)*2]*2
+        radius              = radius - 0.4
+        self.shape.size     = [radius*2]*2
+        self.__half_size    = [radius  ]*2
 
     def set_pos(self, naub, pos):
-        self.shape.pos  = pos - 0.5*Vector(self.shape.size)
+        # so much code, so faster
+        x, y            = self.__half_size
+        vx, vy          = pos
+        self.shape.pos  = (vx + x, vy + y)
 
     def highlight(self):
         if self.highlighted == 0:
