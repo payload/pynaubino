@@ -67,8 +67,6 @@ class Game(Widget):
     def update(self, dt):
         self.translate.xy = self.center
         self.naubino.step(dt)
-        for naub in self.naubino.naubs:
-            naub.tag.update()
         for joint in self.naubino.naubjoints:
             joint.tag.update()
 
@@ -135,24 +133,23 @@ class KivyNaub(Widget):
         with self.canvas:
             self.color      = Color()
             self.shape      = Ellipse()
-        self.update     = self.update_first
+        naub.bind(
+            color   = self.set_color,
+            pos     = self.set_pos,
+            radius  = self.set_radius)
+        naub.property("pos").dispatch(naub)
+        naub.property("color").dispatch(naub)
+        naub.property("radius").dispatch(naub)
         self.highlighted = 0
 
-    def update_first(self):
+    def set_color(self, naub, color):
         self.color.rgb  = color_rgb1(self.naub.color)
-        self.update_always()
-        self.update = self.update_always
 
-    def update_always(self):
-        shape, naub         = self.shape, self.naub
-        off                 = 0.4
-        off2                = off*2
-        bb                  = get(naub.shape.bb, 'left top right bottom')
-        left, top, right, bottom = bb
-        pos                 = (left + off, bottom + off)
-        size                = (right - left - off2, top - bottom - off2)
-        shape.pos           = pos
-        shape.size          = size
+    def set_radius(self, naub, radius):
+        self.shape.size = [(radius - 0.4)*2]*2
+
+    def set_pos(self, naub, pos):
+        self.shape.pos  = pos - 0.5*Vector(self.shape.size)
 
     def highlight(self):
         if self.highlighted == 0:
