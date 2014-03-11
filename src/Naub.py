@@ -130,7 +130,7 @@ class Naub(object):
         if not self.pointer_joints: return
 
         # joker naub behaviour
-        if len(self.naubs_joints) == 0 or len(naub.naubs_joints) == 0:
+        if len(self.naubs_joints) == 0:
             self.join_naub(naub)
             return
 
