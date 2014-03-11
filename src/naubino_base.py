@@ -8,6 +8,8 @@ from random import sample, random
 import math
 import Config
 
+
+
 class Naubino(object):
 
     class Callbacks(object):
@@ -139,6 +141,8 @@ class Naubino(object):
             pointer.step(dt)
         if self.mode: self.mode.step(dt)
         self.space.step(dt)
+        for naub in self.naubs:
+            naub.time   = naub.time + dt
         danger = self.danger()
         self.warn = Config.warn(danger)
         if Config.fail(danger):
