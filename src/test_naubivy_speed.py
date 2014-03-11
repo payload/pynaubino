@@ -47,7 +47,7 @@ class MyApp(App):
 def main():
     app = MyApp()
     #app.run()
-    for i in range(2):
+    for i in range(10):
         app.build()
 
 if __name__ == '__main__':

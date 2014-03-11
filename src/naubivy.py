@@ -155,7 +155,7 @@ class KivyNaub(Widget):
         # so much code, so faster
         x, y            = self.__half_size
         vx, vy          = pos
-        self.shape.pos  = (vx + x, vy + y)
+        self.shape.pos  = (vx - x, vy - y)
 
     def highlight(self):
         if self.highlighted == 0:
