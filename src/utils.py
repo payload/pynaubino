@@ -105,3 +105,10 @@ class Falsy(Dicty):
 
     def __nonzero__(self):
         return False
+
+
+
+def bind_dispatch(obj, **bindings):
+    obj.bind(**bindings)
+    for name in bindings.keys():
+        obj.property(name).dispatch(obj)

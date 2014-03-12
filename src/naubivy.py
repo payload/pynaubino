@@ -134,13 +134,10 @@ class KivyNaub(Widget):
         with self.canvas:
             self.color      = Color()
             self.shape      = Ellipse()
-        naub.bind(
+        bind_dispatch(naub,
             color   = self.set_color,
             pos     = self.set_pos,
             radius  = self.set_radius)
-        naub.property("color").dispatch(naub)
-        naub.property("radius").dispatch(naub)
-        naub.property("pos").dispatch(naub)
         self.highlighted    = 0
 
     def set_color(self, naub, color):
