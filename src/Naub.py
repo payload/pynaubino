@@ -13,7 +13,7 @@ class Naub(EventDispatcher):
     def __get_pos(self): return self.body.position
     def __set_pos(self, pos): self.body.position = pos
 
-    pos     = AliasProperty(__get_pos, __set_pos, bind = ["time"], cache = False)
+    pos     = AliasProperty(__get_pos, __set_pos)
     radius  = BoundedNumericProperty(Config.naub_radius(), min = 0)
     color   = ObjectProperty(ColorRGB255(0, 0, 0))
     time    = NumericProperty(0)
@@ -41,8 +41,6 @@ class Naub(EventDispatcher):
         self.tag            = None # fill with whatever you like
         self.body           = body
         self.shape          = shape
-        self.property("time").dispatch(self)
-        self.pos            = body.position
         self.cycle_check    = 0
         self.cycle_number   = 0
         self.pointer_joints = {}
