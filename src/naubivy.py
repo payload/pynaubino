@@ -144,7 +144,7 @@ class KivyNaub(Widget):
         self.highlighted    = 0
 
     def set_color(self, naub, color):
-        self.color.rgb  = color_rgb1(self.naub.color)
+        self.color.rgb      = color_rgb1(self.naub.color)
 
     def set_radius(self, naub, radius):
         radius              = radius - 0.4
@@ -153,9 +153,9 @@ class KivyNaub(Widget):
 
     def set_pos(self, naub, pos):
         # so much code, so faster
-        x, y            = self.__half_size
-        vpos            = naub.pos
-        self.shape.pos  = (vpos.x - x, vpos.y - y)
+        x, y                = self.__half_size
+        vpos                = naub.pos
+        self.shape.pos      = (vpos.x - x, vpos.y - y)
 
     def highlight(self):
         if self.highlighted == 0:
