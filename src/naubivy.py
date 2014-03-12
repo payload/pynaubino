@@ -190,6 +190,4 @@ class KivyNaubJoint(Widget):
                 close       = False)
 
     def update(self):
-        a, b            = self.joint.endpoints
-        line            = self.line
-        line.points     = [a.x, a.y, b.x, b.y]
+        self.line.points    = self.joint.endpoints_fast()
