@@ -1,19 +1,15 @@
-from naubivy_arena import Arena
-from naubivy_flyby import Flyby
-
-
-
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty
-from kivy.vector import Vector
-from kivy.clock import Clock
-from kivy.graphics import *
-from kivy.metrics import mm
-from utils import *
-import anims
-
-from kivy.config import Config
+from naubivy_arena      import Arena
+from naubivy_flyby      import Flyby
+from kivy.app           import App
+from kivy.uix.widget    import Widget
+from kivy.properties    import NumericProperty, ReferenceListProperty
+from kivy.vector        import Vector
+from kivy.clock         import Clock
+from kivy.graphics      import *
+from kivy.metrics       import mm
+from utils.utils        import *
+import utils.anims      as anims
+from kivy.config        import Config
 
 import os
 DISPLAY     = os.getenv("DISPLAY")

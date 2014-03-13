@@ -1,5 +1,5 @@
-import naubino_base, naubino_mode, autoplay
-from utils import *
+from naubino        import naubino_base, naubino_mode, autoplay
+from utils          import *
 import guppy.heapy.RM # is magic!
 # README ####################################################################
 #

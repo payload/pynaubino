@@ -1,4 +1,5 @@
-import naubino_base, naubino_mode, autoplay, naubivy
+from naubino        import naubino_base, naubino_mode, autoplay
+from naubivy        import naubivy
 from utils          import *
 from kivy.clock     import Clock
 from kivy.base      import EventLoop

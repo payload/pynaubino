@@ -1,17 +1,17 @@
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty
-from kivy.vector import Vector
-from kivy.clock import Clock
-from kivy.graphics import *
-from kivy.metrics import mm
-from utils import *
-import anims
+from kivy.app           import App
+from kivy.uix.widget    import Widget
+from kivy.properties    import NumericProperty, ReferenceListProperty
+from kivy.vector        import Vector
+from kivy.clock         import Clock
+from kivy.graphics      import *
+from kivy.metrics       import mm
+from utils.utils        import *
+import utils.anims      as     anims
 
-from kivy.config import Config
+from kivy.config        import Config
 Config.set('graphics', 'fullscreen', 'auto')
 
-from kivy.lang import Builder
+from kivy.lang          import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 class MenuScreen(Screen):
@@ -19,7 +19,8 @@ class MenuScreen(Screen):
     def __init__(self, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
 
-import naubino_base, naubino_mode, naubivy
+from .                  import naubivy
+from naubino            import naubino_base, naubino_mode
 
 class ArenaModeScreen(Screen):
 

@@ -1,5 +1,6 @@
-import naubino_base, naubino_mode, ipdb
-from utils import *
+import ipdb
+from naubino        import naubino_base, naubino_mode
+from utils.utils    import *
 
 def main():
     naubino         = naubino_base.Naubino()
