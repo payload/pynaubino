@@ -1,7 +1,9 @@
 from naubivy_arena      import Arena
 from naubivy_flyby      import Flyby
-from kivy.app           import App
+from naubivy_explosion  import Explosion
+from kivy.app           import App, Builder
 from kivy.uix.widget    import Widget
+from kivy.uix.floatlayout import FloatLayout
 from kivy.properties    import NumericProperty, ReferenceListProperty
 from kivy.vector        import Vector
 from kivy.clock         import Clock
@@ -20,26 +22,44 @@ WALL_RIGHT  = ":0.0"
 
 
 
-class Game(Widget):
+class NaubinoLayer(FloatLayout): pass
+
+Builder.load_string("""
+<NaubinoLayer>:
+    pos_hint:   { "center": (0.5, 0.5) }
+    canvas.before:
+        PushMatrix:
+        Translate:
+            xy:     self.center
+        Scale:
+            xyz:    mm(1), mm(-1), 1
+    canvas.after:
+        PopMatrix:
+""")
+
+
+
+class Game(FloatLayout):
 
     def __init__(self, naubino, *args, **kwargs):
         super(Game, self).__init__(*args, **kwargs)
-        self.naubino        = naubino
-        self.bind(size      = lambda self, size:
-            setattr(self.naubino, "size", Vec2d(size) / mm(1)))
-        with self.canvas:
-            self.translate      = Translate(*self.center)
-            Scale(mm(1), mm(-1), 1)
-            self.back   = Widget()
-            self.joints = Widget()
-            with self.joints.canvas:
-                Color(0, 0, 0)
-            self.naubs = Widget()
+        self.naubino    = naubino
+        self.back       = NaubinoLayer()
+        self.joints     = NaubinoLayer()
+        self.naubs      = NaubinoLayer()
+        self.add_widget(self.back)
+        self.add_widget(self.joints)
+        self.add_widget(self.naubs)
+        self.bind(
+            size        = lambda _, size:
+                setattr(self.naubino, "size", Vec2d(size) / mm(1)),)
+        #    center      = lambda _, xy:
+        #        setattr(translate, 'xy', xy))
         cb = self.naubino.cb
-        cb.add_naub         = self.add_naub
-        cb.remove_naub      = self.remove_naub
-        cb.add_naub_joint   = self.add_naub_joint
-        cb.remove_naub_joint = self.remove_naub_joint
+        cb.add_naub             = self.add_naub
+        cb.remove_naub          = self.remove_naub
+        cb.add_naub_joint       = self.add_naub_joint
+        cb.remove_naub_joint    = self.remove_naub_joint
 
     def add_naub(self, naub):
         kivy = naub.tag = KivyNaub(naub)
@@ -59,12 +79,13 @@ class Game(Widget):
 
     def start(self):
         self.naubino.play()
+        pass
 
     def update(self, dt):
-        self.translate.xy = self.center
         self.naubino.step(dt)
         for joint in self.naubino.naubjoints:
             joint.tag.update()
+        pass
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
@@ -175,6 +196,7 @@ class KivyNaubJoint(Widget):
         self.joint      = joint
         a, b            = joint.endpoints
         with self.canvas:
+            Color(0, 0, 0)
             self.line = Line(
                 points      = [a.x, a.y, b.x, b.y],
                 width       = joint.a.radius * 0.212,
