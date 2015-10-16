@@ -40,6 +40,12 @@ class NaubJoint(object):
         spring = self.spring
         return spring.a.position + spring.anchr1, spring.b.position + spring.anchr2
 
+    def endpoints_fast(self):
+        spring = self.spring
+        a, b   = spring.a.position, spring.b.position
+        aa, ba = spring.anchr1, spring.anchr2
+        return a.x + aa.x, a.y + aa.y, b.x + ba.x, b.y + ba.y
+
     def remove(self):
         if self.alive:
             self.alive = False

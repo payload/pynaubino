@@ -1,0 +1,18 @@
+#:kivy 1.0
+
+<NaubinoLabel>:
+    text:           "naubin[anchor=o1]o[anchor=o2]"
+    markup:         True
+    font_name:      "Comfortaa-Light.ttf"
+    font_size:      self.size[1]
+    pos_hint:       {'center_x': 0.5, 'center_y': 0.66}
+    size_hint:      0, 0.2
+    size:           0, 0
+
+<FirstNaub>:
+    canvas:
+        Color:
+            rgb:    (1, 0, 0)
+        Ellipse:
+            pos:    root.pos
+            size:   root.size

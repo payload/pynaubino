@@ -7,6 +7,11 @@ import itertools
 def sequence(
         duration = itertools.cycle([1]),
         anim_end = None, **attrs):
+    '''
+    anim1 = Animation(x = 50) + Animation(x = 100, duration = 2.)
+    anim2 = sequence(x = (50, 100), duration = (1, 2))
+    # anim1 and anim2 are equal
+    '''
     try: iter(duration)
     except: duration = itertools.cycle([duration])
     attrs.update(duration = duration)

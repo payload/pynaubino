@@ -1,19 +1,17 @@
-from naubivy_arena import Arena
-from naubivy_flyby import Flyby
-
-
-
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty
-from kivy.vector import Vector
-from kivy.clock import Clock
-from kivy.graphics import *
-from kivy.metrics import mm
-from utils import *
-import anims
-
-from kivy.config import Config
+from naubivy_arena      import Arena
+from naubivy_flyby      import Flyby
+from naubivy_explosion  import Explosion
+from kivy.app           import App, Builder
+from kivy.uix.widget    import Widget
+from kivy.uix.floatlayout import FloatLayout
+from kivy.properties    import NumericProperty, ReferenceListProperty
+from kivy.vector        import Vector
+from kivy.clock         import Clock
+from kivy.graphics      import *
+from kivy.metrics       import mm
+from utils.utils        import *
+import utils.anims      as anims
+from kivy.config        import Config
 
 import os
 DISPLAY     = os.getenv("DISPLAY")
@@ -24,26 +22,44 @@ WALL_RIGHT  = ":0.0"
 
 
 
-class Game(Widget):
+class NaubinoLayer(FloatLayout): pass
+
+Builder.load_string("""
+<NaubinoLayer>:
+    pos_hint:   { "center": (0.5, 0.5) }
+    canvas.before:
+        PushMatrix:
+        Translate:
+            xy:     self.center
+        Scale:
+            xyz:    mm(1), mm(-1), 1
+    canvas.after:
+        PopMatrix:
+""")
+
+
+
+class Game(FloatLayout):
 
     def __init__(self, naubino, *args, **kwargs):
         super(Game, self).__init__(*args, **kwargs)
-        self.naubino        = naubino
-        self.bind(size      = lambda self, size:
-            setattr(self.naubino, "size", Vec2d(size) / mm(1)))
-        with self.canvas:
-            self.translate      = Translate(*self.center)
-            Scale(mm(1), mm(-1), 1)
-            self.back   = Widget()
-            self.joints = Widget()
-            with self.joints.canvas:
-                Color(0, 0, 0)
-            self.naubs = Widget()
+        self.naubino    = naubino
+        self.back       = NaubinoLayer()
+        self.joints     = NaubinoLayer()
+        self.naubs      = NaubinoLayer()
+        self.add_widget(self.back)
+        self.add_widget(self.joints)
+        self.add_widget(self.naubs)
+        self.bind(
+            size        = lambda _, size:
+                setattr(self.naubino, "size", Vec2d(size) / mm(1)),)
+        #    center      = lambda _, xy:
+        #        setattr(translate, 'xy', xy))
         cb = self.naubino.cb
-        cb.add_naub         = self.add_naub
-        cb.remove_naub      = self.remove_naub
-        cb.add_naub_joint   = self.add_naub_joint
-        cb.remove_naub_joint = self.remove_naub_joint
+        cb.add_naub             = self.add_naub
+        cb.remove_naub          = self.remove_naub
+        cb.add_naub_joint       = self.add_naub_joint
+        cb.remove_naub_joint    = self.remove_naub_joint
 
     def add_naub(self, naub):
         kivy = naub.tag = KivyNaub(naub)
@@ -63,14 +79,13 @@ class Game(Widget):
 
     def start(self):
         self.naubino.play()
+        pass
 
     def update(self, dt):
-        self.translate.xy = self.center
         self.naubino.step(dt)
-        for naub in self.naubino.naubs:
-            naub.tag.update()
         for joint in self.naubino.naubjoints:
             joint.tag.update()
+        pass
 
     def on_touch_down(self, touch):
         pos                 = self.translate_touch_pos(touch)
@@ -131,28 +146,30 @@ class KivyNaub(Widget):
 
     def __init__(self, naub):
         super(KivyNaub, self).__init__()
-        self.naub       = naub
+        self.naub           = naub
+        self.__half_size    = (0, 0)
         with self.canvas:
             self.color      = Color()
             self.shape      = Ellipse()
-        self.update     = self.update_first
-        self.highlighted = 0
+        bind_dispatch(naub,
+            color   = self.set_color,
+            pos     = self.set_pos,
+            radius  = self.set_radius)
+        self.highlighted    = 0
 
-    def update_first(self):
-        self.color.rgb  = color_rgb1(self.naub.color)
-        self.update_always()
-        self.update = self.update_always
+    def set_color(self, naub, color):
+        self.color.rgb      = color_rgb1(self.naub.color)
 
-    def update_always(self):
-        shape, naub         = self.shape, self.naub
-        off                 = 0.4
-        off2                = off*2
-        bb                  = get(naub.shape.bb, 'left top right bottom')
-        left, top, right, bottom = bb
-        pos                 = (left + off, bottom + off)
-        size                = (right - left - off2, top - bottom - off2)
-        shape.pos           = pos
-        shape.size          = size
+    def set_radius(self, naub, radius):
+        radius              = radius - 0.4
+        self.shape.size     = [radius*2]*2
+        self.__half_size    = [radius  ]*2
+
+    def set_pos(self, naub, pos):
+        # so much code, so faster
+        x, y                = self.__half_size
+        vpos                = naub.pos
+        self.shape.pos      = (vpos.x - x, vpos.y - y)
 
     def highlight(self):
         if self.highlighted == 0:
@@ -179,6 +196,7 @@ class KivyNaubJoint(Widget):
         self.joint      = joint
         a, b            = joint.endpoints
         with self.canvas:
+            Color(0, 0, 0)
             self.line = Line(
                 points      = [a.x, a.y, b.x, b.y],
                 width       = joint.a.radius * 0.212,
@@ -187,6 +205,4 @@ class KivyNaubJoint(Widget):
                 close       = False)
 
     def update(self):
-        a, b            = self.joint.endpoints
-        line            = self.line
-        line.points     = [a.x, a.y, b.x, b.y]
+        self.line.points    = self.joint.endpoints_fast()

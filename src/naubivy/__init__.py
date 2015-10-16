@@ -1,17 +1,17 @@
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty
-from kivy.vector import Vector
-from kivy.clock import Clock
-from kivy.graphics import *
-from kivy.metrics import mm
-from utils import *
-import anims
+from kivy.app           import App
+from kivy.uix.widget    import Widget
+from kivy.properties    import NumericProperty, ReferenceListProperty
+from kivy.vector        import Vector
+from kivy.clock         import Clock
+from kivy.graphics      import *
+from kivy.metrics       import mm
+from utils.utils        import *
+import utils.anims      as     anims
 
-from kivy.config import Config
-Config.set('graphics', 'fullscreen', 'auto')
+from kivy.config        import Config
+#Config.set('graphics', 'fullscreen', 'auto')
 
-from kivy.lang import Builder
+from kivy.lang          import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 class MenuScreen(Screen):
@@ -19,7 +19,19 @@ class MenuScreen(Screen):
     def __init__(self, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
 
-import naubino_base, naubino_mode, naubivy
+from .                  import naubivy
+from naubino            import naubino_base, naubino_mode
+
+class ExplosionModeScreen(Screen):
+
+    def on_enter(self):
+        naubino     = naubino_base.Naubino()
+        mode        = naubino_mode.Explosion(naubino)
+        game        = naubivy.Game(naubino)
+        game_mode   = naubivy.Explosion(naubino, mode, game)
+        Clock.schedule_interval(game.update, 1.0/60.0)
+        self.add_widget(game)
+        game.start()
 
 class ArenaModeScreen(Screen):
 
@@ -69,6 +81,9 @@ Builder.load_string("""
                 text:       "Naubino"
                 color:      (0, 0, 0, 1)
             Button:
+                text:       "Explosion Mode"
+                on_press:   root.manager.current = "explosion"
+            Button:
                 text:       "Arena Mode"
                 on_press:   root.manager.current = "arena"
             Button:
@@ -93,12 +108,14 @@ class NaubinoApp(App):
         Window.on_key_up = self.on_key_up
 
         menu_screen         = MenuScreen()
+        explosion_screen    = ExplosionModeScreen(name = "explosion")
         arena_screen        = ArenaModeScreen(name = "arena")
         flyby_screen        = FlybyModeScreen(name = "flyby")
         autoplay_screen     = AutoplayModeScreen(name = "autoplay")
 
         sm                  = ScreenManager()
         sm.add_widget(menu_screen)
+        sm.add_widget(explosion_screen)
         sm.add_widget(arena_screen)
         sm.add_widget(flyby_screen)
         sm.add_widget(autoplay_screen)

@@ -1,4 +1,5 @@
-import naubino_base, naubino_mode, autoplay, naubivy
+from naubino            import naubino_base, naubino_mode, autoplay
+from naubivy            import naubivy
 from utils              import *
 from kivy.clock         import Clock
 from kivy.core.window   import Window
@@ -47,7 +48,7 @@ class MyApp(App):
 def main():
     app = MyApp()
     #app.run()
-    for i in range(2):
+    for i in range(10):
         app.build()
 
 if __name__ == '__main__':

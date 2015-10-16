@@ -1,23 +1,34 @@
 import pymunk
 import random
-from NaubJoint import NaubJoint
-from utils import *
+from NaubJoint          import NaubJoint
+from kivy.properties    import *
+from kivy.event         import EventDispatcher
+from utils              import *
 import Config
 
 
 
-class Naub(object):
-    @property
-    def pos(self): return self.body.position
-    @pos.setter
-    def pos(self, x): self.body.position = x
+class Naub(EventDispatcher):
+
+    def __get_pos(self): return self.body.position
+    def __set_pos(self, pos): self.body.position = pos
+
+    pos     = AliasProperty(__get_pos, __set_pos)
+    radius  = BoundedNumericProperty(Config.naub_radius(), min = 0)
+    color   = ObjectProperty(ColorRGB255(0, 0, 0))
+    time    = NumericProperty(0)
 
     def __init__(self,
             naubino = None,
             pos     = (0, 0),
             name    = None):
+        super(Naub, self).__init__()
+        self.bind(time = lambda *_: self.property("pos").dispatch(self))
+        self.register_event_type('on_remove')
+        self.register_event_type('on_remove_merged')
+
         mass                = Config.naub_mass()
-        radius              = Config.naub_radius()
+        radius              = self.radius
         inertia             = pymunk.moment_for_circle(mass, radius, radius)
         body                = pymunk.Body(mass, inertia)
         body.position       = pos
@@ -26,8 +37,6 @@ class Naub(object):
         shape.friction      = Config.naub_friction()
         shape.elasticity    = Config.naub_elasticity()
 
-        self.color          = ColorRGB255(0, 0, 0)
-        self.radius         = radius
         self.alive          = True
         self.tag            = None # fill with whatever you like
         self.body           = body
@@ -36,7 +45,6 @@ class Naub(object):
         self.cycle_number   = 0
         self.pointer_joints = {}
         self.naubs_joints   = {}
-        self.merge_remove   = None # callback, see merge
         self.__naubino      = None
         self.name           = name or id(self)
         self.naubino        = naubino
@@ -60,6 +68,7 @@ class Naub(object):
 
     def remove(self):
         if fail_condition(self.alive): return
+        self.dispatch('on_remove')
         self.alive      = False
         self.body.data  = None
         self.naubino.pre_remove_naub(self)
@@ -116,7 +125,7 @@ class Naub(object):
         for n in naubs_joints:
             naub.unjoin_naub(n)
             self.join_naub(n)
-        if naub.merge_remove: naub.merge_remove(self)
+        self.dispatch('on_remove_merged')
         naub.remove()
 
     def collide(self, other, arbiter):
@@ -193,3 +202,5 @@ class Naub(object):
             nodes.extend(x.reachable_naubs(visited))
         return nodes
 
+    def on_remove(self): pass
+    def on_remove_merged(self): pass

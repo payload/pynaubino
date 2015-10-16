@@ -3,7 +3,7 @@ from kivy.uix.widget    import Widget
 from kivy.graphics      import *
 from kivy.core.window   import Window
 from kivy.vector        import Vector
-import anims
+from utils              import anims
 
 class MyApp(App):
 
