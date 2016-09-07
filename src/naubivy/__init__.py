@@ -131,6 +131,14 @@ class NaubinoApp(App):
             import guppy
             print guppy.hpy().heap()
 
+    def on_stop(self):
+        import threading
+        for thread in threading.enumerate():
+            if thread.isDaemon():
+                continue
+            try:
+                thread.stop()
+            except: pass
 
 
 

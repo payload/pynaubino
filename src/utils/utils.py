@@ -112,3 +112,21 @@ def bind_dispatch(obj, **bindings):
     obj.bind(**bindings)
     for name in bindings.keys():
         obj.property(name).dispatch(obj)
+
+
+
+import threading
+
+class UtilsThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self, *args, **kwargs):
+        super(UtilsThread, self).__init__(*args, **kwargs)
+        self._stop = threading.Event()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()

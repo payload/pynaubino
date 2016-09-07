@@ -8,11 +8,45 @@ from kivy.vector        import Vector
 from kivy.event         import EventDispatcher
 from kivy.properties    import *
 from utils              import *
+from utils.scanf        import scanf
 from .                  import intro
 from naubino.Naub       import Naub
 
-class Explosion(EventDispatcher):
 
+
+import threading
+import sys
+
+class DebugSession(UtilsThread):
+
+    def __init__(self, **kwargs):
+        super(DebugSession, self).__init__(
+            name = "DebugSession")
+        self.objs = Dicty(kwargs)
+
+    def xrun(self):
+        while True:
+            line = sys.stdin.readline()
+            print(line)
+
+    def run(self):
+        while not self.stopped():
+            print("read line")
+            try:
+                line    = sys.stdin.readline().strip()
+                result  = scanf("set %d %d", line)
+                if result is not None:
+                    x, y = result
+                    self.objs.naub.pos = (x, y)
+                result  = scanf("get", line)
+                if result is not None:
+                    print(self.objs.naub.pos)
+            except Exception as e:
+                print(e)
+
+
+
+class Explosion(EventDispatcher):
     def __init__(self, naubino, mode, game):
         super(Explosion, self).__init__()
         self.naubino    = naubino
@@ -45,7 +79,7 @@ class Explosion(EventDispatcher):
             naub.explode()
         def set_o_naub(*_):
             naub.pos    = self.get_o_naub_pos()
-            naub.radius = self.label.o_radius / mm(1)
+            #naub.radius = self.label.o_radius / mm(1)
 
         label.opacity       = 0
         game.naubs.opacity  = 0
@@ -53,13 +87,16 @@ class Explosion(EventDispatcher):
         fade_in.start(game.naubs)
         # TODO get_o_naub_pos is only available after first frame
         Clock.schedule_once(set_o_naub, 0.01)
-        fade_in.bind(
-            on_complete     = move_center_phase)
+        #fade_in.bind(
+        #    on_complete     = move_center_phase)
         move_center.bind(
             on_complete     = explode_phase)
+        DebugSession(
+            naub    = naub
+        ).start()
 
     def get_o_naub_pos(self):
         label, game = self.label, self.game
-        x, y        = Vector(label.o_center) - game.center
-        x, y        = x / mm(1), y / mm(-1)
+        x, y        = Vector(label.o_center) #* 0.5#- game.center
+        x, y        = x / mm(2), y / mm(-2) #y / mm(-1)
         return x, y
